@@ -37,7 +37,7 @@ BasicHead($css);
             <th>Taken</th>
         </tr>
             <?php
-            if($week < 10) { $week = '0' . $week; }
+            if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
 
             for( $day=1; $day <= 7; $day++ )
             {
