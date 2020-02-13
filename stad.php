@@ -1,7 +1,8 @@
 <?php
 require_once "lib/autoload.php";
 
-BasicHead();
+$css = array( "style.css");
+BasicHead( $css );
 ?>
 <body>
 
@@ -13,9 +14,11 @@ BasicHead();
     <div class="row">
 
         <?php
-        $data = GetData("select * from images where img_id=" . $_GET['id'] );
+        $cityLoader = new CityLoader();
+        $cities = $cityLoader->Load( $id = $_GET['id'] );
+
         $template = LoadTemplate("stad");
-        print ReplaceContent( $data, $template);
+        print ReplaceCities( $cities, $template);
         ?>
 
     </div>

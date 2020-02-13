@@ -1,8 +1,14 @@
 <?php
 require_once "lib/autoload.php";
+if ( ! $_SESSION['usr']->getVzEid() > "" )
+{
+    $MS->AddMessage("U moet uw E-id nog opladen!!!", "error");
+    $MS->AddMessage("Dit is gewoon een info bericht", "info");
+}
 
 $css = array( "style.css");
 BasicHead( $css );
+$MS->ShowMessages();
 ?>
 <body>
 
@@ -22,7 +28,7 @@ BasicHead( $css );
             <?php
 
             //gebruikersgegevens ophalen uit databank
-            $sql = "select * from users where usr_id=" . $_SESSION["usr"]["usr_id"];
+            $sql = "select * from users where usr_id=" . $_SESSION["usr"]->getId();
             $data = GetData($sql);
 
             print "<table class='table table-striped table-bordered'>";

@@ -22,15 +22,25 @@ form {
 }
 
 .breadcrumb-item, .breadcrumb {
-    background: #872525;
+    /* background: #872525; */
+
     color: white;
     border-radius: 0;
     margin-bottom: 0;
 }
 
-.breadcrumb-item.active {
+.breadcrumb.error, .breadcrumb-item.error {
+    font-weight: bold;
     color: white;
+    background: red;
 }
+
+.breadcrumb.info, .breadcrumb-item.info {
+    font-weight: bold;
+    color: #04520c;
+    background: lightgreen;
+}
+
 
  #form_stad, #registration_form {
     margin: 0 auto;
@@ -117,3 +127,6 @@ span.img_name {
     overflow: hidden;
 }
 
+.img_city {
+    margin-top: 15vh;
+}

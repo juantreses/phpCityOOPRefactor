@@ -7,20 +7,23 @@ $buttonvalue = $_POST['loginbutton'];
 
 if ( $formname == "login_form" AND $buttonvalue == "Log in" )
 {
-    if ( ControleLoginWachtwoord( $_POST['usr_login'], $_POST['usr_paswd'] ) )
+    $User = new User();
+    $User->setLogin($_POST['usr_login']);
+    $User->setPaswd($_POST['usr_paswd']);
+
+    if ( $User->CheckLogin() )
     {
-        $_SESSION["msg"][] = "Welkom, " . $_SESSION['usr']['usr_voornaam'] . "!" ;
-        LogLoginUser();
+        $MS->AddMessage( "Welkom, " . $_SESSION['usr']->getVoornaam() . "!" );
         header("Location: " . $_application_folder . "/steden.php");
     }
     else
     {
-        $_SESSION["msg"][] = "Sorry! Verkeerde login of wachtwoord!";
+        $MS->AddMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
         header("Location: " . $_application_folder . "/login.php");
     }
 }
 else
 {
-    $_SESSION["msg"][] = "Foute formname of buttonvalue";
+    $MS->AddMessage( "Foute formname of buttonvalue", "error" );
 }
 ?>

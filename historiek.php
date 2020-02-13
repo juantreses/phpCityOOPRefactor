@@ -14,14 +14,14 @@ BasicHead($css);
     <div class="container">
         <div class="row">
 
-            <p>Gebruiker: <?= $_SESSION['usr']['usr_voornaam'] ?> <?=$_SESSION['usr']['usr_naam'] ?></p>
+            <p>Gebruiker: <?= $_SESSION['usr']->getVoornaam() ?> <?=$_SESSION['usr']->getNaam() ?></p>
             <table class="table">
                 <tr>
                     <th>Inloggen</th>
                     <th>Uitloggen</th>
                 </tr>
                     <?php
-                        $sql = "SELECT * FROM log_user WHERE log_usr_id=" . $_SESSION['usr']['usr_id'] . " ORDER BY log_in" ;
+                        $sql = "SELECT * FROM log_user WHERE log_usr_id=" . $_SESSION['usr']->getId() . " ORDER BY log_in" ;
                         $data = GetData($sql);
 
                         foreach( $data as $row )

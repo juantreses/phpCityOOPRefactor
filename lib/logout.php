@@ -2,13 +2,14 @@
 require_once "autoload.php";
 
 session_start();
-LogLogoutUser();
+$User = new User();
+$User->LogLogoutUser();
 
 session_destroy();
 unset($_SESSION);
 
 session_start();
 session_regenerate_id();
-$_SESSION["msg"][] = "U bent afgemeld!";
+$MS->AddMessage( "U bent afgemeld!" );
 header("Location: " . $_application_folder . "/login.php");
 ?>

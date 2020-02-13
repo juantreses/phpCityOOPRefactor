@@ -1,14 +1,23 @@
 <?php
+$_application_folder = "/testremote";
+$_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
+
+//load Models
+require_once $_root_folder . "/Model/City.php";
+require_once $_root_folder . "/Model/User.php";
+
+//load Services
+require_once $_root_folder . "/Service/CityLoader.php";
+require_once $_root_folder . "/Service/MessageService.php";
+
 session_start();
 $_SESSION["head_printed"] = false;
-$_application_folder = "/wdev_steven/testremote";
 
-require_once "passwd.php";
-require_once "pdo.php";                          //database functies
-require_once "view_functions.php";      //basic_head, load_template, replacecontent...
-require_once "authorisation.php";      //controle login e.d.
-require_once "show_messages.php";
-require_once "user_log.php";
+$MS = new MessageService();
+
+require_once $_root_folder . "/lib/passwd.php";
+require_once $_root_folder . "/lib/pdo.php";                          //database functies
+require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
 
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
