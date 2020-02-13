@@ -1,5 +1,5 @@
 <?php
-$_application_folder = "/testremote";
+$_application_folder = "/phpCityOOPRefactor";
 $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
 
 //load Models
