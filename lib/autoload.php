@@ -1,5 +1,14 @@
 <?php
-$_application_folder = "/phpCityOOPRefactor";
+/*
+    ====root folder instructions ====
+ ->create root.php in the lib map AND do not include it in the repository!
+ ->copy the contend of root_example.php in root.php
+ ->change the path in root.php to your path starting from the thdocs folder
+ example = (/php/projects/phpCityOOPRefactor)
+*/
+
+require_once "root.php";
+//$_application_folder = "/testremote_new";
 $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
 
 //load Models
