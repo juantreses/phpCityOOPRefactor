@@ -34,3 +34,4 @@ if ( ! isset($_SESSION['usr']) AND ! $login_form AND ! $register_form AND ! $no_
 {
     header("Location: " . $_application_folder . "/no_access.php");
 }
+
