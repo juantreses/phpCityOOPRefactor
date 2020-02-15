@@ -21,7 +21,9 @@ require_once $_root_folder . "/Service/MessageService.php";
 
 session_start();
 $_SESSION["head_printed"] = false;
-
+/**
+ *
+ */
 $MS = new MessageService();
 
 require_once $_root_folder . "/lib/passwd.php";
