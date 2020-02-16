@@ -27,7 +27,7 @@ if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" ) //als het juist
                 continue;
             }
 
-            if (!CheckImage($fileUploadNr)
+            if (!CheckImage($f)
             ){
                 header("location:".$_application_folder."/file_upload.php");
                 die;
@@ -62,34 +62,8 @@ if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" ) //als het juist
 
 
     //overloop alle bestanden in $_FILES
+/**
+ * @param $f
+ * @return bool
+ */
 
-
-function CheckImage($fileUploadNr){
-    // get the Mes. service
-    global $MS;
-
-    // Check the extensions 
-    $ext_allowed = array(
-        "png",
-        "jpg",
-        "jpeg"
-    );
-    
-    $filename = strtolower($_FILES[$fileUploadNr]["name"]) ;
-    $fileExplode = explode(".",$filename);
-    $fileExt = end($fileExplode);
-    if (! in_array($fileExt,$ext_allowed)){
-        $MS->AddMessage( "U mag enkel jpg, jpeg of png bestanden toevoegen. ",'error' );
-//            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
-        return false;
-    }
-    if ($_FILES[$fileUploadNr]["size"] > 8000000){
-        $MS->AddMessage( "Een afbeelding mag maximum 8MB zijn ",'error' );
-//            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
-        return false;
-    }
-    
-    // als er geen errors zijn zal True meegeven worden
-    return true;
-}
-?>

@@ -1,9 +1,8 @@
 <?php
 require_once "lib/autoload.php";
-if ( ! $_SESSION['usr']->getVzEid() > "" )
+if ($_SESSION['usr']->getVzEid() != "" )
 {
     $MS->AddMessage("U moet uw E-id nog opladen!!!", "error");
-    $MS->AddMessage("Dit is gewoon een info bericht", "info");
 }
 
 $css = array( "style.css");
@@ -30,16 +29,20 @@ $MS->ShowMessages();
             //gebruikersgegevens ophalen uit databank
             $sql = "select * from users where usr_id=" . $_SESSION["usr"]->getId();
             $data = GetData($sql);
-
+            $img_az_eid = "";
+            $img_vz_eid = "";
+            $img_pasfoto = "";
             print "<table class='table table-striped table-bordered'>";
             foreach( $data as $row )
             {
                 foreach( $row as $field => $value )
                 {
+                    $notintable = false;
+
                     //foto's afhandelen
-                    if ( $field == "usr_pasfoto" AND $value > "" ) { $img_pasfoto = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
-                    if ( $field == "usr_vz_eid" AND $value > "" ) { $img_vz_eid = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
-                    if ( $field == "usr_az_eid" AND $value > "" ) { $img_az_eid = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
+                    if ( $field == "usr_pasfoto" AND $value != "" ) { $img_pasfoto = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
+                    if ( $field == "usr_vz_eid" AND $value != "" ) { $img_vz_eid = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
+                    if ( $field == "usr_az_eid" AND $value != "" ) { $img_az_eid = "<img class='thumbnail' src=img/$value>"; $notintable = true; }
 
                     //password niet tonen
                     if ( $field == "usr_paswd" ) $notintable = true;
