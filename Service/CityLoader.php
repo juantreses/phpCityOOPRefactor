@@ -12,12 +12,28 @@ class CityLoader
     {
         $citiesData = $this->queryForCities();
 
-        $ships = array();
+        $cities = array();
         foreach ($citiesData as $cityData) {
-            $ships[] = $this->createCityFromData($cityData);
+            $cities[] = $this->createCityFromData($cityData);
         }
 
-        return $ships;
+        return $cities;
+    }
+
+    public function getCityByID($id)
+    {
+        $pdo = $this->getPDO();
+        $statement = $pdo->prepare('SELECT * FROM images WHERE img_id = :id');
+        $statement->execute(array('id' => $id));
+        $cityArray = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (!$cityArray) {
+            return null;
+        }
+
+        $cities[] = $this->createCityFromData($cityArray);
+
+        return $cities;
     }
 
     private function createCityFromData(array $cityData)
