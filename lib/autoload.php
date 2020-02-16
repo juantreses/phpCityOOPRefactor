@@ -2,7 +2,7 @@
 /*
     ====root folder instructions ====
  ->create root.php in the lib map AND do not include it in the repository!
- ->copy the contend of root_example.php in root.php
+ ->copy the contend of example_root.php in root.php
  ->change the path in root.php to your path starting from the thdocs folder
  example = (/php/projects/phpCityOOPRefactor)
 */
