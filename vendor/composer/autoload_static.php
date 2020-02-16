@@ -68,6 +68,8 @@ class ComposerStaticInit7cf84f2a9b623c76202f79ee37d6819f
     public static $fallbackDirsPsr4 = array (
         0 => __DIR__ . '/../..' . '/Model',
         1 => __DIR__ . '/../..' . '/Service',
+        2 => __DIR__ . '/../..' . '/lib/pdo.php',
+        3 => __DIR__ . '/../..' . '/lib/passwd.php',
     );
 
     public static $classMap = array (

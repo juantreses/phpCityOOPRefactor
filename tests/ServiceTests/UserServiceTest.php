@@ -1,5 +1,6 @@
 <?php
 require __DIR__."\..\..\lib\pdo.php";
+//require __DIR__."\..\..\lib\passwd.php";
 use PHPUnit\Framework\TestCase;
 
 class UserServiceTest extends TestCase
@@ -11,6 +12,7 @@ class UserServiceTest extends TestCase
     {
         $this->UserService = new UserService();
         $this->User = new User();
+
 
     }
     public function testLogInUser()

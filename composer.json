@@ -4,7 +4,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": ["Model/","Service/"]
+            "": ["Model/","Service/","lib/pdo.php","lib/passwd.php"]
         }
     }
 }
