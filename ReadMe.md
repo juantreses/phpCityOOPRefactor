@@ -9,7 +9,7 @@
 ### Get you passwords  where no one can see them
 
 * Go to the example_password.php file in the lib map
-* fil in your db location and password
+* fill in your db location and password
 * follow the instructions in the example_password.php file
 
 ### Go and install or TestSuite for running tests
