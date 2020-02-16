@@ -1,29 +1,48 @@
 <?php
 class CityLoader
 {
+    private $pdo;
 
-    public function Load( $id = null )
+    public function __construct(PDO $pdo)
     {
-        $cities = array();
-
-        $sql = "select * from images";
-        if ( $id > 0 ) $sql .= " where img_id=$id";
-
-        $data = GetData($sql);
-        foreach ( $data as $row )
-        {
-            $city = new City();
-
-            $city->setId( $row['img_id'] );
-            $city->setFileName( $row['img_filename'] );
-            $city->setTitle( $row['img_title'] );
-            $city->setWidth( $row['img_width'] );
-            $city->setHeight( $row['img_height'] );
-
-            $cities[] = $city;
-        }
-
-        return $cities;
+        $this->pdo = $pdo;
     }
 
+    public function getCities()
+    {
+        $citiesData = $this->queryForCities();
+
+        $ships = array();
+        foreach ($citiesData as $cityData) {
+            $ships[] = $this->createCityFromData($cityData);
+        }
+
+        return $ships;
+    }
+
+    private function createCityFromData(array $cityData)
+    {
+        $city = new City();
+        $city->setId($cityData['img_id']);
+        $city->setFileName($cityData['img_filename']);
+        $city->setTitle($cityData['img_title']);
+        $city->setWidth($cityData['img_width']);
+        $city->setHeight($cityData['img_height']);
+
+        return $city;
+    }
+
+    private function queryForCities()
+    {
+        $pdo = $this->getPDO();
+        $statement = $pdo->prepare('SELECT * FROM images');
+        $statement->execute();
+        $cityArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $cityArray;
+    }
+
+    private function getPDO()
+    {
+        return $this->pdo;
+    }
 }
