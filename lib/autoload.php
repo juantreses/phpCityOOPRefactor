@@ -6,7 +6,9 @@
  ->change the path in root.php to your path starting from the thdocs folder
  example = (/php/projects/phpCityOOPRefactor)
 */
-
+//ini_set("error_reporting", E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
 require_once "root.php";
 //$_application_folder = "/testremote_new";
 $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
@@ -21,7 +23,9 @@ require_once $_root_folder . "/Service/MessageService.php";
 
 session_start();
 $_SESSION["head_printed"] = false;
-
+/**
+ *
+ */
 $MS = new MessageService();
 
 require_once $_root_folder . "/lib/passwd.php";
