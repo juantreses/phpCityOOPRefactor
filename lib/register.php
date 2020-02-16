@@ -8,8 +8,10 @@ $pkey = $_POST["pkey"];
 
 if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
 {
+
+    $UserService = new UserService();
     $User = new User();
-    $User->ValidatePostedUserData();
-    $User->RegisterUser();
+    $UserService->ValidatePostedUserData($User);
+    $UserService->RegisterUser($User);
 }
 ?>

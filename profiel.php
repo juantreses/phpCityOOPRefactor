@@ -1,8 +1,8 @@
 <?php
 require_once "lib/autoload.php";
-if ($_SESSION['usr']->getVzEid() != "" )
+if (!$_SESSION['usr']-> getPasfoto() != "" )
 {
-    $MS->AddMessage("U moet uw E-id nog opladen!!!", "error");
+    $MS->AddMessage("U moet uw Pasfoto opladen!!!", "error");
 }
 
 $css = array( "style.css");
