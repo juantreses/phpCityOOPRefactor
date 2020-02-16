@@ -10,6 +10,8 @@ https://getcomposer.org/download/
 * Install php unit:
     * i made a litle program that wil install (or update)php unit in this folder
     and creates a alias for testing the software
+    * if you wont to run the code yourself: `composer require --dev phpunit/phpunit
+                                             echo @php "%~dp0vendor\phpunit\phpunit\phpunit" %*> phpunit.cmd`
     * go to the root folder of the project and open de CLI
     *run this command: `phpunitinstall.sh`
     
@@ -25,6 +27,8 @@ https://getcomposer.org/download/
     xdebug.remote_handler=dbgp
     xdebug.profiler_enable=1
     xdebug.profiler_output_dir=C:\Windows\Temp
+    
+
  
 running the test
 ---------------
