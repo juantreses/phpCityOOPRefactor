@@ -5,8 +5,8 @@ if ( isset($_POST["submit"]) == "Opladen" )
 {
 
     $target_dir = "../img/";                                                          //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
-    $max_size = 5000000;                                                           //maximum grootte in bytes
-
+    $max_size = 5000000;//maximum grootte in bytes
+    $imagesUploadCheck = false;
     $images = array();
 
 
@@ -25,7 +25,7 @@ if ( isset($_POST["submit"]) == "Opladen" )
 
 
 
-        if (CheckImage($fileobject,array("jpg","jpeg","png","gif"),5000000) )
+        if (CheckImage($fileobject,array("jpg","jpeg","png","gif"),$max_size) )
         {
             switch ( $inputname )
             {
@@ -49,18 +49,22 @@ if ( isset($_POST["submit"]) == "Opladen" )
 
             if ( move_uploaded_file( $tmp_name, $target))
             {
+                $imagesUploadCheck = true;
                 $MS->AddMessage("Bestand $originele_naam opgeladen");
 //                print "Bestand $originele_naam opgeladen<br>";
                 $sql = "update users SET " . implode("," , $images) . " where usr_id=".$_SESSION['usr']->getId();
                 ExecuteSQL($sql);
+                $userService = new UserService();
+                $userService->ReloadUser($_SESSION['usr']);
 
 
             }
             else $MS->AddMessage("Sorry, there was an unexpected error uploading file " . $originele_naam );
         }
-        header("location:".$_application_folder."/profiel.php");
-    }
 
+    }
+    if(!$imagesUploadCheck)$MS->AddMessage("Sorry,there  where no images " ,"error");
+    header("location:".$_application_folder."/profiel.php");
 
 
 }
