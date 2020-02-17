@@ -33,9 +33,19 @@ class UserService
         $data = GetData($sql);
         $user->Load($data[0]);
     }
+
+    public function CheckIfUserExistsAlready()
+    {
+        //controle of gebruiker al bestaat
+        $sql = "SELECT * FROM users WHERE usr_login='" . $_POST['usr_login'] . "' ";
+        $data = GetData($sql);
+        if ( count($data) > 0 ) die("Deze gebruiker bestaat reeds! Gelieve een andere login te gebruiken.");
+    }
+
+
     public function ValidatePostedUserData(User $user)
     {
-        $user->CheckIfUserExistsAlready();
+        $this->CheckIfUserExistsAlready();
 
         //controle wachtwoord minimaal 8 tekens
         if ( strlen($_POST["usr_paswd"]) < 8 ) die("Uw wachtwoord moet minstens 8 tekens bevatten!");
@@ -43,6 +53,8 @@ class UserService
         //controle geldig e-mailadres
         if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) die("Ongeldig email formaat voor login");
     }
+
+
     public function RegisterUser(User $user)
     {
         global $tablename;
@@ -104,5 +116,4 @@ class UserService
         $sql = "INSERT INTO log_user SET log_usr_id=".$user->getId().", log_session_id='".$session."', log_in= '".$now."'";
         ExecuteSQL($sql);
     }
-
 }
