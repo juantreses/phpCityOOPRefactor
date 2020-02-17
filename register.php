@@ -4,6 +4,7 @@ require_once "lib/autoload.php";
 
 $css = array( "style.css");
 BasicHead( $css );
+$MS->ShowMessages();
 ?>
 <body>
 

@@ -8,10 +8,18 @@ $pkey = $_POST["pkey"];
 
 if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
 {
-
-    $UserService = new UserService();
     $User = new User();
-    $UserService->ValidatePostedUserData($User);
-    $UserService->RegisterUser($User);
+    // if the from and user data is valid
+    if ($UserService->ValidatePostedUserData())
+    {
+        if ($UserService->RegisterUser($User))
+        {
+            header("Location:../steden.php");
+        }
+    }else
+    {
+        header("Location:../register.php");
+    }
+
 }
 ?>
