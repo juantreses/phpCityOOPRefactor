@@ -304,13 +304,13 @@ class User
 //        ExecuteSQL($sql);
 //    }
 //
-//    public function CheckIfUserExistsAlready()
-//    {
-//        //controle of gebruiker al bestaat
-//        $sql = "SELECT * FROM users WHERE usr_login='" . $_POST['usr_login'] . "' ";
-//        $data = GetData($sql);
-//        if ( count($data) > 0 ) die("Deze gebruiker bestaat reeds! Gelieve een andere login te gebruiken.");
-//    }
+    public function CheckIfUserExistsAlready()
+    {
+        //controle of gebruiker al bestaat
+        $sql = "SELECT * FROM users WHERE usr_login='" . $_POST['usr_login'] . "' ";
+        $data = GetData($sql);
+        if ( count($data) > 0 ) die("Deze gebruiker bestaat reeds! Gelieve een andere login te gebruiken.");
+    }
 //
 //    public function ValidatePostedUserData()
 //    {

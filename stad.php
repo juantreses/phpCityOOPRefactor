@@ -9,7 +9,7 @@ BasicHead( $css );
 <div class="jumbotron text-center">
     <h1>Detailpagina Afbeelding</h1>
 </div>
-
+<?php PrintNavBar(); ?>
 <div class="container">
     <div class="row">
 

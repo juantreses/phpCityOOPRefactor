@@ -43,6 +43,8 @@ class UserService
         //controle geldig e-mailadres
         if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) die("Ongeldig email formaat voor login");
     }
+
+
     public function RegisterUser(User $user)
     {
         global $tablename;
