@@ -13,6 +13,8 @@ class Container
 
     private $databaseService;
 
+    private $temporaryPrintWeekTask;
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -103,16 +105,17 @@ class Container
     */
 
 
-    /* Alex works over here
+//     Alex works over here
+    public function getTemporaryPrintWeekTask()
+    {
+        if ($this->temporaryPrintWeekTask === null) {
+            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService());
+        }
+        return $this->temporaryPrintWeekTask;
+    }
 
 
-
-
-
-
-
-
-     */
+//
 
     /* Jan works over here
 
