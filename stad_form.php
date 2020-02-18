@@ -18,7 +18,6 @@ BasicHead( $css );
         $cityLoader = $container->getCityLoader();
         $city = $cityLoader->getCityByID($id = $_GET['id']);
 
-
         $template = LoadTemplate("stad_form");
         print ReplaceCities( $city, $template);
         ?>

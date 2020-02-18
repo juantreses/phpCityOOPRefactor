@@ -29,16 +29,14 @@ class CityLoader
      */
     public function getCityByID($id)
     {
-
-
-        $cityArray = $this->databaseService->getData("SELECT * FROM images WHERE img_id = ".$id);
+        $cityArray = $this->databaseService->getData("SELECT * FROM images WHERE img_id = ". $id);
 
 
         if (!$cityArray) {
             return null;
         }
 
-        $cities[] = $this->createCityFromData($cityArray);
+        $cities[] = $this->createCityFromData($cityArray[0]);
 
         return $cities;
     }
