@@ -33,6 +33,7 @@ $_SESSION["head_printed"] = false;
  *
  */
 $MS = new MessageService();
+$UserService = new UserService();
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies

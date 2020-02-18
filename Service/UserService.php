@@ -3,65 +3,90 @@
 
 class UserService
 {
-    public function CheckLogin(User $user)
+    /**
+     * @param User $user
+     * @return bool
+     */
+
+    public function checkLoginUser(User $user,$fromRegistrateForm = false)
     {
         $login_ok = false;
-        //gebruiker opzoeken ahv zijn login (e-mail)
-        $sql = "SELECT * FROM users WHERE usr_login='" .$user->getLogin() . "' ";
-        $data = GetData($sql);
-        if ( count($data) == 1 )
+        //if you come from registration there are no checks
+        if(!$fromRegistrateForm)
         {
-            $row = $data[0];
-            //password controleren
-            if ( password_verify( $user->getPaswd(), $row['usr_paswd'] ) ) $login_ok = true;
+            // Is the user in the database?
+            if($this->checkIfUserIsInDatabase($user->getLogin()))
+            {
+                // Get the pw hash in the model
+                $user->LoadUserInModelFromDatabase();
+                //check the pw from the form with the hash
+                $login_ok = ($this->checkUserPassword($user))?true:false;
+            }
         }
-
-        if ( $login_ok )
+        
+        // if you come from registration the user model is already loaded
+        if ( $login_ok || $fromRegistrateForm)
         {
-            $user->load($row);
+            // assign to superglobal and registration of the log-in  in the database
             $_SESSION['usr'] = $user;
             $this->LogLoginUser($user);
             return true;
+        }else
+        {
+            // if there was a problem,...
+            return false;
         }
 
-        return false;
     }
 
-    public function ReloadUser(User $user)
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function ValidatePostedUserData()
     {
-        $sql = "SELECT * FROM users WHERE usr_login='" .$user->getLogin() . "' ";
-        $data = GetData($sql);
-        $user->Load($data[0]);
+        $pass = true;
+        global $MS;
+
+        // check if user already exists
+        if ($this->checkIfUserIsInDatabase($_POST['usr_login']))
+        {
+            $MS->AddMessage( "Deze login bestaat al!","error" );
+            $pass = false;
+        }
+
+        //check password
+        if (strlen($_POST["usr_paswd"]) < 8){
+            $MS->AddMessage( "Uw paswoord moet minimum 8 cijfers zijn!","error" );
+            $pass = false;
+
+        }
+
+        //check email format
+        if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL))
+        {
+            $MS->AddMessage( "Uw e-mail adres heeft een ongeldig formaat!","error" );
+            $pass = false;
+        }
+
+        // If all is ok return true
+        return $pass;
     }
 
-    public function CheckIfUserExistsAlready()
-    {
-        //controle of gebruiker al bestaat
-        $sql = "SELECT * FROM users WHERE usr_login='" . $_POST['usr_login'] . "' ";
-        $data = GetData($sql);
-        if ( count($data) > 0 ) die("Deze gebruiker bestaat reeds! Gelieve een andere login te gebruiken.");
-    }
 
-
-    public function ValidatePostedUserData(User $user)
-    {
-        $this->CheckIfUserExistsAlready();
-
-        //controle wachtwoord minimaal 8 tekens
-        if ( strlen($_POST["usr_paswd"]) < 8 ) die("Uw wachtwoord moet minstens 8 tekens bevatten!");
-
-        //controle geldig e-mailadres
-        if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) die("Ongeldig email formaat voor login");
-    }
-
-
+    /**
+     * @param User $user
+     */
     public function RegisterUser(User $user)
     {
+        $registrationSucces = false;
         global $tablename;
         global $_application_folder;
         global $MS;
 
         //wachtwoord coderen
+
         $password_encrypted = password_hash ( $_POST["usr_paswd"] , PASSWORD_DEFAULT );
 
         $sql = "INSERT INTO $tablename SET " .
@@ -76,30 +101,35 @@ class UserService
             " usr_login='" . $_POST['usr_login'] . "' , " .
             " usr_paswd='" . $password_encrypted . "'  " ;
 
-        if ( ExecuteSQL($sql) )
+        if (ExecuteSQL($sql) )
         {
             $MS->AddMessage( "Bedankt voor uw registratie!" );
-
             $user->setLogin($_POST['usr_login']);
             $user->setPaswd($_POST['usr_paswd']);
+            $user->LoadUserInModelFromDatabase();
 
-            if ( $this->CheckLogin($user) )
+            if ( $this->checkLoginUser($user,true) )
             {
-                header("Location: " .__DIR__ . "/steden.php");
+                $registrationSucces = true;
             }
             else
             {
-                $MS->AddMessage( "Sorry! Verkeerde login of wachtwoord na registratie!" );
-                header("Location: " . __DIR__ . "/login.php");
+                $MS->AddMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $registrationSucces = false;
             }
         }
         else
         {
-            $MS->AddMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ) ;
-            header("Location: " . __DIR__ . "/login.php");
+            $MS->AddMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
+            $registrationSucces = false;
+
         }
+        return $registrationSucces;
     }
 
+    /**
+     * @throws Exception
+     */
     public function LogLogoutUser()
     {
         $session = session_id();
@@ -108,6 +138,11 @@ class UserService
         $sql = "UPDATE log_user SET  log_out='".$now."' where log_session_id='".$session."'";
         ExecuteSQL($sql);
     }
+
+    /**
+     * @param User $user
+     * @throws Exception
+     */
     public function LogLoginUser(User $user)
     {
         $session = session_id();
@@ -116,4 +151,33 @@ class UserService
         $sql = "INSERT INTO log_user SET log_usr_id=".$user->getId().", log_session_id='".$session."', log_in= '".$now."'";
         ExecuteSQL($sql);
     }
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function checkUserPassword(User $user)
+    {
+        $passwCheck = (password_verify($_POST["usr_paswd"],$user->getPaswd()))?true:false;
+        return $passwCheck;
+    }
+
+
+
+    /**
+     * @param $userLogin
+     * @return bool
+     */
+
+    public function checkIfUserIsInDatabase($userLogin)
+    {
+        //controle of gebruiker al bestaat
+        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
+        $data = GetData($sql);
+
+        $userIsInDatabase = ( count($data) > 0 )? true:false;
+        return $userIsInDatabase;
+
+    }
+
+
 }
