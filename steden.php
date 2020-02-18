@@ -23,8 +23,9 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        $cityLoader = new CityLoader();
-        $cities = $cityLoader->Load();
+        $container = new Container($connectionData);
+        $cityLoader = $container->getCityLoader();
+        $cities = $cityLoader->getCities();
 
         $template = LoadTemplate("steden");
         print ReplaceCities( $cities, $template);

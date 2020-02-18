@@ -1,5 +1,10 @@
 {
     "require-dev": {
         "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "": ["Model/","Service/","lib/pdo.php","lib/passwd.php"]
+        }
     }
 }
