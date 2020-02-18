@@ -9,6 +9,8 @@ class Container
 
     private $cityLoader;
 
+    private $downloadService;
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -31,6 +33,31 @@ class Container
         return $this->pdo;
     }
 
+    /**
+     * @param string $sql
+     * @return array
+     */
+    public function getData(string $sql)
+    {
+        $stm = $this->getPDO()->prepare($sql);
+        $stm->execute();
+
+        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $rows;
+    }
+
+    /**
+     * @param $sql
+     * @return bool
+     */
+    function executeSQL(string $sql )
+    {
+        $stm = $this->getPDO()->prepare($sql);
+
+        if ( $stm->execute() ) return true;
+        else return false;
+    }
+
     public function getCityLoader()
     {
         if ($this->cityLoader === null) {
@@ -39,4 +66,52 @@ class Container
 
         return $this->cityLoader;
     }
+
+    public function getDownloadService()
+    {
+        if ($this->downloadService === null) {
+            $this->downloadService = new DownloadService($this->getPDO());
+        }
+
+        return $this->downloadService;
+    }
+
+    /* Nicole works over here
+
+
+
+
+
+
+
+
+
+
+    */
+
+
+    /* Alex works over here
+
+
+
+
+
+
+
+
+     */
+
+    /* Jan works over here
+
+
+
+
+
+
+
+
+
+
+
+    */
 }

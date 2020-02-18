@@ -1,9 +1,10 @@
 <?php
 require_once "lib/autoload.php";
 
-$dl = new DownloadService();
-$dl->PrintCSVHeader("taken" . date("Y_m_d_His"));
-$dl->GenerateRows();
+$container = new Container($connectionData);
+$downloadService = $container->getDownloadService();
+$downloadService->PrintCSVHeader("taken" . date("Y_m_d_His"));
+$downloadService->GenerateRows();
 
 //function PrintCSVHeader( $filename )
 //{
