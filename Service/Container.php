@@ -7,6 +7,8 @@ class Container
 
     private $pdo;
 
+    private $cityLoader;
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -27,5 +29,14 @@ class Container
         }
 
         return $this->pdo;
+    }
+
+    public function getCityLoader()
+    {
+        if ($this->cityLoader === null) {
+            $this->cityLoader = new CityLoader($this->getPDO());
+        }
+
+        return $this->cityLoader;
     }
 }

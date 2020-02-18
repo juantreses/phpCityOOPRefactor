@@ -14,11 +14,13 @@ BasicHead( $css );
     <div class="row">
 
         <?php
-        $cityLoader = new CityLoader();
-        $cities = $cityLoader->Load( $id = $_GET['id'] );
+        $container = new Container($connectionData);
+        $cityLoader = $container->getCityLoader();
+        $city = $cityLoader->getCityByID($id = $_GET['id']);
+
 
         $template = LoadTemplate("stad_form");
-        print ReplaceCities( $cities, $template);
+        print ReplaceCities( $city, $template);
         ?>
 
     </div>
