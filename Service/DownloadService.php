@@ -3,11 +3,11 @@
 
 class DownloadService
 {
-    private $pdo;
+    private $databaseService;
 
-    public function __construct(PDO $pdo)
+    public function __construct(DatabaseService $databaseService)
     {
-        $this->pdo = $pdo;
+        $this->databaseService = $databaseService;
     }
 
     function PrintCSVHeader( $filename )
@@ -32,10 +32,10 @@ class DownloadService
         //veldnamenrij
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
-        $pdo = $this->getPDO();
-        $statement = $pdo->prepare('SELECT * FROM taak');
-        $statement->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $this->databaseService->getData('SELECT * FROM taak');
+//        $statement = $pdo->prepare('SELECT * FROM taak');
+//        $statement->execute();
+//        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
        // $sql = "SELECT * FROM taak";
 

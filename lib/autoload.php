@@ -25,6 +25,7 @@ require_once $_root_folder . "/Service/UserService.php";
 require_once $_root_folder . "/Service/DownloadService.php";
 
 require_once $_root_folder . "/Service/Container.php";
+require_once $_root_folder . "/Service/DatabaseService.php";
 
 
 session_start();
