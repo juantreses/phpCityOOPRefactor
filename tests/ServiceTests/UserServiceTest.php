@@ -1,5 +1,5 @@
 <?php
-require __DIR__."\..\..\lib\pdo.php";
+//require __DIR__."\..\..\lib\pdo.php";
 //require __DIR__."\..\..\lib\passwd.php";
 use PHPUnit\Framework\TestCase;
 

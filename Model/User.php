@@ -21,17 +21,17 @@ class User
      * @param User $user
      */
 
-    public function LoadUserInModelFromDatabase()
+    public function loadUserInModelFromDatabase()
     {
         $sql = "SELECT * FROM users WHERE usr_login='" .$this->login . "' ";
         $data = GetData($sql);
-        $this->Load($data[0]);
+        $this->load($data[0]);
     }
 
     /**
      * @param $row
      */
-    public function Load( $row )
+    public function load($row )
     {
         $this->id = $row['usr_id'];
         $this->voornaam = $row['usr_voornaam'];

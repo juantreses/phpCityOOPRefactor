@@ -32,7 +32,7 @@ class ModelUserTest extends TestCase
     {
         $sql = "SELECT * FROM users WHERE usr_login='alex.alex@gmail.com' ";
         $data = GetData($sql);
-        $this->User->Load($data[0]);
+        $this->User->load($data[0]);
         $checkVoornaam = $this->User->getVoornaam();
         $checkNaam = $this->User->getNaam();
         $this->assertEquals("alex",$checkVoornaam);

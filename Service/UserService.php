@@ -18,7 +18,7 @@ class UserService
             if($this->checkIfUserIsInDatabase($user->getLogin()))
             {
                 // Get the pw hash in the model
-                $user->LoadUserInModelFromDatabase();
+                $user->loadUserInModelFromDatabase();
                 //check the pw from the form with the hash
                 $login_ok = ($this->checkUserPassword($user))?true:false;
             }
@@ -106,7 +106,7 @@ class UserService
             $MS->AddMessage( "Bedankt voor uw registratie!" );
             $user->setLogin($_POST['usr_login']);
             $user->setPaswd($_POST['usr_paswd']);
-            $user->LoadUserInModelFromDatabase();
+            $user->loadUserInModelFromDatabase();
 
             if ( $this->checkLoginUser($user,true) )
             {
