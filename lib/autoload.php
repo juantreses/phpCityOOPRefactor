@@ -26,6 +26,12 @@ require_once $_root_folder . "/Service/DownloadService.php";
 
 require_once $_root_folder . "/Service/Container.php";
 require_once $_root_folder . "/Service/DatabaseService.php";
+require_once $_root_folder . "/Service/ViewService.php";
+
+
+require_once $_root_folder . "/lib/passwd.php";
+require_once $_root_folder . "/lib/pdo.php";                          //database functies
+require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
 
 require_once $_root_folder . "/Service/UploadService.php";
 
@@ -38,13 +44,17 @@ $_SESSION["head_printed"] = false;
 /**
  *
  */
-$MS = new MessageService();
+$container = new Container($connectionData);
+$viewService = $container->getViewService();
+$MS = new MessageService($viewService);
 $UserService = new UserService();
+
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
 require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
 $container = new Container($connectionData);
+
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
 if ( ! isset($_SESSION['usr']) AND ! $login_form AND ! $register_form AND ! $no_access)

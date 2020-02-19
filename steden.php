@@ -6,8 +6,8 @@ ini_set("display_startup_errors", 1);
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
 
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
 <body>
@@ -17,18 +17,17 @@ $MS->ShowMessages();
     <p>Tips voor citytrips voor vrolijke vakantiegangers!</p>
 </div>
 
-<?php PrintNavBar(); ?>
+<?php $viewService->printNavBar(); ?>
 
 <div class="container">
     <div class="row">
 
         <?php
-        $container = new Container($connectionData);
         $cityLoader = $container->getCityLoader();
         $cities = $cityLoader->getCities();
 
-        $template = LoadTemplate("steden");
-        print ReplaceCities( $cities, $template);
+        $template = $viewService->loadTemplate("steden");
+        print $viewService->replaceCities($cities, $template);
         ?>
 
     </div>

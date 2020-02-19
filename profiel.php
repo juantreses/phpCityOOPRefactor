@@ -6,7 +6,7 @@ if (!$_SESSION['usr']-> getPasfoto() != "" )
 }
 
 $css = array( "style.css");
-BasicHead( $css );
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
 <body>
@@ -15,7 +15,7 @@ $MS->ShowMessages();
     <h1>Uw profiel</h1>
 </div>
 
-<?php PrintNavBar(); ?>
+<?php $viewService->printNavBar(); ?>
 
 <div class="container">
 
