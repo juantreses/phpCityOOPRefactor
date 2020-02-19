@@ -19,7 +19,7 @@ $MS->ShowMessages();
 
             $temporaryPrintWeekTask = $container->getTemporaryPrintWeekTask();
             // print the week and return the new date(link updated in class)
-            $newdate = $temporaryPrintWeekTask->printWeek($week,$year);
+            $newdate = $temporaryPrintWeekTask->printWeekAndReturnNewDateForLink($week,$year);
             $week = $newdate[0];
             $year = $newdate[1];
 

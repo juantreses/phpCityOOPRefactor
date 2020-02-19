@@ -11,7 +11,7 @@ class TemporaryPrintWeekTask
 
     }
 
-    public function printWeek($week, $year)
+    public function printWeekAndReturnNewDateForLink($week, $year)
     {
         // correction of the week //
         if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
