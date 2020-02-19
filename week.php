@@ -2,7 +2,8 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead($css);
+
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
     <body>
@@ -10,7 +11,7 @@ $MS->ShowMessages();
     <div class="jumbotron text-center">
         <h1>Weekoverzicht</h1>
     </div>
-    <?php PrintNavBar(); ?>
+    <?php $viewService->printNavBar(); ?>
 
     <div class="container">
         <div class="row">

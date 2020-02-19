@@ -96,16 +96,11 @@ class Container
      public function getViewService()
         {
             if ($this->viewService === null) {
-                $this->viewService = new ViewService();
+                $this->viewService = new ViewService($this->getDatabaseService());
             }
 
             return $this->viewService;
         }
-
-
-
-
-
 
 
 

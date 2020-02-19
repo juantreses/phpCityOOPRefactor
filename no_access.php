@@ -3,7 +3,7 @@ $no_access = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
+$viewService->basicHead($css);
 
 ?>
 <body>
@@ -16,8 +16,7 @@ BasicHead( $css );
 <div class="container">
 
         <?php
-        $views = new ViewService();
-        print $views->loadTemplate("no_access");
+        print $viewService->loadTemplate("no_access");
         ?>
 
 </div>

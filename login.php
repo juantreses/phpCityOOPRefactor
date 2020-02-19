@@ -11,8 +11,8 @@ if ( isset($_SESSION['usr']) )
 }
 
 $css = array( "style.css");
-BasicHead( $css );
 
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
 <body>
@@ -25,8 +25,7 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        $views = new ViewService();
-        print $views->loadTemplate("login");
+        print $viewService->loadTemplate("login");
         ?>
 
     </div>

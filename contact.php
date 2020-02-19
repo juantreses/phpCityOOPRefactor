@@ -3,8 +3,8 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
 
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
 <body>
@@ -13,7 +13,7 @@ $MS->ShowMessages();
     <h1>Contact</h1>
 </div>
 
-<?php PrintNavBar(); ?>
+<?php $viewService->printNavBar(); ?>
 
 <div class="container">
     <div class="row">

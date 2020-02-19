@@ -2,7 +2,8 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
+
+$viewService->basicHead($css);
 $MS->ShowMessages();
 ?>
 <body>
@@ -11,17 +12,16 @@ $MS->ShowMessages();
     <h1>Formulier File Upload</h1>
 </div>
 
-<?php PrintNavBar(); ?>
+<?php $viewService->printNavBar(); ?>
 
 <div class="container">
     <div class="row">
 
         <?php
-        $views = new ViewService();
-        print $views->loadTemplate("form_file_upload");
+        print $viewService->loadTemplate("form_file_upload");
 
         $images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
-        $views->displayImages($images);
+        $viewService->displayImages($images);
         ?>
 
     </div>

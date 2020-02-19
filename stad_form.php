@@ -2,26 +2,23 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css" );
-BasicHead( $css );
+$viewService->basicHead($css);
 ?>
 <body>
 
 <div class="jumbotron text-center">
     <h1>Formulier Stad</h1>
 </div>
-<?php PrintNavBar(); ?>
+<?php $viewService->printNavBar(); ?>
 <div class="container">
     <div class="row">
 
         <?php
-        $container = new Container($connectionData);
-        $views = new ViewService();
-
         $cityLoader = $container->getCityLoader();
         $city = $cityLoader->getCityByID($id = $_GET['id']);
 
-        $template = $views->loadTemplate("stad_form");
-        print ReplaceCities( $city, $template);
+        $template = $viewService->loadTemplate("stad_form");
+        print $viewService->replaceCities($city, $template);
         ?>
 
     </div>
