@@ -15,6 +15,11 @@ class Container
 
     private $temporaryPrintWeekTask;
 
+    private $userService;
+
+    private $formHandler;
+
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -91,18 +96,25 @@ class Container
         return $this->downloadService;
     }
 
-    /* Nicole works over here
+    /* Nicole works over here */
 
+    public function getUserService()
+    {
+        if ($this->userService === null) {
+            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler());
+        }
 
+        return $this->userService;
+    }
 
+     public function getFormHandler()
+    {
+        if ($this->formHandler === null) {
+            $this->formHandler = new FormHandler();
+        }
 
-
-
-
-
-
-
-    */
+        return $this->formHandler;
+    }
 
 
 //     Alex works over here

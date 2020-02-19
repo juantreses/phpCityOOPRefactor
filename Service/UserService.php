@@ -4,6 +4,15 @@
 class UserService
 {
 
+    private $databaseService;
+
+    private $formHandler;
+
+    public function __construct(DatabaseService $databaseService, FormHandler $formHandler)
+    {
+        $this->databaseService = $databaseService;
+        $this->formHandler = $formHandler;
+    }
     /**
      * @param User $user
      * @return bool

@@ -4,6 +4,13 @@
 class FormHandler
 {
 
+    private $databaseService;
+
+    public function __construct(DatabaseService $databaseService)
+    {
+        $this->databaseService = $databaseService;
+    }
+
 
     /**
      * @param $userLogin
@@ -13,11 +20,14 @@ class FormHandler
     public function checkIfUserIsInDatabase($userLogin)
     {
         //controle of gebruiker al bestaat
-        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
-        $data = GetData($sql);
-
+        $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = ( count($data) > 0 )? true:false;
         return $userIsInDatabase;
+
+//        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
+//        $data = GetData($sql);
+
+
 
     }
 
