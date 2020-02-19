@@ -20,17 +20,6 @@ $MS->ShowMessages();
         $uploadService = new UploadService();
         $uploadService->LoadUploadPage();
 
-//        print LoadTemplate("form_file_upload");
-//
-//        $images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
-//        $i =0;
-//        foreach( $images as $img )
-//        {
-//
-//            $replaceData[$i]['img']= "'".$img."'" ;
-//            $i++;
-//        }
-//        print ReplaceContent($replaceData,LoadTemplate("file_upload_img"));
         ?>
 
     </div>
