@@ -33,6 +33,10 @@ require_once $_root_folder . "/Service/UploadService.php";
 require_once $_root_folder . "/Service/TemporaryPrintWeekTask.php";
 
 
+
+require_once $_root_folder . "/Service/FormHandler.php";
+
+
 session_start();
 $_SESSION["head_printed"] = false;
 /**
@@ -40,6 +44,7 @@ $_SESSION["head_printed"] = false;
  */
 $MS = new MessageService();
 $UserService = new UserService();
+$formHandler = new FormHandler();
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies

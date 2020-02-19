@@ -10,7 +10,7 @@ if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register"
 {
     $User = new User();
     // if the from and user data is valid
-    if ($UserService->ValidatePostedUserData())
+    if ($formHandler->ValidatePostedUserData())
     {
         if ($UserService->RegisterUser($User))
         {
