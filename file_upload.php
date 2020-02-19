@@ -18,10 +18,10 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        print $viewService->loadTemplate("form_file_upload");
 
-        $images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
-        $viewService->displayImages($images);
+        $uploadService = new UploadService();
+        $uploadService->LoadUploadPage();
+
         ?>
 
     </div>
