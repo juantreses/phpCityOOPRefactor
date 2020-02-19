@@ -2,6 +2,13 @@
 
 class MessageService
 {
+    private $viewService;
+
+    public function __construct(ViewService $viewService)
+    {
+        $this->viewService = $viewService;
+    }
+
     public function AddMessage( $msg, $type = "info" )
     {
         $_SESSION["$type"][] = $msg ;
@@ -19,7 +26,8 @@ class MessageService
                 foreach( $_SESSION["$type"] as $message )
                 {
                     $row = array( "message" => $message );
-                    $templ = LoadTemplate("$type" . "s");   // errors.html en infos.html
+                    $templ = $this->viewService->loadTemplate("$type" . "s");
+                    //$templ = LoadTemplate("$type" . "s");   // errors.html en infos.html
                     print ReplaceContentOneRow( $row, $templ );
                 }
 

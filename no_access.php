@@ -16,7 +16,8 @@ BasicHead( $css );
 <div class="container">
 
         <?php
-        print LoadTemplate("no_access");
+        $views = new ViewService();
+        print $views->loadTemplate("no_access");
         ?>
 
 </div>

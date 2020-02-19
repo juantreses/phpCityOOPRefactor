@@ -16,7 +16,8 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        print LoadTemplate("register");
+        $views = new ViewService();
+        print $views->loadTemplate("register");
         ?>
 
     </div>

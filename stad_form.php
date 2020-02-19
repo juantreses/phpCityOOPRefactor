@@ -15,10 +15,12 @@ BasicHead( $css );
 
         <?php
         $container = new Container($connectionData);
+        $views = new ViewService();
+
         $cityLoader = $container->getCityLoader();
         $city = $cityLoader->getCityByID($id = $_GET['id']);
 
-        $template = LoadTemplate("stad_form");
+        $template = $views->loadTemplate("stad_form");
         print ReplaceCities( $city, $template);
         ?>
 

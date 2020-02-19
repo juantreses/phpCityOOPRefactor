@@ -24,10 +24,12 @@ $MS->ShowMessages();
 
         <?php
         $container = new Container($connectionData);
+        $views = new ViewService();
+
         $cityLoader = $container->getCityLoader();
         $cities = $cityLoader->getCities();
 
-        $template = LoadTemplate("steden");
+        $template = $views->loadTemplate("steden");
         print ReplaceCities( $cities, $template);
         ?>
 
