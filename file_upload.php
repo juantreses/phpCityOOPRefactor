@@ -17,15 +17,9 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        print LoadTemplate("form_file_upload");
-        $images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
-        foreach( $images as $img )
-        {
-            print "<div class='div_thumb'>";
-            print "<img class='thumbnail' src='$img'><br>";
-            print "<span class='img_name'>$img</span>";
-            print "</div>";
-        }
+        $uploadService = new UploadService();
+        $uploadService->LoadUploadPage();
+
         ?>
 
     </div>
