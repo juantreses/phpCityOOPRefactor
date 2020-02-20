@@ -19,6 +19,8 @@ class Container
 
     private $formHandler;
 
+    private $uploadService;
+
 
     public function __construct(array $configuration)
     {
@@ -114,6 +116,15 @@ class Container
         }
 
         return $this->formHandler;
+    }
+
+    public function getUploadService()
+    {
+        if ($this->uploadService === null) {
+            $this->uploadService = new UploadService($this->getFormHandler());
+        }
+
+        return $this->uploadService;
     }
 
 

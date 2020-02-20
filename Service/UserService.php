@@ -6,7 +6,7 @@ class UserService
 
     private $databaseService;
 
-//    private $formHandler;
+    private $formHandler;
 
     public function __construct(DatabaseService $databaseService, FormHandler $formHandler)
     {
