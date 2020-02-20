@@ -6,7 +6,7 @@ class UserService
 
     private $databaseService;
 
-    private $formHandler;
+//    private $formHandler;
 
     public function __construct(DatabaseService $databaseService, FormHandler $formHandler)
     {
@@ -25,7 +25,7 @@ class UserService
         if(!$fromRegistrateForm)
         {
             // Is the user in the database?
-            if($this->checkIfUserIsInDatabase($user->getLogin()))
+            if($this->formHandler->checkIfUserIsInDatabase($user->getLogin()))
             {
                 // Get the pw hash in the model
                 $user->loadUserInModelFromDatabase();

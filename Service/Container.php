@@ -34,7 +34,7 @@ class Container
             $this->pdo = new PDO(
                 $this->configuration['db_dsn'],
                 $this->configuration['db_user'],
-                $this->configuration['db_pass'],
+                $this->configuration['db_pass']
             );
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
@@ -110,7 +110,7 @@ class Container
      public function getFormHandler()
     {
         if ($this->formHandler === null) {
-            $this->formHandler = new FormHandler();
+            $this->formHandler = new FormHandler($this->getDatabaseService());
         }
 
         return $this->formHandler;

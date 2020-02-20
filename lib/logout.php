@@ -3,7 +3,7 @@ require_once "autoload.php";
 
 
 session_start();
-$UserService = new UserService();
+//$UserService = new UserService();
 $UserService->LogLogoutUser();
 
 session_destroy();

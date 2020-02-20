@@ -42,14 +42,17 @@ $_SESSION["head_printed"] = false;
 /**
  *
  */
-$MS = new MessageService();
-$UserService = new UserService();
-$formHandler = new FormHandler();
-
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
 require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
+
+
+$MS = new MessageService();
 $container = new Container($connectionData);
+$UserService = $container->getUserService();
+//$formHandler = new FormHandler();
+
+
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
 if ( ! isset($_SESSION['usr']) AND ! $login_form AND ! $register_form AND ! $no_access)
