@@ -19,7 +19,8 @@ $MS->ShowMessages();
 
         <?php
 
-        $uploadService = new UploadService();
+        $uploadService = $container->getUploadService();
+//         $uploadService = new UploadService();
         $uploadService->LoadUploadPage();
 
         ?>

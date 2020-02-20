@@ -5,6 +5,13 @@ class UploadService
 {
     private $images;
 
+    private $formHandler;
+
+    public function __construct(FormHandler $formHandler)
+    {
+        $this->formHandler = $formHandler;
+    }
+
 
 
     public function LoadUploadPage()
@@ -39,20 +46,20 @@ class UploadService
     {
         global $MS;
         global $_application_folder;
-        $target_dir = "../img/";                                                          //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
-        $max_size = 5000000;                                                           //maximum grootte in bytes
+        $target_dir = "../img/";                     //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
+        $max_size = 5000000;                         //maximum grootte in bytes
         $allowed_extensions = [ "jpeg", "jpg", "png", "gif" ];
         $fileUploadNr = 0;
         foreach ( $_FILES as $f )
         {
             $upfile = array();
             $f['name'] = strtolower($f['name']);
-            $upfile["name"]                            = basename($f["name"]);
-            $upfile["tmp_name"]                    = $f["tmp_name"];
-            $upfile["target_path_name"]       = $target_dir . $upfile["name"]; //samenstellen definitieve bestandsnaam (+pad)    //basename
-            $upfile["extension"]                      = strtolower(pathinfo($upfile["name"], PATHINFO_EXTENSION));
-            $upfile["getimagesize"]                = getimagesize($upfile["tmp_name"]);                 //getimagesize geeft false als het bestand geen afbeelding is
-            $upfile["size"]                                = $f["size"];
+            $upfile["name"] = basename($f["name"]);
+            $upfile["tmp_name"] = $f["tmp_name"];
+            $upfile["target_path_name"] = $target_dir . $upfile["name"]; //samenstellen definitieve bestandsnaam (+pad)    //basename
+            $upfile["extension"] = strtolower(pathinfo($upfile["name"], PATHINFO_EXTENSION));
+            $upfile["getimagesize"] = getimagesize($upfile["tmp_name"]);                 //getimagesize geeft false als het bestand geen afbeelding is
+            $upfile["size"] = $f["size"];
 
             // If there is no file the loop wil be broken, otherwise the check's run and files are imported
 
@@ -63,7 +70,7 @@ class UploadService
                 continue;
             }
 
-            if (!$this->CheckImage($f,$allowed_extensions,$max_size)
+            if (!$this->formHandler->CheckImage($f,$allowed_extensions,$max_size)
             ){
                 header("location:".$_application_folder."/file_upload.php");
                 die;
@@ -94,33 +101,6 @@ class UploadService
     }
 
 
-    private function CheckImage($f,$ext_allowed = array("png","jpg","jpeg"),$max_size = 8000000){
-    // get the Mes. service
-    global $MS;
 
-    // Check the extensions
-    $ext_allowed = array(
-        "png",
-        "jpg",
-        "jpeg"
-    );
-
-    $filename = strtolower($f["name"]) ;
-    $fileExplode = explode(".",$filename);
-    $fileExt = end($fileExplode);
-    if (! in_array($fileExt,$ext_allowed)){
-        $MS->AddMessage( "U mag enkel jpg, jpeg of png bestanden toevoegen. ",'error' );
-//            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
-        return false;
-    }
-if ($f["size"] > $max_size){
-    $MS->AddMessage( "Een afbeelding mag maximum 8MB zijn ",'error' );
-//            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
-    return false;
-}
-
-// als er geen errors zijn zal True meegeven worden
-return true;
-}
 
 }

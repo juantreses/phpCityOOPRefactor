@@ -39,21 +39,28 @@ require_once $_root_folder . "/Service/UploadService.php";
 require_once $_root_folder . "/Service/TemporaryPrintWeekTask.php";
 
 
+
+require_once $_root_folder . "/Service/FormHandler.php";
+
+
 session_start();
 $_SESSION["head_printed"] = false;
 /**
  *
  */
+
 $container = new Container($connectionData);
 $viewService = $container->getViewService();
 $MS = new MessageService($viewService);
-$UserService = new UserService();
+$UserService = $container->getUserService();
 
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
 require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
-$container = new Container($connectionData);
+
+
+
 
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
