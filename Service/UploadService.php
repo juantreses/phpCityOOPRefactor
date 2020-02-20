@@ -46,20 +46,20 @@ class UploadService
     {
         global $MS;
         global $_application_folder;
-        $target_dir = "../img/";                                                          //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
-        $max_size = 5000000;                                                           //maximum grootte in bytes
+        $target_dir = "../img/";                     //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
+        $max_size = 5000000;                         //maximum grootte in bytes
         $allowed_extensions = [ "jpeg", "jpg", "png", "gif" ];
         $fileUploadNr = 0;
         foreach ( $_FILES as $f )
         {
             $upfile = array();
             $f['name'] = strtolower($f['name']);
-            $upfile["name"]                            = basename($f["name"]);
-            $upfile["tmp_name"]                    = $f["tmp_name"];
-            $upfile["target_path_name"]       = $target_dir . $upfile["name"]; //samenstellen definitieve bestandsnaam (+pad)    //basename
-            $upfile["extension"]                      = strtolower(pathinfo($upfile["name"], PATHINFO_EXTENSION));
-            $upfile["getimagesize"]                = getimagesize($upfile["tmp_name"]);                 //getimagesize geeft false als het bestand geen afbeelding is
-            $upfile["size"]                                = $f["size"];
+            $upfile["name"] = basename($f["name"]);
+            $upfile["tmp_name"] = $f["tmp_name"];
+            $upfile["target_path_name"] = $target_dir . $upfile["name"]; //samenstellen definitieve bestandsnaam (+pad)    //basename
+            $upfile["extension"] = strtolower(pathinfo($upfile["name"], PATHINFO_EXTENSION));
+            $upfile["getimagesize"] = getimagesize($upfile["tmp_name"]);                 //getimagesize geeft false als het bestand geen afbeelding is
+            $upfile["size"] = $f["size"];
 
             // If there is no file the loop wil be broken, otherwise the check's run and files are imported
 
