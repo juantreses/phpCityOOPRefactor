@@ -54,7 +54,7 @@ if ( isset($_POST["submit"]) == "Opladen" )
 //                print "Bestand $originele_naam opgeladen<br>";
                 $sql = "update users SET " . implode("," , $images) . " where usr_id=".$_SESSION['usr']->getId();
                 ExecuteSQL($sql);
-                $userService = new UserService();
+//                $userService = new UserService();
                 $_SESSION['usr']->LoadUserInModelFromDatabase();
 
 

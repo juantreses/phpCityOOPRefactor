@@ -18,7 +18,7 @@ if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register"
 
     if ($formHandler->ValidatePostedUserData())
     {
-        if ($UserService->RegisterUser($User))
+        if ($UserService->CheckRegistrationSuccess($User))
         {
             header("Location:../steden.php");
         }

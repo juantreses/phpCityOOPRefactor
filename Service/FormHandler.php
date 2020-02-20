@@ -64,4 +64,32 @@ class FormHandler
         return $pass;
     }
 
+
+    public function RegisterUser() {
+
+        global $tablename;
+
+        // encrypt password
+
+        $password_encrypted = password_hash ( $_POST["usr_paswd"] , PASSWORD_DEFAULT );
+
+        // insert into db
+
+        $sql = "INSERT INTO $tablename SET " .
+            " usr_voornaam='" . htmlentities($_POST['usr_voornaam'], ENT_QUOTES) . "' , " .
+            " usr_naam='" . htmlentities($_POST['usr_naam'], ENT_QUOTES) . "' , " .
+            " usr_straat='" . htmlentities($_POST['usr_straat'], ENT_QUOTES) . "' , " .
+            " usr_huisnr='" . htmlentities($_POST['usr_huisnr'], ENT_QUOTES) . "' , " .
+            " usr_busnr='" . htmlentities($_POST['usr_busnr'], ENT_QUOTES) . "' , " .
+            " usr_postcode='" . htmlentities($_POST['usr_postcode'], ENT_QUOTES) . "' , " .
+            " usr_gemeente='" . htmlentities($_POST['usr_gemeente'], ENT_QUOTES) . "' , " .
+            " usr_telefoon='" . htmlentities($_POST['usr_telefoon'], ENT_QUOTES) . "' , " .
+            " usr_login='" . $_POST['usr_login'] . "' , " .
+            " usr_paswd='" . $password_encrypted . "'  " ;
+
+            return $sql;
+
+    }
+
+
 }
