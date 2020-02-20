@@ -3,8 +3,9 @@ $register_form = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
-$MS->ShowMessages();
+
+$viewService->basicHead($css);
+$MS->showMessages();
 ?>
 <body>
 
@@ -16,7 +17,7 @@ $MS->ShowMessages();
     <div class="row">
 
         <?php
-        print LoadTemplate("register");
+        print $viewService->loadTemplate("register");
         ?>
 
     </div>

@@ -13,6 +13,8 @@ class Container
 
     private $databaseService;
 
+    private $viewService;
+  
     private $temporaryPrintWeekTask;
 
     private $userService;
@@ -43,31 +45,6 @@ class Container
 
         return $this->pdo;
     }
-
-//    /**
-//     * @param string $sql
-//     * @return array
-//     */
-//    public function getData(string $sql)
-//    {
-//        $stm = $this->getPDO()->prepare($sql);
-//        $stm->execute();
-//
-//        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
-//        return $rows;
-//    }
-//
-//    /**
-//     * @param $sql
-//     * @return bool
-//     */
-//    function executeSQL(string $sql )
-//    {
-//        $stm = $this->getPDO()->prepare($sql);
-//
-//        if ( $stm->execute() ) return true;
-//        else return false;
-//    }
 
     public function getDatabaseService()
     {
@@ -140,17 +117,19 @@ class Container
 
 //
 
-    /* Jan works over here
+    // Jan works over here
+
+     public function getViewService()
+        {
+            if ($this->viewService === null) {
+                $this->viewService = new ViewService($this->getDatabaseService());
+            }
+
+            return $this->viewService;
+        }
 
 
 
 
 
-
-
-
-
-
-
-    */
 }

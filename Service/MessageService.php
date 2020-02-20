@@ -2,6 +2,13 @@
 
 class MessageService
 {
+    private $viewService;
+
+    public function __construct(ViewService $viewService)
+    {
+        $this->viewService = $viewService;
+    }
+
     public function AddMessage( $msg, $type = "info" )
     {
         $_SESSION["$type"][] = $msg ;
@@ -9,7 +16,7 @@ class MessageService
 
     public function ShowMessages()
     {
-        if ( ! $_SESSION["head_printed"] ) BasicHead();
+        if ( ! $_SESSION["head_printed"] ) $this->viewService->basicHead();
 
         //weergeven 2 soorten messages: errors en infos
         foreach( array("error", "info") as $type )
@@ -19,14 +26,13 @@ class MessageService
                 foreach( $_SESSION["$type"] as $message )
                 {
                     $row = array( "message" => $message );
-                    $templ = LoadTemplate("$type" . "s");   // errors.html en infos.html
-                    print ReplaceContentOneRow( $row, $templ );
+                    $templ = $this->viewService->loadTemplate("$type" . "s");
+                    print $this->viewService->replaceContentOneRow( $row, $templ );
                 }
 
                 unset($_SESSION["$type"]);
             }
         }
-
     }
 
 }
