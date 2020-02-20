@@ -25,6 +25,11 @@ class UploadService
 
     }
 
+    public  function LoadProfilePage()
+    {
+
+    }
+
     private function printUploadForm()
     {
         print LoadTemplate("form_file_upload");

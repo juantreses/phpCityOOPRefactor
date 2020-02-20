@@ -8,10 +8,13 @@ class UserService
 
     private $formHandler;
 
-    public function __construct(DatabaseService $databaseService, FormHandler $formHandler)
+    private $viewService;
+
+    public function __construct(DatabaseService $databaseService, FormHandler $formHandler,ViewService $viewService)
     {
         $this->databaseService = $databaseService;
         $this->formHandler = $formHandler;
+        $this->viewService = $viewService;
     }
     /**
      * @param User $user
@@ -125,9 +128,42 @@ class UserService
         return $passwCheck;
     }
 
+    public function loadProfielPage()
+    {
+        //gebruikersgegevens ophalen uit databank
+        $sql = "select * from users where usr_id=" . $_SESSION["usr"]->getId();
+        $data = $this->databaseService->getData($sql);
+        $img_az_eid = "";
+        $img_vz_eid = "";
+        $img_pasfoto = "";
+//            print "<table class='table table-striped table-bordered'>";
 
 
+        $tableRow = "";
+        foreach( $data[0] as $field => $value )
+        {
+            $notintable = false;
 
+            //foto's afhandelen
+            if ( $field == "usr_pasfoto" AND $value != "" ) { $contentProfielTable[0]["img_pasfoto"] = "<img class='thumbnail' src='img/$value'>"; $notintable = true; }
+            if ( $field == "usr_vz_eid" AND $value != "" ) {  $contentProfielTable[0]["img_vz_eid"] = "<img class='thumbnail' src='img/$value'>"; $notintable = true; }
+            if ( $field == "usr_az_eid" AND $value != "" ) { $contentProfielTable[0]["img_az_eid"] = "<img class='thumbnail' src='img/$value'>"; $notintable = true; }
 
+            //password niet tonen
+            if ( $field == "usr_paswd" ) $notintable = true;
+
+            //alle andere velden weergeven
+            if ( !$notintable )
+            {
+                $caption = str_replace("usr_", "", $field);
+                $caption = strtoupper(substr($caption,0,1)) . substr($caption,1);
+                $tableRow .= "<tr><td>$caption</td><td>$value</td></tr>";
+
+            }
+        }
+        $contentProfielTable[0]["table_row"]= $tableRow;
+        print $this->viewService->replaceContentOneRow($contentProfielTable[0],$this->viewService->loadTemplate("profiel"));
+
+    }
 
 }
