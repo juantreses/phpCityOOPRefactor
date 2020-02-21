@@ -3,16 +3,8 @@ require_once "lib/autoload.php";
 
 $css = array( "style.css");
 
-$viewService->basicHead($css);
-$MS->ShowMessages();
+$viewService->basicHead($css, "Formulier File Upload");
 ?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Formulier File Upload</h1>
-</div>
-
-<?php $viewService->printNavBar(); ?>
 
 <div class="container">
     <div class="row">

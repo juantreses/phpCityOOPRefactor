@@ -31,7 +31,6 @@ require_once $_root_folder . "/Service/ViewService.php";
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
-require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
 
 require_once $_root_folder . "/Service/UploadService.php";
 
@@ -54,7 +53,6 @@ $UserService = $container->getUserService();
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
-require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_template, replacecontent...
 
 
 
