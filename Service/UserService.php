@@ -162,6 +162,7 @@ class UserService
             }
         }
         $contentProfielTable[0]["table_row"]= $tableRow;
+        // replace the the fields in the template whit the data
         print $this->viewService->replaceContentOneRow($contentProfielTable[0],$this->viewService->loadTemplate("profiel"));
 
     }

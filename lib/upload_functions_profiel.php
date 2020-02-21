@@ -4,6 +4,9 @@ require_once "autoload.php";
 if ( isset($_POST["submit"]) == "Opladen" )
 {
 
+    $upLoadservice = $container->getUploadService();
+    $upLoadservice->SubmitProfielForm();
+
     $target_dir = "../img/";                                                          //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
     $max_size = 5000000;//maximum grootte in bytes
     $imagesUploadCheck = false;
@@ -41,6 +44,8 @@ if ( isset($_POST["submit"]) == "Opladen" )
                     $target = "eidachter_" . $_SESSION['usr']->getId() . "." . $extensie;
                     $images[] = "usr_az_eid='" . $target . "'";
                     break;
+                default:
+                    $target =$fileobject["name"];
             }
             $target = $target_dir . $target;
 

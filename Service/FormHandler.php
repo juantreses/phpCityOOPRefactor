@@ -93,6 +93,7 @@ class FormHandler
 
     public function CheckImage($f, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
+        foreach ($f as $uploadFile)
         // get the Mes. service
         global $MS;
 
