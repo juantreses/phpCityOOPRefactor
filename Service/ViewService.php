@@ -181,8 +181,6 @@ class ViewService
                     $templ = $this->loadTemplate("$type" . "s");
                     return $this->replaceContentOneRow( $row, $templ );
                 }
-
-                unset($_SESSION["$type"]);
             }
         }
     }
