@@ -29,11 +29,13 @@ class ViewService
 
 
 
-        $data = array("stylesheets" => $str_stylesheets, "header" => $header );
+        $data = array("stylesheets" => $str_stylesheets, "header" => $header, "messages" => $this->returnMessages() );
+
+        unset($_SESSION["error"]);
+        unset($_SESSION["info"]);
+
         $template = $this->loadTemplate("basic_head");
         print $this->replaceContentOneRow($data, $template);
-
-        $this->showMessages();
 
         if (! $login_form and ! $register_form and ! $no_access ) {
             $this->printNavBar();
@@ -166,7 +168,7 @@ class ViewService
         return $newDate= array($week,$year);
     }
 
-    private function showMessages()
+    private function returnMessages()
     {
         //weergeven 2 soorten messages: errors en infos
         foreach( array("error", "info") as $type )
@@ -177,7 +179,7 @@ class ViewService
                 {
                     $row = array( "message" => $message );
                     $templ = $this->loadTemplate("$type" . "s");
-                    print $this->replaceContentOneRow( $row, $templ );
+                    return $this->replaceContentOneRow( $row, $templ );
                 }
 
                 unset($_SESSION["$type"]);
