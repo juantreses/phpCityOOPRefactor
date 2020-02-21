@@ -41,20 +41,20 @@ class FormHandler
 
         // check if user already exists
         if ($this->checkIfUserIsInDatabase($_POST['usr_login'])) {
-            $MS->AddMessage("Deze login bestaat al!", "error");
+            $MS->addMessage("Deze login bestaat al!", "error");
             $pass = false;
         }
 
         //check password
         if (strlen($_POST["usr_paswd"]) < 8) {
-            $MS->AddMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
+            $MS->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
             $pass = false;
 
         }
 
         //check email format
         if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) {
-            $MS->AddMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
+            $MS->addMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
             $pass = false;
         }
 
@@ -107,12 +107,12 @@ class FormHandler
         $fileExplode = explode(".", $filename);
         $fileExt = end($fileExplode);
         if (!in_array($fileExt, $ext_allowed)) {
-            $MS->AddMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
+            $MS->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
             //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
             return false;
         }
         if ($f["size"] > $max_size) {
-            $MS->AddMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
+            $MS->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
             //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
             return false;
         }

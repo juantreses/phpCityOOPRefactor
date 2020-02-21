@@ -2,7 +2,7 @@
 
 class MessageService
 {
-    public function AddMessage( $msg, $type = "info" )
+    public function addMessage($msg, $type = "info" )
     {
         $_SESSION["$type"][] = $msg ;
     }

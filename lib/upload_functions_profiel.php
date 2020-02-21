@@ -50,7 +50,7 @@ if ( isset($_POST["submit"]) == "Opladen" )
             if ( move_uploaded_file( $tmp_name, $target))
             {
                 $imagesUploadCheck = true;
-                $MS->AddMessage("Bestand $originele_naam opgeladen");
+                $MS->addMessage("Bestand $originele_naam opgeladen");
 //                print "Bestand $originele_naam opgeladen<br>";
                 $sql = "update users SET " . implode("," , $images) . " where usr_id=".$_SESSION['usr']->getId();
                 ExecuteSQL($sql);
@@ -59,11 +59,11 @@ if ( isset($_POST["submit"]) == "Opladen" )
 
 
             }
-            else $MS->AddMessage("Sorry, there was an unexpected error uploading file " . $originele_naam );
+            else $MS->addMessage("Sorry, there was an unexpected error uploading file " . $originele_naam );
         }
 
     }
-    if(!$imagesUploadCheck)$MS->AddMessage("Sorry,there  where no images " ,"error");
+    if(!$imagesUploadCheck)$MS->addMessage("Sorry,there  where no images " ,"error");
     header("location:".$_application_folder."/profiel.php");
 
 
