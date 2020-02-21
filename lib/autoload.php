@@ -36,9 +36,6 @@ require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_
 require_once $_root_folder . "/Service/UploadService.php";
 
 
-require_once $_root_folder . "/Service/TemporaryPrintWeekTask.php";
-
-
 
 require_once $_root_folder . "/Service/FormHandler.php";
 
