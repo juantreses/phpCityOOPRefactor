@@ -11,9 +11,12 @@ class ViewService
         $this->databaseService = $databaseService;
     }
 
-    public function basicHead( $css = "" )
+    public function basicHead( $css = "", $header )
     {
         global $_application_folder;
+        global $login_form;
+        global $register_form;
+        global $no_access;
 
         $str_stylesheets = "";
         if ( is_array($css))
@@ -24,14 +27,22 @@ class ViewService
             }
         }
 
-        $data = array("stylesheets" => $str_stylesheets );
+
+
+        $data = array("stylesheets" => $str_stylesheets, "header" => $header );
         $template = $this->loadTemplate("basic_head");
         print $this->replaceContentOneRow($data, $template);
+
+        $this->showMessages();
+
+        if (! $login_form and ! $register_form and ! $no_access ) {
+            $this->printNavBar();
+        }
 
         $_SESSION["head_printed"] = true;
     }
 
-    function printNavBar()
+    private function printNavBar()
     {
         //navbar items ophalen
         $data = $this->databaseService->getData("select * from menu order by men_order");
@@ -70,7 +81,7 @@ class ViewService
         if ( file_exists("../templates/$name.html") ) return file_get_contents("../templates/$name.html");
     }
 
-    function replaceContent( $data, $template_html )
+    public function replaceContent( $data, $template_html )
     {
         $returnval = "";
 
@@ -89,16 +100,6 @@ class ViewService
         return $returnval;
     }
 
-    public function displayImages( $images )
-    {
-        foreach( $images as $img )
-        {
-            print "<div class='div_thumb'>";
-            print "<img class='thumbnail' src='$img'><br>";
-            print "<span class='img_name'>$img</span>";
-            print "</div>";
-        }
-    }
 
     public function replaceCities( $cities, $template_html )
     {
@@ -163,5 +164,24 @@ class ViewService
         $dataReplaceOneRow['link_next_week'] = "week.php?week=" . ($week == 1 ? 52 : $week + 1 ) . "&year=" . ($week == 1 ? $year + 1 : $year);
         print $this->replaceContentOneRow($dataReplaceOneRow,$this->loadTemplate("week_table"));
         return $newDate= array($week,$year);
+    }
+
+    private function showMessages()
+    {
+        //weergeven 2 soorten messages: errors en infos
+        foreach( array("error", "info") as $type )
+        {
+            if ( key_exists("$type", $_SESSION) AND is_array($_SESSION["$type"]) AND count($_SESSION["$type"]) > 0 )
+            {
+                foreach( $_SESSION["$type"] as $message )
+                {
+                    $row = array( "message" => $message );
+                    $templ = $this->loadTemplate("$type" . "s");
+                    print $this->replaceContentOneRow( $row, $templ );
+                }
+
+                unset($_SESSION["$type"]);
+            }
+        }
     }
 }

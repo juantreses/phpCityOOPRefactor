@@ -12,15 +12,9 @@ if ( isset($_SESSION['usr']) )
 
 $css = array( "style.css");
 
-$viewService->basicHead($css);
+$viewService->basicHead($css, "Login");
 $MS->ShowMessages();
 ?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Login</h1>
-</div>
-
 <div class="container">
     <div class="row">
 
