@@ -23,17 +23,8 @@ class FormHandler
         $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = (count($data) > 0) ? true : false;
         return $userIsInDatabase;
-
-//        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
-//        $data = GetData($sql);
-
-
     }
 
-    /**
-     * @param User $user
-     * @return bool
-     */
     public function ValidatePostedUserData()
     {
         $pass = true;
@@ -143,12 +134,12 @@ class FormHandler
         if ( $_POST[$pkey] > 0 ) //update
         {
             $sql = "UPDATE $tablename SET " . implode( ", " , $sql_body ) . " WHERE $pkey=" . $_POST[$pkey];
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
+            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
         }
         else //insert
         {
             $sql = "INSERT INTO $tablename SET " . implode( ", " , $sql_body );
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
+            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
         }
 
         //print $sql;
