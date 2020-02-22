@@ -7,9 +7,15 @@ class UploadService
 
     private $formHandler;
 
-    public function __construct(FormHandler $formHandler)
+    private $viewService;
+
+    private $messageService;
+
+    public function __construct(FormHandler $formHandler, ViewService $viewService, MessageService $messageService)
     {
         $this->formHandler = $formHandler;
+        $this->viewService = $viewService;
+        $this->messageService = $messageService;
     }
 
 
@@ -27,7 +33,7 @@ class UploadService
 
     private function printUploadForm()
     {
-        print LoadTemplate("form_file_upload");
+        print $this->viewService->loadTemplate("form_file_upload");
     }
 
     private function printImages()
@@ -39,12 +45,11 @@ class UploadService
             $replaceData[$i]['img']= "'".$img."'" ;
             $i++;
         }
-        print ReplaceContent($replaceData,LoadTemplate("file_upload_img"));
+        print $this->viewService->replaceContent($replaceData,$this->viewService->loadTemplate("file_upload_img"));
     }
 
     public function checkUploadForm()
     {
-        global $MS;
         global $_application_folder;
         $target_dir = "../img/";                     //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
         $max_size = 5000000;                         //maximum grootte in bytes
@@ -80,14 +85,14 @@ class UploadService
                 //bestand verplaatsen naar definitieve locatie + naam
                 if ( move_uploaded_file( $upfile["tmp_name"], $upfile["target_path_name"] ))
                 {
-                    $MS->AddMessage( 'The file ' . $upfile["name"] . " has been uploaded as " . $upfile["target_path_name"]   );
+                    $this->messageService->addMessage( 'The file ' . $upfile["name"] . " has been uploaded as " . $upfile["target_path_name"]   );
 //                echo "The file " . $upfile["name"] . " has been uploaded as " . $upfile["target_path_name"] . "<br>";
                     $upLoad = true;
 
                 }
                 else
                 {
-                    $MS->AddMessage( "Sorry, there was an unexpected error uploading file ". $upfile["name"]  ,'error' );
+                    $this->messageService->addMessage( "Sorry, there was an unexpected error uploading file ". $upfile["name"]  ,'error' );
 //                echo "Sorry, there was an unexpected error uploading file " . $upfile["name"] . "<br>";
                     $upLoad = true;
                 }
@@ -95,7 +100,7 @@ class UploadService
 
         }
         // if there where no images selected there wil be a error message
-        if(!$upLoad)$MS->AddMessage( "sorry, there where no images"  ,'error' );
+        if(! $upLoad ) $this->messageService->addMessage( "sorry, there where no images"  ,'error' );
         header("location:".$_application_folder."/file_upload.php");
 
     }

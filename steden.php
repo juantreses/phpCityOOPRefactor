@@ -7,17 +7,7 @@ require_once "lib/autoload.php";
 
 $css = array( "style.css");
 
-$viewService->basicHead($css);
-$MS->ShowMessages();
-?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Leuke plekken in Europa</h1>
-    <p>Tips voor citytrips voor vrolijke vakantiegangers!</p>
-</div>
-
-<?php $viewService->printNavBar(); ?>
+$viewService->basicHead($css, "Leuke plekken in Europa"); ?>
 
 <div class="container">
     <div class="row">

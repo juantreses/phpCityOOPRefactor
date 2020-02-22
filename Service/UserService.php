@@ -67,7 +67,7 @@ class UserService
 
         if (ExecuteSQL($sql) )
         {
-            $MS->AddMessage( "Bedankt voor uw registratie!" );
+            $MS->addMessage( "Bedankt voor uw registratie!" );
             $user->setLogin($_POST['usr_login']);
             $user->setPaswd($_POST['usr_paswd']);
             $user->loadUserInModelFromDatabase();
@@ -78,13 +78,13 @@ class UserService
             }
             else
             {
-                $MS->AddMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $MS->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
                 $registrationSucces = false;
             }
         }
         else
         {
-            $MS->AddMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
+            $MS->addMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
             $registrationSucces = false;
 
         }

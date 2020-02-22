@@ -3,15 +3,9 @@ $no_access = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-$viewService->basicHead($css);
+$viewService->basicHead($css, "Geen toegang");
 
 ?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Geen toegang!</h1>
-    <p>Gelieve eerst in te loggen</p>
-</div>
 
 <div class="container">
 
