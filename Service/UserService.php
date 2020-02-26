@@ -136,9 +136,10 @@ class UserService
         //gebruikersgegevens ophalen uit databank
         $sql = "select * from users where usr_id=" . $_SESSION["usr"]->getId();
         $data = $this->databaseService->getData($sql);
-        $img_az_eid = "";
-        $img_vz_eid = "";
-        $img_pasfoto = "";
+        $contentProfielTable[0]["img_pasfoto"] = "";
+        $contentProfielTable[0]["img_vz_eid"] = "";
+        $contentProfielTable[0]["img_az_eid"] = "";
+
 //            print "<table class='table table-striped table-bordered'>";
 
 

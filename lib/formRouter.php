@@ -1,6 +1,6 @@
 <?php
 require_once "autoload.php";
-// fromRouter.php
+
 $formname = $_POST["formname"];
 //$tablename = $_POST["tablename"];
 //$pkey = $_POST["pkey"];
@@ -8,18 +8,42 @@ $formname = $_POST["formname"];
 
 switch ( $formname )
 {
+
     case "profiel_form":
-        // Do the things for profile form
-        $userService = $container->getUserService();
-        $userService->procesProfileForm();
+        if ( isset($_POST["submit"]) == "Opladen" )
+        {
+            $userService = $container->getUserService();
+            $userService->procesProfileForm();
+        }
+
         break;
 
-    case "upload_form":
+    case "file_upload":
+
+        /*because fileUpload is not really connected to user or city,
+         it does not use the UserService. If the FileUpload page were connected to the user,
+         we would use the userService. Because of this the logic of processing the form happens here.
+        And so no DI happens*/
+
         if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" )
         {
             $uploadService = $container->getUploadService();
-            $uploadService->submitUploadForms();
+            $formHandler = $container->getFormHandler();
+            $files = $formHandler->getFilesFromForm();
+            if($formHandler->checkImagesFromFileModels($files))
+            {
+                $files = $uploadService->setFileDestination($files);
+                if($uploadService->uploadFileModels($files))
+                {
+                    $MS->AddMessage("uw Foto werd opgeladen","info");
+
+                }else{
+                    $MS->AddMessage("er liep iets mis met het opladen van de foto's","error");
+                }
+            }
+
         }
+        header("location:".$_application_folder."/file_upload.php");
     break;
 
     case "registration_form":
