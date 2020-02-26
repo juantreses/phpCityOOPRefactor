@@ -91,32 +91,25 @@ class FormHandler
     }
 
 
-    public function CheckImage($f, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
+    public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
-        foreach ($f as $uploadFile)
         // get the Mes. service
         global $MS;
+        foreach ($fileModelArray as $fileModel)
 
         // Check the extensions
-        $ext_allowed = array(
-            "png",
-            "jpg",
-            "jpeg"
-        );
 
-        $filename = strtolower($f["name"]);
-        $fileExplode = explode(".", $filename);
-        $fileExt = end($fileExplode);
-        if (!in_array($fileExt, $ext_allowed)) {
-            $MS->AddMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
-            //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
-            return false;
-        }
-        if ($f["size"] > $max_size) {
-            $MS->AddMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
-            //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
-            return false;
-        }
+            if (!in_array($fileModel->getExtention(), $ext_allowed)) {
+                $MS->AddMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
+                //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
+                return false;
+            }
+            if ($fileModel->getSize() > $max_size) {
+                $MS->AddMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
+                //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
+                return false;
+            }
+
 
         // als er geen errors zijn zal True meegeven worden
         return true;
@@ -155,6 +148,22 @@ class FormHandler
         //print $sql;
         header("Location: $new_url");
 
+    }
+
+    /**
+     * @return array File
+     */
+
+    public function getFilesFromForm()
+    {
+        $filesModels = [];
+        foreach ($_FILES as $formFieldName =>$file)
+        {
+            if($file['name'] == "")continue;
+            $x = new File($file,$formFieldName);
+            $filesModels[] = $x;
+        }
+        return $filesModels;
     }
 
 }

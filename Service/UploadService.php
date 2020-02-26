@@ -13,7 +13,6 @@ class UploadService
     }
 
 
-
     public function LoadUploadPage()
     {
         $this->images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
@@ -74,7 +73,7 @@ class UploadService
 
 
 
-            if ($this->formHandler->CheckImage($fileobject,array("jpg","jpeg","png","gif"),$max_size) )
+            if ($this->formHandler->checkImagesFromFileModels($fileobject,array("jpg","jpeg","png","gif"),$max_size) )
             {
 
                 switch ( $inputname )
@@ -188,21 +187,54 @@ class UploadService
 
 
 }
-    public function uploadFilesToDir($tmp_name ,$targetdir) {
-        if ( move_uploaded_file( $tmp_name, $targetdir))
-        {
-            $imagesUploadCheck = true;
-            $MS->AddMessage("Bestand  opgeladen");
-//                    header("location:".$_application_folder."/file_upload.php");
-//                print "Bestand $originele_naam opgeladen<br>";
-//                    $sql = "update users SET " . implode("," , $images) . " where usr_id=".$_SESSION['usr']->getId();
-//                    ExecuteSQL($sql);
-//                $userService = new UserService();
-//                    $_SESSION['usr']->LoadUserInModelFromDatabase();
 
-        }else{
-            $MS->AddMessage("Bestand  niet opgeladen");
+
+    public function uploadFileModels($fileModels)
+    {
+        global $MS;
+        foreach ($fileModels as $file)
+        {
+            $tmpName = $file->getTmpName();
+            $destination = $file-> getTargetLocation();
+            if(!move_uploaded_file($tmpName,"../".$destination))
+            {
+             $MS->AddMessage("Er liep iets mis met het uploaden van uw Foto:".$destination);
+                return false;
+            }
         }
+        return true;
     }
+
+    public function setFileDestination($files)
+    {
+        foreach ($files as $fileModel)
+        {
+          $formField = $fileModel->getFormField();
+            switch ( $formField )
+            {
+                case "pasfoto":
+                    $newName = "pasfoto_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");
+                    break;
+                case "eidvoor":
+                    $newName = "eidvoor_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_vz_eid ='".$newName."'");
+                    break;
+                case "eidachter":
+                    $newName = "eidachter_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_az_eid ='".$newName."'");
+                    break;
+                case "uploadfoto":
+                    $newName = $fileModel->getOriganalName();
+                    $fileModel->setTargetLocation("img/",$newName,NULL);
+                    break;
+            }
+
+        }
+        return $files;
+    }
+
+
+
 
 }

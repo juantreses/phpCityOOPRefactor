@@ -10,11 +10,14 @@ class UserService
 
     private $viewService;
 
-    public function __construct(DatabaseService $databaseService, FormHandler $formHandler,ViewService $viewService)
+    private $uploadService;
+
+    public function __construct(DatabaseService $databaseService, FormHandler $formHandler,ViewService $viewService,UploadService $uploadService)
     {
         $this->databaseService = $databaseService;
         $this->formHandler = $formHandler;
         $this->viewService = $viewService;
+        $this->uploadService = $uploadService;
     }
     /**
      * @param User $user
@@ -164,6 +167,59 @@ class UserService
         $contentProfielTable[0]["table_row"]= $tableRow;
         // replace the the fields in the template whit the data
         print $this->viewService->replaceContentOneRow($contentProfielTable[0],$this->viewService->loadTemplate("profiel"));
+
+    }
+
+    public function procesProfileForm()
+    {
+        global $MS;
+        global $_application_folder;
+        $files = $this->formHandler->getFilesFromForm();
+        // if there are files submitted
+        if($files)
+        {
+            // check the images
+            if($this->formHandler->checkImagesFromFileModels($files))
+            {
+                //Get the file destination and sql statement for inserting the db
+                $files = $this->uploadService->setFileDestination($files);
+                // Upload the files
+                if($this->uploadService->uploadFileModels($files))
+                {
+                    // update the user in the database and reload the user
+                    if($this->updateImagesToDatabase($files))
+                    {
+                        $_SESSION['usr']->loadUserInModelFromDatabase();
+                        $MS->AddMessage("uw profiel werd aangepast","info");
+                    }else{
+                        $MS->AddMessage("Er is een probleem met het updaten van uw userprofiel","error");
+                    }
+                }
+            }
+        }else
+        {
+            // if there where no images selected
+            $MS->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+
+        }
+            //return to the profile page
+            header("location:".$_application_folder."/profiel.php");
+    }
+    public function updateImagesToDatabase($files)
+    {
+        foreach ($files as $fileModel)
+        {
+            $sqlImages[] = $fileModel->getSqlField();
+        }
+        $sql = "update users SET " . implode("," , $sqlImages) . " where usr_id=".$_SESSION['usr']->getId();
+
+        if($this->databaseService->executeSQL($sql))
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
 
     }
 

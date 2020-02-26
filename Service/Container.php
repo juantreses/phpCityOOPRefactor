@@ -80,7 +80,7 @@ class Container
     public function getUserService()
     {
         if ($this->userService === null) {
-            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler(),$this->viewService);
+            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler(),$this->viewService,$this->getUploadService());
         }
 
         return $this->userService;

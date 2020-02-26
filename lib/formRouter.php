@@ -1,13 +1,17 @@
-<?
+<?php
+require_once "autoload.php";
 // fromRouter.php
 $formname = $_POST["formname"];
-$tablename = $_POST["tablename"];
-$pkey = $_POST["pkey"];
+//$tablename = $_POST["tablename"];
+//$pkey = $_POST["pkey"];
+
 
 switch ( $formname )
 {
     case "profiel_form":
         // Do the things for profile form
+        $userService = $container->getUserService();
+        $userService->procesProfileForm();
         break;
 
     case "upload_form":
