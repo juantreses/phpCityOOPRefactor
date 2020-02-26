@@ -1,5 +1,5 @@
 <?php
-$register_form = true;
+$form = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");

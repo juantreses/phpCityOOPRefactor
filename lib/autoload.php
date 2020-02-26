@@ -64,7 +64,7 @@ require_once $_root_folder . "/lib/view_functions.php";      //basic_head, load_
 
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
-if ( ! isset($_SESSION['usr']) AND ! $login_form AND ! $register_form AND ! $no_access)
+if ( ! isset($_SESSION['usr']) AND ! $form AND ! $no_access)
 {
     header("Location: " . $_application_folder . "/no_access.php");
 }

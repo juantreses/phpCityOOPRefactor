@@ -1,5 +1,5 @@
 <?php
-$login_form = true;
+$form = true;
 require_once "lib/autoload.php";
 
 //redirect naar homepage als de gebruiker al ingelogd is

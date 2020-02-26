@@ -1,14 +1,12 @@
 <?php
+$form = true;
 require_once "autoload.php";
 
 $formname = $_POST["formname"];
-//$tablename = $_POST["tablename"];
-//$pkey = $_POST["pkey"];
-
 
 switch ( $formname )
 {
-
+    //Uses UserService for the logic, UserService uses databaseService , Formhandler and UploadService
     case "profiel_form":
         if ( isset($_POST["submit"]) == "Opladen" )
         {
@@ -20,39 +18,29 @@ switch ( $formname )
 
     case "file_upload":
 
-        /*because fileUpload is not really connected to user or city,
-         it does not use the UserService. If the FileUpload page were connected to the user,
-         we would use the userService. Because of this the logic of processing the form happens here.
-        And so no DI happens*/
-
+        //uses UploadService for the logic, uploadService uses formhandler
         if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" )
         {
             $uploadService = $container->getUploadService();
-            $formHandler = $container->getFormHandler();
-            $files = $formHandler->getFilesFromForm();
-            if($formHandler->checkImagesFromFileModels($files))
-            {
-                $files = $uploadService->setFileDestination($files);
-                if($uploadService->uploadFileModels($files))
-                {
-                    $MS->AddMessage("uw Foto werd opgeladen","info");
+            $uploadService->procesUploadForm();
 
-                }else{
-                    $MS->AddMessage("er liep iets mis met het opladen van de foto's","error");
-                }
-            }
 
         }
         header("location:".$_application_folder."/file_upload.php");
     break;
 
     case "registration_form":
-        if($_POST['registerbutton'] == "Register" )
+
+        if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
+
             $User = new User();
+
             // if the form and user data is valid
+
 //     $userService = $container->getUserService();
             $formHandler = $container->getFormHandler();
+
 
             if ($formHandler->ValidatePostedUserData())
             {
@@ -64,12 +52,19 @@ switch ( $formname )
             {
                 header("Location:../register.php");
             }
+            header("Location:../register.php");
+        }
+        break;
 
+    case "stad_form":
+        if ( $_POST["savebutton"] == "Save" ) {
+            $formHandler = $container->getFormHandler();
+            $formHandler->SaveCity();
         }
         break;
 
     case "login_form":
-        if ($buttonvalue == "Log in" )
+        if ($_POST['loginbutton'] == "Log in" )
         {
 
             $User = new User();
