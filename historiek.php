@@ -15,8 +15,9 @@ $viewService->basicHead($css, "Mijn Historiek");
                     <th>Uitloggen</th>
                 </tr>
                     <?php
+                    $databaseService = $container->getDatabaseService();
                         $sql = "SELECT * FROM log_user WHERE log_usr_id=" . $_SESSION['usr']->getId() . " ORDER BY log_in" ;
-                        $data = GetData($sql);
+                        $data = $databaseService->getData($sql);
 
                         foreach( $data as $row )
                         {

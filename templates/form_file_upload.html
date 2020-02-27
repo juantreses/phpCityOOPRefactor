@@ -1,8 +1,10 @@
-<form action="lib/upload_functions.php" method="post" enctype="multipart/form-data">
+<form action="lib/formRouter.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" id="formname" name="formname" value="file_upload">
+
     <div class="form-group">
         <h3>Select images to upload</h3>
-        <input class="uploadbutton form-control-file" type="file" name="0" id="file1">
-        <input class="uploadbutton form-control-file" type="file" name="1" id="file2">
+        <input class="uploadbutton form-control-file" type="file" name="uploadfoto1" id="file1">
+        <input class="uploadbutton form-control-file" type="file" name="uploadfoto2" id="file2">
         <input type="submit" value="Opladen" name="submit">
     </div>
 </form>
