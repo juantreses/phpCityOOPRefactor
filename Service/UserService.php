@@ -61,9 +61,7 @@ class UserService
      */
     public function CheckRegistrationSuccess(User $user)
     {
-        $registrationSucces = false;
-        global $tablename;
-        global $_application_folder;
+        $registrationSucces = true;
         global $MS;
 
         // register user in formhandler
@@ -71,9 +69,9 @@ class UserService
 
         // set data in model, check success and give msg
 
-        if (ExecuteSQL($sql) )
+        if ($this->databaseService->executeSQL($sql) )
         {
-            $MS->AddMessage( "Bedankt voor uw registratie!" );
+            $MS->AddMessage( "Bedankt voor uw registratie!","info" );
             $user->setLogin($_POST['usr_login']);
             $user->setPaswd($_POST['usr_paswd']);
             $user->loadUserInModelFromDatabase();
@@ -106,7 +104,7 @@ class UserService
         $timenow = new DateTime( 'NOW', new DateTimeZone('Europe/Brussels') );
         $now = $timenow->format('Y-m-d H:i:s') ;
         $sql = "UPDATE log_user SET  log_out='".$now."' where log_session_id='".$session."'";
-        ExecuteSQL($sql);
+        $this->databaseService->executeSQL($sql);
     }
 
     /**
@@ -119,7 +117,7 @@ class UserService
         $timenow = new DateTime( 'NOW', new DateTimeZone('Europe/Brussels') );
         $now = $timenow->format('Y-m-d H:i:s') ;
         $sql = "INSERT INTO log_user SET log_usr_id=".$user->getId().", log_session_id='".$session."', log_in= '".$now."'";
-        ExecuteSQL($sql);
+        $this->databaseService->executeSQL($sql);
     }
     /**
      * @param User $user

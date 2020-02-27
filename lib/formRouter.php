@@ -38,7 +38,6 @@ switch ( $formname )
 
             // if the form and user data is valid
 
-//     $userService = $container->getUserService();
             $formHandler = $container->getFormHandler();
 
 
@@ -51,8 +50,9 @@ switch ( $formname )
             }else
             {
                 header("Location:../register.php");
+
             }
-            header("Location:../register.php");
+
         }
         break;
 

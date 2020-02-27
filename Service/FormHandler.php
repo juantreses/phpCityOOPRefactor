@@ -66,7 +66,6 @@ class FormHandler
     public function RegisterUser()
     {
 
-        global $tablename;
 
         // encrypt password
 
@@ -74,7 +73,7 @@ class FormHandler
 
         // insert into db
 
-        $sql = "INSERT INTO $tablename SET " .
+        $sql = "INSERT INTO users SET " .
             " usr_voornaam='" . htmlentities($_POST['usr_voornaam'], ENT_QUOTES) . "' , " .
             " usr_naam='" . htmlentities($_POST['usr_naam'], ENT_QUOTES) . "' , " .
             " usr_straat='" . htmlentities($_POST['usr_straat'], ENT_QUOTES) . "' , " .
