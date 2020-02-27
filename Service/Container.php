@@ -109,7 +109,7 @@ class Container
     public function getTemporaryPrintWeekTask()
     {
         if ($this->temporaryPrintWeekTask === null) {
-            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService());
+            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService(),$this->getViewService());
         }
         return $this->temporaryPrintWeekTask;
     }
