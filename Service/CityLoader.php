@@ -1,13 +1,16 @@
 <?php
 class CityLoader
 {
-    private $pdo;
+    private $databaseService;
 
-    public function __construct(PDO $pdo)
+    public function __construct(DatabaseService $databaseService)
     {
-        $this->pdo = $pdo;
+        $this->databaseService = $databaseService;
     }
 
+    /**
+     * @return City[]
+     */
     public function getCities()
     {
         $citiesData = $this->queryForCities();
@@ -20,22 +23,28 @@ class CityLoader
         return $cities;
     }
 
+    /**
+     * @param $id
+     * @return array|null
+     */
     public function getCityByID($id)
     {
-        $pdo = $this->getPDO();
-        $statement = $pdo->prepare('SELECT * FROM images WHERE img_id = :id');
-        $statement->execute(array('id' => $id));
-        $cityArray = $statement->fetch(PDO::FETCH_ASSOC);
+        $cityArray = $this->databaseService->getData("SELECT * FROM images WHERE img_id = ". $id);
+
 
         if (!$cityArray) {
             return null;
         }
 
-        $cities[] = $this->createCityFromData($cityArray);
+        $cities[] = $this->createCityFromData($cityArray[0]);
 
         return $cities;
     }
 
+    /**
+     * @param array $cityData
+     * @return City
+     */
     private function createCityFromData(array $cityData)
     {
         $city = new City();
@@ -48,17 +57,15 @@ class CityLoader
         return $city;
     }
 
+    /**
+     * @return array
+     */
     private function queryForCities()
     {
-        $pdo = $this->getPDO();
-        $statement = $pdo->prepare('SELECT * FROM images');
-        $statement->execute();
-        $cityArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $cityArray = $this->databaseService->getData('SELECT * FROM images');
         return $cityArray;
     }
 
-    private function getPDO()
-    {
-        return $this->pdo;
-    }
+
 }

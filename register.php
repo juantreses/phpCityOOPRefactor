@@ -3,20 +3,14 @@ $register_form = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
-$MS->ShowMessages();
-?>
-<body>
 
-<div class="jumbotron text-center">
-    <h1>Registratie</h1>
-</div>
+$viewService->basicHead($css, "Registratie"); ?>
 
 <div class="container">
     <div class="row">
 
         <?php
-        print LoadTemplate("register");
+        print $viewService->loadTemplate("register");
         ?>
 
     </div>

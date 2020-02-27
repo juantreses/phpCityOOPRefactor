@@ -11,6 +11,21 @@ class Container
 
     private $downloadService;
 
+    private $databaseService;
+
+    private $viewService;
+  
+    private $temporaryPrintWeekTask;
+
+    private $userService;
+
+    private $formHandler;
+
+    private $uploadService;
+
+    private $messageService;
+
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -25,7 +40,7 @@ class Container
             $this->pdo = new PDO(
                 $this->configuration['db_dsn'],
                 $this->configuration['db_user'],
-                $this->configuration['db_pass'],
+                $this->configuration['db_pass']
             );
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
@@ -33,35 +48,21 @@ class Container
         return $this->pdo;
     }
 
-    /**
-     * @param string $sql
-     * @return array
-     */
-    public function getData(string $sql)
+    public function getDatabaseService()
     {
-        $stm = $this->getPDO()->prepare($sql);
-        $stm->execute();
+        if ($this->databaseService === null) {
+            $this->databaseService = new databaseService($this->getPDO());
+        }
 
-        $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
-        return $rows;
-    }
+        return $this->databaseService;
 
-    /**
-     * @param $sql
-     * @return bool
-     */
-    function executeSQL(string $sql )
-    {
-        $stm = $this->getPDO()->prepare($sql);
 
-        if ( $stm->execute() ) return true;
-        else return false;
     }
 
     public function getCityLoader()
     {
         if ($this->cityLoader === null) {
-            $this->cityLoader = new CityLoader($this->getPDO());
+            $this->cityLoader = new CityLoader($this->getDatabaseService());
         }
 
         return $this->cityLoader;
@@ -70,48 +71,76 @@ class Container
     public function getDownloadService()
     {
         if ($this->downloadService === null) {
-            $this->downloadService = new DownloadService($this->getPDO());
+            $this->downloadService = new DownloadService($this->getDatabaseService());
         }
 
         return $this->downloadService;
     }
 
-    /* Nicole works over here
+    /* Nicole works over here */
+
+    public function getUserService()
+    {
+        if ($this->userService === null) {
+            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler());
+        }
+
+        return $this->userService;
+    }
+
+     public function getFormHandler()
+    {
+        if ($this->formHandler === null) {
+            $this->formHandler = new FormHandler($this->getDatabaseService());
+        }
+
+        return $this->formHandler;
+    }
+
+    public function getUploadService()
+    {
+        if ($this->uploadService === null) {
+            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService(), $this->getMessageService());
+        }
+
+        return $this->uploadService;
+    }
+
+    public function getMessageService()
+    {
+        if ($this->messageService === null) {
+            $this->messageService =new MessageService();
+        }
+
+        return $this->messageService;
+    }
+
+
+//     Alex works over here
+    public function getTemporaryPrintWeekTask()
+    {
+        if ($this->temporaryPrintWeekTask === null) {
+            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService());
+        }
+        return $this->temporaryPrintWeekTask;
+    }
+
+
+//
+
+    // Jan works over here
+
+     public function getViewService()
+        {
+            if ($this->viewService === null) {
+                $this->viewService = new ViewService($this->getDatabaseService());
+            }
+
+            return $this->viewService;
+        }
 
 
 
 
 
-
-
-
-
-
-    */
-
-
-    /* Alex works over here
-
-
-
-
-
-
-
-
-     */
-
-    /* Jan works over here
-
-
-
-
-
-
-
-
-
-
-
-    */
 }

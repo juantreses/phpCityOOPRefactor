@@ -2,14 +2,8 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead($css);
+$viewService->basicHead($css, "Mijn Historiek");
 ?>
-    <body>
-
-    <div class="jumbotron text-center">
-        <h1>Mijn historiek</h1>
-    </div>
-    <?php PrintNavBar(); ?>
 
     <div class="container">
         <div class="row">

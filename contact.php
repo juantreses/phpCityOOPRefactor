@@ -3,17 +3,9 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-BasicHead( $css );
 
-$MS->ShowMessages();
+$viewService->basicHead($css, "Contact");
 ?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Contact</h1>
-</div>
-
-<?php PrintNavBar(); ?>
 
 <div class="container">
     <div class="row">
