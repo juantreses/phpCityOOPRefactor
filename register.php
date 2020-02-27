@@ -4,14 +4,7 @@ require_once "lib/autoload.php";
 
 $css = array( "style.css");
 
-$viewService->basicHead($css);
-$MS->showMessages();
-?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Registratie</h1>
-</div>
+$viewService->basicHead($css, "Registratie"); ?>
 
 <div class="container">
     <div class="row">

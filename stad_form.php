@@ -2,14 +2,7 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css" );
-$viewService->basicHead($css);
-?>
-<body>
-
-<div class="jumbotron text-center">
-    <h1>Formulier Stad</h1>
-</div>
-<?php $viewService->printNavBar(); ?>
+$viewService->basicHead($css, "Formulier Stad");  ?>
 <div class="container">
     <div class="row">
 

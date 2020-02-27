@@ -9,11 +9,15 @@ class UploadService
 
     private $viewService;
 
-    public function __construct(FormHandler $formHandler,ViewService $viewService)
+    private $messageService;
+
+    public function __construct(FormHandler $formHandler, ViewService $viewService, MessageService $messageService)
     {
         $this->formHandler = $formHandler;
         $this->viewService = $viewService;
+        $this->messageService = $messageService;
     }
+
 
 
     public function LoadUploadPage()
@@ -26,8 +30,6 @@ class UploadService
         }
 
     }
-
-
 
     private function printUploadForm()
     {
@@ -63,12 +65,12 @@ class UploadService
                 // Upload the files
                 if($this->uploadFileModels($files))
                 {
-                    $MS->AddMessage("U Foto's zijn opgeslagen",'info');
+                    $MS->addMessage("U Foto's zijn opgeslagen",'info');
                     // update the user in the database and reload the user
 
                 }else
                 {
-                    $MS->AddMessage("Er Liep iets mis","error");
+                    $MS->addMessage("Er Liep iets mis","error");
 
                 }
             }

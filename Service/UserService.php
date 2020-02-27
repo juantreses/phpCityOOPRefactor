@@ -71,7 +71,7 @@ class UserService
 
         if ($this->databaseService->executeSQL($sql) )
         {
-            $MS->AddMessage( "Bedankt voor uw registratie!","info" );
+            $MS->addMessage( "Bedankt voor uw registratie!","info" );
             $user->setLogin($_POST['usr_login']);
             $user->setPaswd($_POST['usr_paswd']);
             $user->loadUserInModelFromDatabase();
@@ -82,13 +82,13 @@ class UserService
             }
             else
             {
-                $MS->AddMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $MS->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
                 $registrationSucces = false;
             }
         }
         else
         {
-            $MS->AddMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
+            $MS->addMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
             $registrationSucces = false;
 
         }
@@ -189,16 +189,16 @@ class UserService
                     if($this->updateImagesToDatabase($files))
                     {
                         $_SESSION['usr']->loadUserInModelFromDatabase();
-                        $MS->AddMessage("uw profiel werd aangepast","info");
+                        $MS->addMessage("uw profiel werd aangepast","info");
                     }else{
-                        $MS->AddMessage("Er is een probleem met het updaten van uw userprofiel","error");
+                        $MS->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
                     }
                 }
             }
         }else
         {
             // if there where no images selected
-            $MS->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            $MS->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
 
         }
             //return to the profile page

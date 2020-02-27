@@ -11,9 +11,12 @@ class ViewService
         $this->databaseService = $databaseService;
     }
 
-    public function basicHead( $css = "" )
+    public function basicHead( $css = "", $header )
     {
         global $_application_folder;
+        global $login_form;
+        global $register_form;
+        global $no_access;
 
         $str_stylesheets = "";
         if ( is_array($css))
@@ -24,14 +27,24 @@ class ViewService
             }
         }
 
-        $data = array("stylesheets" => $str_stylesheets );
+
+
+        $data = array("stylesheets" => $str_stylesheets, "header" => $header, "messages" => $this->returnMessages() );
+
+        unset($_SESSION["error"]);
+        unset($_SESSION["info"]);
+
         $template = $this->loadTemplate("basic_head");
         print $this->replaceContentOneRow($data, $template);
+
+        if (! $login_form and ! $register_form and ! $no_access ) {
+            $this->printNavBar();
+        }
 
         $_SESSION["head_printed"] = true;
     }
 
-    function printNavBar()
+    private function printNavBar()
     {
         //navbar items ophalen
         $data = $this->databaseService->getData("select * from menu order by men_order");
@@ -70,7 +83,7 @@ class ViewService
         if ( file_exists("../templates/$name.html") ) return file_get_contents("../templates/$name.html");
     }
 
-    function replaceContent( $data, $template_html )
+    public function replaceContent( $data, $template_html )
     {
         $returnval = "";
 
@@ -89,16 +102,6 @@ class ViewService
         return $returnval;
     }
 
-    public function displayImages( $images )
-    {
-        foreach( $images as $img )
-        {
-            print "<div class='div_thumb'>";
-            print "<img class='thumbnail' src='$img'><br>";
-            print "<span class='img_name'>$img</span>";
-            print "</div>";
-        }
-    }
 
     public function replaceCities( $cities, $template_html )
     {
@@ -129,5 +132,56 @@ class ViewService
         }
 
         return $content;
+    }
+
+    public function printWeekAndReturnNewDateForLink($week, $year)
+    {
+        // correction of the week //
+        if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
+        if ($week > 52)
+        {
+            $year++;
+            $week = 1;
+        }
+        elseif ($week < 1)
+        {
+            $year--;
+            $week = 52;
+        }
+
+        // getting 7 rows of data (day, date and tasks)
+        for( $day=1; $day <= 7; $day++ )
+        {
+            $d = strtotime($year . "W" . $week . $day);
+            $dataReplaceContent[$day - 1]['day'] = date("l", $d);
+            $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
+            $data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
+            $dataReplaceContent[$day -1]['tasks']= $this->replaceContent($data,$this->loadTemplate("week_tasks"));
+
+        }
+        // get this data on the week.php page end replace the new links to previous and next week.
+
+        $dataReplaceOneRow['tableContent'] =  $this->replaceContent($dataReplaceContent,$this->loadTemplate("week_table_row"));
+        $dataReplaceOneRow['link_previous_week'] = "week.php?week=" . ($week == 1 ? 52 : $week - 1 ) . "&year=" . ($week == 1 ? $year - 1 : $year);
+        $dataReplaceOneRow['link_next_week'] = "week.php?week=" . ($week == 1 ? 52 : $week + 1 ) . "&year=" . ($week == 1 ? $year + 1 : $year);
+        print $this->replaceContentOneRow($dataReplaceOneRow,$this->loadTemplate("week_table"));
+        return $newDate= array($week,$year);
+    }
+
+    private function returnMessages()
+    {
+        //weergeven 2 soorten messages: errors en infos
+        foreach( array("error", "info") as $type )
+        {
+            if ( key_exists("$type", $_SESSION) AND is_array($_SESSION["$type"]) AND count($_SESSION["$type"]) > 0 )
+            {
+                foreach( $_SESSION["$type"] as $message )
+                {
+                    $row = array( "message" => $message );
+                    $templ = $this->loadTemplate("$type" . "s");
+                    return $this->replaceContentOneRow( $row, $templ );
+                }
+            }
+        }
     }
 }
