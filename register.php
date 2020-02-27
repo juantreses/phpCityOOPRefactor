@@ -11,7 +11,6 @@ $viewService->basicHead($css, "Registratie"); ?>
     <div class="row">
 
         <?php
-//        var_dump($_SESSION);
         print $viewService->loadTemplate("register");
         ?>
 
