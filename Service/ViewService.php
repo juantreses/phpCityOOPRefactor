@@ -46,6 +46,7 @@ class ViewService
 
     private function printNavBar()
     {
+
         //navbar items ophalen
         $data = $this->databaseService->getData("select * from menu order by men_order");
 
@@ -168,6 +169,18 @@ class ViewService
         return $newDate= array($week,$year);
     }
 
+    public function renderWeek() {
+        // Get the year and week
+        $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
+        $week = (isset($_GET['week'])) ? $_GET['week'] : date("W");
+
+        // print the week and return the new date(link updated in class)
+        $newdate = $this->printWeekAndReturnNewDateForLink($week,$year);
+        $week = $newdate[0];
+        $year = $newdate[1];
+    }
+
+
     private function returnMessages()
     {
         //weergeven 2 soorten messages: errors en infos
@@ -184,4 +197,6 @@ class ViewService
             }
         }
     }
+
+
 }

@@ -17,16 +17,6 @@ class User
     private $az_eid;
 
 
-    /**
-     * @param User $user
-     */
-
-    public function loadUserInModelFromDatabase()
-    {
-        $sql = "SELECT * FROM users WHERE usr_login='" .$this->login . "' ";
-        $data = GetData($sql);
-        $this->load($data[0]);
-    }
 
     /**
      * @param $row
