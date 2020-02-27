@@ -66,7 +66,6 @@ class FormHandler
     public function RegisterUser()
     {
 
-        global $tablename;
 
         // encrypt password
 
@@ -74,7 +73,7 @@ class FormHandler
 
         // insert into db
 
-        $sql = "INSERT INTO $tablename SET " .
+        $sql = "INSERT INTO users SET " .
             " usr_voornaam='" . htmlentities($_POST['usr_voornaam'], ENT_QUOTES) . "' , " .
             " usr_naam='" . htmlentities($_POST['usr_naam'], ENT_QUOTES) . "' , " .
             " usr_straat='" . htmlentities($_POST['usr_straat'], ENT_QUOTES) . "' , " .
@@ -91,31 +90,25 @@ class FormHandler
     }
 
 
-    public function CheckImage($f, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
+    public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
         // get the Mes. service
         global $MS;
+        foreach ($fileModelArray as $fileModel)
 
         // Check the extensions
-        $ext_allowed = array(
-            "png",
-            "jpg",
-            "jpeg"
-        );
 
-        $filename = strtolower($f["name"]);
-        $fileExplode = explode(".", $filename);
-        $fileExt = end($fileExplode);
-        if (!in_array($fileExt, $ext_allowed)) {
-            $MS->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
-            //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
-            return false;
-        }
-        if ($f["size"] > $max_size) {
-            $MS->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
-            //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
-            return false;
-        }
+            if (!in_array($fileModel->getExtention(), $ext_allowed)) {
+                $MS->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
+                //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
+                return false;
+            }
+            if ($fileModel->getSize() > $max_size) {
+                $MS->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
+                //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
+                return false;
+            }
+
 
         // als er geen errors zijn zal True meegeven worden
         return true;
@@ -154,6 +147,22 @@ class FormHandler
         //print $sql;
         header("Location: $new_url");
 
+    }
+
+    /**
+     * @return array File
+     */
+
+    public function getFilesFromForm()
+    {
+        $filesModels = [];
+        foreach ($_FILES as $formFieldName =>$file)
+        {
+            if($file['name'] == "")continue;
+            $x = new File($file,$formFieldName);
+            $filesModels[] = $x;
+        }
+        return $filesModels;
     }
 
 }

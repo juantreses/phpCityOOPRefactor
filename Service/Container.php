@@ -82,7 +82,7 @@ class Container
     public function getUserService()
     {
         if ($this->userService === null) {
-            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler());
+            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler(),$this->viewService,$this->getUploadService());
         }
 
         return $this->userService;
@@ -120,7 +120,7 @@ class Container
     public function getTemporaryPrintWeekTask()
     {
         if ($this->temporaryPrintWeekTask === null) {
-            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService());
+            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService(),$this->getViewService());
         }
         return $this->temporaryPrintWeekTask;
     }

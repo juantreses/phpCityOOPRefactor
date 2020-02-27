@@ -1,0 +1,32 @@
+
+<div class="container">
+
+    <div class="row"><div class="col-sm-12">&nbsp;</div></div>
+
+    <div class="row">
+
+        <div class="col-sm-5">
+            <table class='table table-striped table-bordered'>
+                @@table_row@@
+
+        </table>
+
+        </div>
+
+        <div class="col-sm-7">
+          <table class='table table-striped table-bordered'>
+            <form action="lib/formRouter.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="formname" name="formname" value="profiel_form">
+
+                <tr><td>Pasfoto</td><td><input type="file" name="pasfoto" id="pasfoto"></td><td>@@img_pasfoto@@</td></tr>
+            <tr><td>E-id voorzijde</td><td><input type="file" name="eidvoor" id="eidvoor"></td><td>@@img_vz_eid@@</td></tr>
+            <tr><td>E-id achterzijde</td><td><input type="file" name="eidachter" id="eidachter"></td><td>@@img_az_eid@@</td></tr>
+            <tr><td></td><td><input type="submit" value="Opladen" name="submit"></td><td></td></tr>
+
+         </form>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
