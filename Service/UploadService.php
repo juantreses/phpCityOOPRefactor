@@ -48,6 +48,7 @@ class UploadService
         print $this->viewService->replaceContent($replaceData,$this->viewService->loadTemplate("file_upload_img"));
     }
 
+
     public function procesUploadForm()
     {
         global $MS;
@@ -111,15 +112,15 @@ class UploadService
             switch ( $formField )
             {
                 case "pasfoto":
-                    $newName = "pasfoto_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
                     $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");
                     break;
                 case "eidvoor":
-                    $newName = "eidvoor_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
                     $fileModel->setTargetLocation("img/",$newName,"usr_vz_eid ='".$newName."'");
                     break;
                 case "eidachter":
-                    $newName = "eidachter_" . $_SESSION['usr']->getId() . "." . $fileModel-> getExtention();
+                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
                     $fileModel->setTargetLocation("img/",$newName,"usr_az_eid ='".$newName."'");
                     break;
                 default:
