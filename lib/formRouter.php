@@ -34,7 +34,6 @@ switch ( $formname )
         if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
 
-            $User = new User();
 
             // if the form and user data is valid
 
@@ -43,7 +42,7 @@ switch ( $formname )
 
             if ($formHandler->ValidatePostedUserData())
             {
-                if ($UserService->CheckRegistrationSuccess($User))
+                if ($UserService->CheckRegistrationSuccess())
                 {
                     header("Location:../steden.php");
                 }
@@ -67,12 +66,12 @@ switch ( $formname )
         if ($_POST['loginbutton'] == "Log in" )
         {
 
-            $User = new User();
-            $User->setLogin($_POST['usr_login']);
 
-            if ( $UserService->checkLoginUser($User) )
+
+            if ( $UserService->checkLoginUser($_POST['usr_login']) )
             {
-                $MS->addMessage( "Welkom, " . $User->getVoornaam() . "!" );
+                $user = $UserService->loadUserFromId($_SESSION['usr_id']);
+                $MS->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
                 header("Location: " . $_application_folder . "/steden.php");
             }
             else

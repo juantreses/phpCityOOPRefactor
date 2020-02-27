@@ -59,7 +59,7 @@ require_once $_root_folder . "/lib/pdo.php";                          //database
 
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
 //de loginpagina gaat
-if ( ! isset($_SESSION['usr']) AND ! $form AND ! $no_access)
+if ( ! isset($_SESSION['usr_id']) AND ! $form AND ! $no_access)
 {
     header("Location: " . $_application_folder . "/no_access.php");
 }

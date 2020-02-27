@@ -19,33 +19,36 @@ class UserService
         $this->viewService = $viewService;
         $this->uploadService = $uploadService;
     }
+
     /**
-     * @param User $user
+     * @param $userLogin
+     * @param bool $fromRegistrateForm
      * @return bool
+     * @throws Exception
      */
 
-    public function checkLoginUser(User $user,$fromRegistrateForm = false)
+    public function checkLoginUser( $userLogin,$fromRegistrateForm = false)
     {
         $login_ok = false;
         //if you come from registration there are no checks
         if(!$fromRegistrateForm)
         {
             // Is the user in the database?
-            if($this->formHandler->checkIfUserIsInDatabase($user->getLogin()))
+            if($this->formHandler->checkIfUserIsInDatabase($userLogin))
             {
                 // Get the pw hash in the model
-                $user->loadUserInModelFromDatabase();
+                $user = $this->loadUserFromId($this->getUserIdFromLogIn($userLogin));
                 //check the pw from the form with the hash
                 $login_ok = ($this->checkUserPassword($user))?true:false;
             }
         }
-        
-        // if you come from registration the user model is already loaded
+
         if ( $login_ok || $fromRegistrateForm)
         {
-            // assign to superglobal and registration of the log-in  in the database
-            $_SESSION['usr'] = $user;
-            $this->LogLoginUser($user);
+            // assign th usr_id to a session and registration of the log-in  in the database
+            $user = ($fromRegistrateForm)?$this->loadUserFromId($this->getUserIdFromLogIn($userLogin)):$user;
+            $_SESSION['usr_id'] = $user->getId();
+            $this->LogLoginUser();
             return true;
         }else
         {
@@ -55,11 +58,23 @@ class UserService
 
     }
 
+    /**
+     * @param $userLogIn
+     * @return mixed
+     */
+    public function getUserIdFromLogIn($userLogIn)
+    {
+        $sql = "SELECT * FROM users WHERE usr_login='" .$userLogIn. "' ";
+        $data = $this->databaseService->getData($sql);
+        return $data[0]['usr_id'];
+    }
+
 
     /**
-     * @param User $user
+     * @return bool
+     * @throws Exception
      */
-    public function CheckRegistrationSuccess(User $user)
+    public function CheckRegistrationSuccess()
     {
         $registrationSucces = true;
         global $MS;
@@ -72,11 +87,8 @@ class UserService
         if ($this->databaseService->executeSQL($sql) )
         {
             $MS->addMessage( "Bedankt voor uw registratie!","info" );
-            $user->setLogin($_POST['usr_login']);
-            $user->setPaswd($_POST['usr_paswd']);
-            $user->loadUserInModelFromDatabase();
 
-            if ( $this->checkLoginUser($user,true) )
+            if ( $this->checkLoginUser($_POST['usr_login'],true) )
             {
                 $registrationSucces = true;
             }
@@ -108,17 +120,18 @@ class UserService
     }
 
     /**
-     * @param User $user
      * @throws Exception
      */
-    public function LogLoginUser(User $user)
+
+    public function LogLoginUser()
     {
         $session = session_id();
         $timenow = new DateTime( 'NOW', new DateTimeZone('Europe/Brussels') );
         $now = $timenow->format('Y-m-d H:i:s') ;
-        $sql = "INSERT INTO log_user SET log_usr_id=".$user->getId().", log_session_id='".$session."', log_in= '".$now."'";
+        $sql = "INSERT INTO log_user SET log_usr_id=".$_SESSION['usr_id'].", log_session_id='".$session."', log_in= '".$now."'";
         $this->databaseService->executeSQL($sql);
     }
+
     /**
      * @param User $user
      * @return bool
@@ -129,10 +142,12 @@ class UserService
         return $passwCheck;
     }
 
+
+
     public function loadProfielPage()
     {
         //gebruikersgegevens ophalen uit databank
-        $sql = "select * from users where usr_id=" . $_SESSION["usr"]->getId();
+        $sql = "select * from users where usr_id=" . $_SESSION["usr_id"];
         $data = $this->databaseService->getData($sql);
         $contentProfielTable[0]["img_pasfoto"] = "";
         $contentProfielTable[0]["img_vz_eid"] = "";
@@ -188,7 +203,6 @@ class UserService
                     // update the user in the database and reload the user
                     if($this->updateImagesToDatabase($files))
                     {
-                        $_SESSION['usr']->loadUserInModelFromDatabase();
                         $MS->addMessage("uw profiel werd aangepast","info");
                     }else{
                         $MS->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
@@ -210,7 +224,7 @@ class UserService
         {
             $sqlImages[] = $fileModel->getSqlField();
         }
-        $sql = "update users SET " . implode("," , $sqlImages) . " where usr_id=".$_SESSION['usr']->getId();
+        $sql = "update users SET " . implode("," , $sqlImages) . " where usr_id=".$_SESSION['usr_id'];
 
         if($this->databaseService->executeSQL($sql))
         {
@@ -219,6 +233,15 @@ class UserService
         {
             return false;
         }
+
+    }
+    public function loadUserFromId($id)
+    {
+        $user = new User();
+        $sql = "SELECT * FROM users WHERE usr_id='".$id. "' ";
+        $data = $this->databaseService->getData($sql);
+        $user->load($data[0]);
+        return $user;
 
     }
 
