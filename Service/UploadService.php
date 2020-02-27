@@ -7,9 +7,12 @@ class UploadService
 
     private $formHandler;
 
-    public function __construct(FormHandler $formHandler)
+    private $viewService;
+
+    public function __construct(FormHandler $formHandler,ViewService $viewService)
     {
         $this->formHandler = $formHandler;
+        $this->viewService = $viewService;
     }
 
 
@@ -28,7 +31,7 @@ class UploadService
 
     private function printUploadForm()
     {
-        print LoadTemplate("form_file_upload");
+        print $this->viewService->loadTemplate("form_file_upload");
     }
 
     private function printImages()
@@ -40,7 +43,7 @@ class UploadService
             $replaceData[$i]['img']= "'".$img."'" ;
             $i++;
         }
-        print ReplaceContent($replaceData,LoadTemplate("file_upload_img"));
+        print $this->viewService->replaceContent($replaceData,$this->viewService->loadTemplate("file_upload_img"));
     }
 
     public function procesUploadForm()

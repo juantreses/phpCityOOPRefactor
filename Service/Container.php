@@ -98,7 +98,7 @@ class Container
     public function getUploadService()
     {
         if ($this->uploadService === null) {
-            $this->uploadService = new UploadService($this->getFormHandler());
+            $this->uploadService = new UploadService($this->getFormHandler(),$this->getViewService());
         }
 
         return $this->uploadService;
