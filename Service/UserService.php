@@ -237,6 +237,23 @@ class UserService
 
     }
 
+    public function processLoginForm()
+    {
+        global $MS;
+        global $_application_folder;
+        if ( $this->checkLoginUser($_POST['usr_login']) )
+        {
+            $user = $this->loadUserFromId($_SESSION['usr_id']);
+            $MS->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
+            header("Location: " . $_application_folder . "/steden.php");
+        }
+        else
+        {
+            $MS->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
+            header("Location: " . $_application_folder . "/login.php");
+        }
+    }
+
     public function updateImagesToDatabase($files)
     {
         foreach ($files as $fileModel)

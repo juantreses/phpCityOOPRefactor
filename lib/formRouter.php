@@ -13,7 +13,6 @@ switch ( $formname )
             $userService = $container->getUserService();
             $userService->procesProfileForm();
         }
-
         break;
 
     case "file_upload":
@@ -23,8 +22,6 @@ switch ( $formname )
         {
             $uploadService = $container->getUploadService();
             $uploadService->procesUploadForm();
-
-
         }
         header("location:".$_application_folder."/file_upload.php");
     break;
@@ -35,7 +32,6 @@ switch ( $formname )
         {
             $userService = $container->getUserService();
             $userService->processRegisterForm();
-
         }
         break;
 
@@ -49,20 +45,8 @@ switch ( $formname )
     case "login_form":
         if ($_POST['loginbutton'] == "Log in" )
         {
-
-
-
-            if ( $UserService->checkLoginUser($_POST['usr_login']) )
-            {
-                $user = $UserService->loadUserFromId($_SESSION['usr_id']);
-                $MS->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
-                header("Location: " . $_application_folder . "/steden.php");
-            }
-            else
-            {
-                $MS->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
-                header("Location: " . $_application_folder . "/login.php");
-            }
+            $userService = $container->getUserService();
+            $userService->processLoginForm();
         }
         else
         {
