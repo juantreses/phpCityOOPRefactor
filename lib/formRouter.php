@@ -13,7 +13,6 @@ switch ( $formname )
             $userService = $container->getUserService();
             $userService->procesProfileForm();
         }
-
         break;
 
     case "file_upload":
@@ -23,8 +22,6 @@ switch ( $formname )
         {
             $uploadService = $container->getUploadService();
             $uploadService->procesUploadForm();
-
-
         }
         header("location:".$_application_folder."/file_upload.php");
     break;
@@ -33,25 +30,8 @@ switch ( $formname )
 
         if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
-
-
-            // if the form and user data is valid
-
-            $formHandler = $container->getFormHandler();
-
-
-            if ($formHandler->ValidatePostedUserData())
-            {
-                if ($UserService->CheckRegistrationSuccess())
-                {
-                    header("Location:../steden.php");
-                }
-            }else
-            {
-                header("Location:../register.php");
-
-            }
-
+            $userService = $container->getUserService();
+            $userService->processRegisterForm();
         }
         break;
 
@@ -65,20 +45,8 @@ switch ( $formname )
     case "login_form":
         if ($_POST['loginbutton'] == "Log in" )
         {
-
-
-
-            if ( $UserService->checkLoginUser($_POST['usr_login']) )
-            {
-                $user = $UserService->loadUserFromId($_SESSION['usr_id']);
-                $MS->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
-                header("Location: " . $_application_folder . "/steden.php");
-            }
-            else
-            {
-                $MS->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
-                header("Location: " . $_application_folder . "/login.php");
-            }
+            $userService = $container->getUserService();
+            $userService->processLoginForm();
         }
         else
         {
@@ -86,6 +54,6 @@ switch ( $formname )
         }
         break;
     default:
-//        error message if no form is adressed
+//        error message if no form is addressed
 }
 

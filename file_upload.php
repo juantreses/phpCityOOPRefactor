@@ -4,18 +4,12 @@ require_once "lib/autoload.php";
 $css = array( "style.css");
 
 $viewService->basicHead($css, "Formulier File Upload");
+
+$uploadService = $container->getUploadService();
+
+$uploadService->LoadUploadPage();
+
 ?>
-
-<div class="container">
-    <div class="row">
-
-        <?php
-
-        $uploadService = $container->getUploadService();
-//         $uploadService = new UploadService();
-        $uploadService->LoadUploadPage();
-
-        ?>
 
     </div>
 </div>

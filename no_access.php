@@ -3,17 +3,8 @@ $no_access = true;
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
+
 $viewService->basicHead($css, "Geen toegang");
 
-?>
+print $viewService->loadTemplate("no_access");
 
-<div class="container">
-
-        <?php
-        print $viewService->loadTemplate("no_access");
-        ?>
-
-</div>
-
-</body>
-</html>
