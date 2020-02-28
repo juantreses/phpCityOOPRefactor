@@ -33,24 +33,8 @@ switch ( $formname )
 
         if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
-
-
-            // if the form and user data is valid
-
-            $formHandler = $container->getFormHandler();
-
-
-            if ($formHandler->ValidatePostedUserData())
-            {
-                if ($UserService->CheckRegistrationSuccess())
-                {
-                    header("Location:../steden.php");
-                }
-            }else
-            {
-                header("Location:../register.php");
-
-            }
+            $userService = $container->getUserService();
+            $userService->processRegisterForm();
 
         }
         break;
@@ -86,6 +70,6 @@ switch ( $formname )
         }
         break;
     default:
-//        error message if no form is adressed
+//        error message if no form is addressed
 }
 

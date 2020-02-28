@@ -218,6 +218,25 @@ class UserService
             //return to the profile page
             header("location:".$_application_folder."/profiel.php");
     }
+
+    public function processRegisterForm()
+    {
+        // if the form and user data is valid
+
+        if ($this->formHandler->ValidatePostedUserData())
+        {
+            if ($this->CheckRegistrationSuccess())
+            {
+                header("Location:../steden.php");
+            }
+        }else
+        {
+            header("Location:../register.php");
+
+        }
+
+    }
+
     public function updateImagesToDatabase($files)
     {
         foreach ($files as $fileModel)
