@@ -281,4 +281,14 @@ class UserService
 
     }
 
+    public function loadUserWithLoginData($id)
+    {
+        $user = $this->loadUserFromId($id);
+        $sql = "SELECT * FROM log_user WHERE log_usr_id=" . $_SESSION['usr_id']. " ORDER BY log_in" ;
+        $data = $this->databaseService->getData($sql);
+        $user->setLogInData($data);
+
+        return $user;
+    }
+
 }

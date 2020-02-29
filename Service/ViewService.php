@@ -124,7 +124,7 @@ class ViewService
         return $content;
     }
 
-    public function printWeekAndReturnNewDateForLink($week, $year)
+    private function printWeekAndReturnNewDateForLink($week, $year)
     {
         // correction of the week //
         if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
@@ -147,7 +147,6 @@ class ViewService
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
             $data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
             $dataReplaceContent[$day -1]['tasks']= $this->replaceContent($data,$this->loadTemplate("week_tasks"));
-
         }
         // get this data on the week.php page end replace the new links to previous and next week.
 
@@ -164,9 +163,7 @@ class ViewService
         $week = (isset($_GET['week'])) ? $_GET['week'] : date("W");
 
         // print the week and return the new date(link updated in class)
-        $newdate = $this->printWeekAndReturnNewDateForLink($week,$year);
-        $week = $newdate[0];
-        $year = $newdate[1];
+        $this->printWeekAndReturnNewDateForLink($week,$year);
     }
 
 
@@ -229,5 +226,18 @@ class ViewService
         return $dataRow;
     }
 
+    public function renderLoginHistory(User $userObject)
+    {
+        $replaceContentData = array();
+        $replaceContentData['usr_naam'] = $userObject->getNaam();
+        $replaceContentData['usr_voornaam'] = $userObject->getVoornaam();
+
+        $loginData = $userObject->getLogInData();
+
+        $replaceContentData['login_data'] = $this->replaceContent($loginData, $this->loadTemplate('historiek_data'));
+
+        $templ = $this->loadTemplate('historiek');
+        print $this->replaceContentOneRow($replaceContentData, $templ);
+    }
 
 }
