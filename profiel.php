@@ -4,7 +4,7 @@ $userService = $container->getUserService();
 $user = $userService->loadUserFromId($_SESSION['usr_id']);
 if (!$user-> getPasfoto() != "" )
 {
-    $MS->addMessage("U moet uw Pasfoto opladen!!!", "error");
+    $viewService->addMessage("U moet uw Pasfoto opladen!!!", "error");
 }
 
 $css = array( "style.css");

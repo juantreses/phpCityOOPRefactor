@@ -91,7 +91,7 @@ class Container
      public function getFormHandler()
     {
         if ($this->formHandler === null) {
-            $this->formHandler = new FormHandler($this->getDatabaseService());
+            $this->formHandler = new FormHandler($this->getDatabaseService(), $this->getViewService());
         }
 
         return $this->formHandler;
@@ -125,7 +125,6 @@ class Container
         return $this->temporaryPrintWeekTask;
     }
 
-
 //
 
     // Jan works over here
@@ -138,9 +137,5 @@ class Container
 
             return $this->viewService;
         }
-
-
-
-
 
 }
