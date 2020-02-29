@@ -7,6 +7,13 @@ class Task
     private $datum;
     private $omschr;
 
+    public function __construct($dataRow)
+    {
+        $this->datum = $dataRow['taa_datum'];
+        $this->omschr = $dataRow['taa_omschr'];
+        $this->id = $dataRow['taa_id'];
+    }
+
     /**
      * @return mixed
      */
