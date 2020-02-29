@@ -48,10 +48,9 @@ class TaskLoader
         return $taskArray;
     }
 
-    public function getTasksForAWeek($date)
+    public function getTaskDescriptionByDate($date)
     {
-        $taskArray = $this->databaseService->getData("SELECT * FROM images WHERE img_id = ". $id);
-
+        $taskArray = $this->databaseService->getData("SELECT * FROM taak WHERE taa_datum = '". $date . "'");
 
         if (!$taskArray) {
             return null;

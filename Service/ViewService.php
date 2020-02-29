@@ -6,9 +6,12 @@ class ViewService
 
     private $databaseService;
 
-    public function __construct(DatabaseService $databaseService)
+    private $taskLoader;
+
+    public function __construct(DatabaseService $databaseService, TaskLoader $taskLoader)
     {
         $this->databaseService = $databaseService;
+        $this->taskLoader = $taskLoader;
     }
 
     public function basicHead( $css = "", $header )
@@ -145,8 +148,24 @@ class ViewService
             $d = strtotime($year . "W" . $week . $day);
             $dataReplaceContent[$day - 1]['day'] = date("l", $d);
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
-            $data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
-            $dataReplaceContent[$day -1]['tasks']= $this->replaceContent($data,$this->loadTemplate("week_tasks"));
+            //$data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
+            $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
+
+            if ($tasks)
+            {
+                foreach ($tasks as $task)
+                {
+                    $data = $this->getTaskModelDataInArray($task);
+
+                    $dataReplaceContent[$day -1]['tasks']= $this->replaceContentOneRow($data,$this->loadTemplate("week_tasks"));
+                }
+            }
+            else {
+                $dataReplaceContent[$day -1]['tasks']= '';
+            }
+
+
+
 
         }
         // get this data on the week.php page end replace the new links to previous and next week.
@@ -226,6 +245,13 @@ class ViewService
         $dataRow['men_id'] = $menuModel->getId();
         $dataRow['active'] = $menuModel->getActive();
         $dataRow['sr_only'] = $menuModel->getSrOnly();
+        return $dataRow;
+    }
+
+    private function getTaskModelDataInArray(Task $taskModel)
+    {
+        $dataRow = array();
+        $dataRow['taa_omschr'] = $taskModel->getOmschr();
         return $dataRow;
     }
 

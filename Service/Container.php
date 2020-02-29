@@ -116,7 +116,7 @@ class Container
      public function getViewService()
      {
          if ($this->viewService === null) {
-             $this->viewService = new ViewService($this->getDatabaseService());
+             $this->viewService = new ViewService($this->getDatabaseService(), $this->getTaskLoader());
          }
 
          return $this->viewService;
