@@ -190,7 +190,7 @@ class ViewService
     /**
      * @return array
      */
-    public function loadMenuModels()
+    private function loadMenuModels()
     {
         //check the page your one to know the active menu item
         $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
@@ -216,7 +216,7 @@ class ViewService
      * @param Menu $menuModel
      * @return array
      */
-    public function getMenuModelDataInArray(Menu $menuModel)
+    private function getMenuModelDataInArray(Menu $menuModel)
     {
         // put the data of the menuModel in a array
         $dataRow = array();
