@@ -17,6 +17,7 @@ $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
 require_once $_root_folder . "/Model/City.php";
 require_once $_root_folder . "/Model/User.php";
 require_once $_root_folder . "/Model/File.php";
+require_once $_root_folder . "/Model/Menu.php";
 //load Services
 require_once $_root_folder . "/Service/CityLoader.php";
 require_once $_root_folder . "/Service/MessageService.php";

@@ -46,30 +46,19 @@ class ViewService
 
     private function printNavBar()
     {
-
-        //navbar items ophalen
-        $data = $this->databaseService->getData("select * from menu order by men_order");
-
-        $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
-
-        //aan de juiste datarij, de sleutels 'active' en 'sr-only' toevoegen
-        foreach( $data as $r => $row )
+        //Load the Menu Model from the database
+        $menuModelArray = $this->loadMenuModels();
+        $i = 0;
+        //Get the data from each MenuModel in a array
+        foreach ($menuModelArray as $menuModel)
         {
-            if ( $laatste_deel_url == $data[$r]['men_destination'] )
-            {
-                $data[$r]['active'] = 'active';
-                $data[$r]['sr_only'] = '<span class="sr-only">(current)</span>';
-            }
-            else
-            {
-                $data[$r]['active'] = '';
-                $data[$r]['sr_only'] = '';
-            }
+            $navbarItemsData[$i] = $this->getMenuModelDataInArray($menuModel);
+            $i++;
         }
 
-        //template voor 1 item samenvoegen met data voor items
+        // replace the data
         $template_navbar_item = $this->loadTemplate("navbar_item");
-        $navbar_items = $this->replaceContent($data, $template_navbar_item);
+        $navbar_items = $this->replaceContent($navbarItemsData, $template_navbar_item);
 
         //navbar template samenvoegen met resultaat ($navbar_items)
         $data = array( "navbar_items" => $navbar_items ) ;
@@ -196,6 +185,48 @@ class ViewService
                 }
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function loadMenuModels()
+    {
+        //check the page your one to know the active menu item
+        $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
+        //collect the data from the database
+        $data = $this->databaseService->getData("select * from menu order by men_order");
+        // each menu item is loaded in a menuModel
+        foreach ($data as $row)
+        {
+            $menu = new Menu($row);
+            if ( $laatste_deel_url == $menu-> getDestination() )
+            {
+                $menu->setActive('active');
+                $menu->setSrOnly('<span class="sr-only">(current)</span>');
+            }
+            $menuModelArray[] = $menu;
+
+        }
+        // return a array of menuModels
+        return $menuModelArray;
+    }
+
+    /**
+     * @param Menu $menuModel
+     * @return array
+     */
+    public function getMenuModelDataInArray(Menu $menuModel)
+    {
+        // put the data of the menuModel in a array
+        $dataRow = array();
+        $dataRow['men_caption'] = $menuModel->getCaption();
+        $dataRow['men_destination'] = $menuModel->getDestination();
+        $dataRow['men_order'] = $menuModel->getOrder();
+        $dataRow['men_id'] = $menuModel->getId();
+        $dataRow['active'] = $menuModel->getActive();
+        $dataRow['sr_only'] = $menuModel->getSrOnly();
+        return $dataRow;
     }
 
 
