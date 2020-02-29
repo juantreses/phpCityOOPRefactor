@@ -9,13 +9,11 @@ class UploadService
 
     private $viewService;
 
-    private $messageService;
 
-    public function __construct(FormHandler $formHandler, ViewService $viewService, MessageService $messageService)
+    public function __construct(FormHandler $formHandler, ViewService $viewService)
     {
         $this->formHandler = $formHandler;
         $this->viewService = $viewService;
-        $this->messageService = $messageService;
     }
 
 

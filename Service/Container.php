@@ -23,8 +23,6 @@ class Container
 
     private $uploadService;
 
-    private $messageService;
-
 
     public function __construct(array $configuration)
     {
@@ -100,19 +98,10 @@ class Container
     public function getUploadService()
     {
         if ($this->uploadService === null) {
-            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService(), $this->getMessageService());
+            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService());
         }
 
         return $this->uploadService;
-    }
-
-    public function getMessageService()
-    {
-        if ($this->messageService === null) {
-            $this->messageService =new MessageService();
-        }
-
-        return $this->messageService;
     }
 
 
