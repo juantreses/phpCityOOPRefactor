@@ -14,8 +14,6 @@ class Container
     private $databaseService;
 
     private $viewService;
-  
-    private $temporaryPrintWeekTask;
 
     private $userService;
 
@@ -24,6 +22,8 @@ class Container
     private $uploadService;
 
     private $messageService;
+
+    private $taskLoader;
 
 
     public function __construct(array $configuration)
@@ -71,13 +71,11 @@ class Container
     public function getDownloadService()
     {
         if ($this->downloadService === null) {
-            $this->downloadService = new DownloadService($this->getDatabaseService());
+            $this->downloadService = new DownloadService($this->getTaskLoader());
         }
 
         return $this->downloadService;
     }
-
-    /* Nicole works over here */
 
     public function getUserService()
     {
@@ -115,31 +113,23 @@ class Container
         return $this->messageService;
     }
 
-
-//     Alex works over here
-    public function getTemporaryPrintWeekTask()
-    {
-        if ($this->temporaryPrintWeekTask === null) {
-            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService(),$this->getViewService());
-        }
-        return $this->temporaryPrintWeekTask;
-    }
-
-
-//
-
-    // Jan works over here
-
      public function getViewService()
-        {
-            if ($this->viewService === null) {
-                $this->viewService = new ViewService($this->getDatabaseService());
-            }
+     {
+         if ($this->viewService === null) {
+             $this->viewService = new ViewService($this->getDatabaseService());
+         }
 
-            return $this->viewService;
+         return $this->viewService;
+     }
+
+    public function getTaskLoader()
+    {
+        if ($this->taskLoader === null) {
+            $this->taskLoader = new TaskLoader($this->getDatabaseService());
         }
 
-
+        return $this->taskLoader;
+    }
 
 
 
