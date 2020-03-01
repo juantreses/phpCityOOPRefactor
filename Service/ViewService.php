@@ -151,22 +151,23 @@ class ViewService
             //$data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
             $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
 
+            $dataArray = array();
+            $i = 0;
+
             if ($tasks)
             {
                 foreach ($tasks as $task)
                 {
-                    $data = $this->getTaskModelDataInArray($task);
+                    $dataArray[$i] = $this->getTaskModelDataInArray($task);
 
-                    $dataReplaceContent[$day -1]['tasks']= $this->replaceContentOneRow($data,$this->loadTemplate("week_tasks"));
+                    $i++;
+
+                    $dataReplaceContent[$day -1]['tasks'] = $this->replaceContent($dataArray,$this->loadTemplate("week_tasks"));
                 }
             }
             else {
                 $dataReplaceContent[$day -1]['tasks']= '';
             }
-
-
-
-
         }
         // get this data on the week.php page end replace the new links to previous and next week.
 

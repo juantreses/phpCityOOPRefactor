@@ -50,13 +50,18 @@ class TaskLoader
 
     public function getTaskDescriptionByDate($date)
     {
+        $i = 0;
         $taskArray = $this->databaseService->getData("SELECT * FROM taak WHERE taa_datum = '". $date . "'");
 
         if (!$taskArray) {
             return null;
         }
 
-        $tasks[] = $this->createTaskFromData($taskArray[0]);
+        foreach ($taskArray as $task)
+        {
+            $tasks[$i] = $this->createTaskFromData($task);
+            $i++;
+        }
 
         return $tasks;
     }
