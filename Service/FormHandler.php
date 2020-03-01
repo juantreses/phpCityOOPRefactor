@@ -26,18 +26,13 @@ class FormHandler
         $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = (count($data) > 0) ? true : false;
         return $userIsInDatabase;
-
-//        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
-//        $data = GetData($sql);
-
-
     }
 
     /**
      * @param User $user
      * @return bool
      */
-    public function ValidatePostedUserData()
+    public function validatePostedUserData()
     {
         $pass = true;
 
@@ -51,7 +46,6 @@ class FormHandler
         if (strlen($_POST["usr_paswd"]) < 8) {
             $this->viewService->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
             $pass = false;
-
         }
 
         //check email format
@@ -65,7 +59,7 @@ class FormHandler
     }
 
 
-    public function RegisterUser()
+    public function registerUser()
     {
         // encrypt password
 
@@ -108,7 +102,7 @@ class FormHandler
             }
 
 
-        // als er geen errors zijn zal True meegeven worden
+        // return true if no errors
         return true;
     }
 

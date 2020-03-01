@@ -27,8 +27,6 @@ class ViewService
             }
         }
 
-
-
         $data = array("stylesheets" => $str_stylesheets, "header" => $header, "messages" => $this->returnMessages() );
 
         unset($_SESSION["error"]);
@@ -203,7 +201,6 @@ class ViewService
                 $menu->setSrOnly('<span class="sr-only">(current)</span>');
             }
             $menuModelArray[] = $menu;
-
         }
         // return a array of menuModels
         return $menuModelArray;

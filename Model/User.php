@@ -33,9 +33,6 @@ class User
         $this->log_in_data = $log_in_data;
     }
 
-
-
-
     /**
      * @param $row
      */
@@ -283,9 +280,5 @@ class User
     {
         $this->az_eid = $az_eid;
     }
-
-
-
-
 
 }

@@ -10,7 +10,7 @@ class DownloadService
         $this->databaseService = $databaseService;
     }
 
-    public function PrintCSVHeader( $filename )
+    public function printCSVHeader( $filename )
     {
         // CSV header
         header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
@@ -25,13 +25,13 @@ class DownloadService
     }
 
 
-    public function GenerateRows() {
-        //veldnamenrij
+    public function generateRows() {
+        // field name row
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
         $data = $this->databaseService->getData('SELECT * FROM taak');
 
-        //rijen met data
+        //rows with data
         foreach( $data as $row )
         {
             echo implode(";", $row) . "\r\n" ;

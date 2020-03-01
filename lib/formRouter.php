@@ -11,7 +11,7 @@ switch ( $formname )
         if ( isset($_POST["submit"]) == "Opladen" )
         {
             $userService = $container->getUserService();
-            $userService->procesProfileForm();
+            $userService->processProfileForm();
         }
         break;
 
@@ -21,7 +21,7 @@ switch ( $formname )
         if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" )
         {
             $uploadService = $container->getUploadService();
-            $uploadService->procesUploadForm();
+            $uploadService->processUploadForm();
         }
         header("location:".$_application_folder."/file_upload.php");
     break;

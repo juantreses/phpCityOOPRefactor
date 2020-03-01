@@ -10,7 +10,6 @@ class Menu
     private $active;
     private $srOnly;
 
-
     public function __construct($dataRow)
     {
         $this->caption = $dataRow['men_caption'];
@@ -116,8 +115,5 @@ class Menu
     {
         $this->order = $order;
     }
-
-
-
 
 }

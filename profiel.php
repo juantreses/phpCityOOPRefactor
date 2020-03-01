@@ -14,6 +14,6 @@ $viewService->basicHead($css, "Uw profiel");
 
 // Print the ProfielForm
 $userService = $container->getUserService();
-$userService->loadProfielPage();
+$userService->loadProfilePage();
 ?>
 

@@ -53,8 +53,6 @@ class Container
         }
 
         return $this->databaseService;
-
-
     }
 
     public function getCityService()
@@ -74,8 +72,6 @@ class Container
 
         return $this->downloadService;
     }
-
-    /* Nicole works over here */
 
     public function getUserService()
     {
@@ -104,19 +100,14 @@ class Container
         return $this->uploadService;
     }
 
-
-//     Alex works over here
     public function getTemporaryPrintWeekTask()
     {
         if ($this->temporaryPrintWeekTask === null) {
             $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService(),$this->getViewService());
         }
+
         return $this->temporaryPrintWeekTask;
     }
-
-//
-
-    // Jan works over here
 
      public function getViewService()
         {
@@ -126,5 +117,4 @@ class Container
 
             return $this->viewService;
         }
-
 }

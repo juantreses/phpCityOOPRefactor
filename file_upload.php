@@ -7,7 +7,7 @@ $viewService->basicHead($css, "Formulier File Upload");
 
 $uploadService = $container->getUploadService();
 
-$uploadService->LoadUploadPage();
+$uploadService->loadUploadPage();
 
 ?>
 

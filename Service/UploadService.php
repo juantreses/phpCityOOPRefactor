@@ -16,9 +16,7 @@ class UploadService
         $this->viewService = $viewService;
     }
 
-
-
-    public function LoadUploadPage()
+    public function loadUploadPage()
     {
         $this->images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
         $this->printUploadForm();
@@ -26,7 +24,6 @@ class UploadService
         {
             $this->printImages();
         }
-
     }
 
     private function printUploadForm()
@@ -39,7 +36,6 @@ class UploadService
         $i =0;
         foreach( $this->images as $img )
         {
-
             $replaceData[$i]['img']= "'".$img."'" ;
             $i++;
         }
@@ -47,7 +43,7 @@ class UploadService
     }
 
 
-    public function procesUploadForm()
+    public function processUploadForm()
     {
         global $_application_folder;
         $files = $this->formHandler->getFilesFromForm();
@@ -65,25 +61,19 @@ class UploadService
                 {
                     $this->viewService->addMessage("U Foto's zijn opgeslagen",'info');
                     // update the user in the database and reload the user
-
                 }else
                 {
                     $this->viewService->addMessage("Er Liep iets mis","error");
-
                 }
             }
-        }else
+        } else
         {
-            // if there where no images selected
+            // if there were no images selected
             $this->viewService->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
-
         }
         //return to the profile page
         header("location:".$_application_folder."/file_upload.php");
-
     }
-
-
 
     public function uploadFileModels($fileModels)
     {
@@ -128,8 +118,4 @@ class UploadService
         }
         return $files;
     }
-
-
-
-
 }

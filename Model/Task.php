@@ -62,6 +62,4 @@ class Task
         $this->omschr = $omschr;
     }
 
-
-
 }
