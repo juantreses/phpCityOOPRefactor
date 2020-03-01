@@ -1,11 +1,12 @@
 PHP City OOP Refactor
 
-Please create your own root.php and passwd.php in the lib folder, according to the format of the example files.
+Please create your own root.php and passwd.php in the lib folder, according to the format of the example_passwd.php and example_root.php files.
 
 ROOT: 
-make a new file root.php copy the last line of this script and change te folder to your root folder
-dont include the root.php in the repo.
-copy the line in root.php in the lib directory
+1.	make a new file root.php copy the last line of this script and change te folder to your root folder
+2.	dont include the root.php in the repo
+3.	copy the line in root.php in the lib directory
+
 
 PASSWD: 
 1.	Fill in your data
