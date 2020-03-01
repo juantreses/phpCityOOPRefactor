@@ -78,7 +78,7 @@ class CityService
 
         $sql_body = array();
 
-        //key-value pairs samenstellen
+        // make key-value pairs
         foreach( $_POST as $field => $value )
         {
             if ( in_array($field, array("tablename", "formname", "afterinsert", "pkey", "savebutton", $pkey))) continue;

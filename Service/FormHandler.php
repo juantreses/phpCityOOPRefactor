@@ -14,7 +14,6 @@ class FormHandler
         $this->viewService = $viewService;
     }
 
-
     /**
      * @param $userLogin
      * @return bool
@@ -22,7 +21,7 @@ class FormHandler
 
     public function checkIfUserIsInDatabase($userLogin)
     {
-        //controle of gebruiker al bestaat
+        // check if user already exists
         $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = (count($data) > 0) ? true : false;
         return $userIsInDatabase;
@@ -88,19 +87,18 @@ class FormHandler
     {
         foreach ($fileModelArray as $fileModel)
 
-        // Check the extensions
-
+            // check the extensions
             if (!in_array($fileModel->getExtension(), $ext_allowed)) {
                 $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
                 //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
                 return false;
             }
+            // check size
             if ($fileModel->getSize() > $max_size) {
                 $this->viewService->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
                 //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
                 return false;
             }
-
 
         // return true if no errors
         return true;
@@ -115,6 +113,7 @@ class FormHandler
         $filesModels = [];
         foreach ($_FILES as $formFieldName =>$file)
         {
+            // create file objects from uploaded files
             if($file['name'] == "")continue;
             $x = new File($file,$formFieldName);
             $filesModels[] = $x;

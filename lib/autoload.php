@@ -32,8 +32,7 @@ $viewService = $container->getViewService();
 $UserService = $container->getUserService();
 
 
-//redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
-//de loginpagina gaat
+//redirect to no access if user is not logged in and isn't going to login page
 if ( ! isset($_SESSION['usr_id']) AND ! $form AND ! $no_access)
 {
     header("Location: " . $_application_folder . "/no_access.php");

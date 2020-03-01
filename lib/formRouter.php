@@ -6,7 +6,7 @@ $formname = $_POST["formname"];
 
 switch ( $formname )
 {
-    //Uses UserService for the logic, UserService uses databaseService , Formhandler and UploadService
+    //Uses UserService for the logic, UserService uses databaseService , Formhandler, ViewService and UploadService
     case "profiel_form":
         if ( isset($_POST["submit"]) == "Opladen" )
         {
@@ -17,7 +17,7 @@ switch ( $formname )
 
     case "file_upload":
 
-        //uses UploadService for the logic, uploadService uses formhandler
+        //uses UploadService for the logic, uploadService uses formhandler and ViewService
         if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" )
         {
             $uploadService = $container->getUploadService();
@@ -28,6 +28,7 @@ switch ( $formname )
 
     case "registration_form":
 
+        //Uses UserService for the logic, UserService uses DatabaseService , Formhandler, ViewService and UploadService
         if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
             $userService = $container->getUserService();
@@ -36,6 +37,8 @@ switch ( $formname )
         break;
 
     case "stad_form":
+
+        //Uses CityService for the logic, CityService uses DatabaseService
         if ( $_POST["savebutton"] == "Save" ) {
             $cityService = $container->getCityService();
             $cityService->SaveCity();
@@ -43,6 +46,8 @@ switch ( $formname )
         break;
 
     case "login_form":
+
+        //Uses UserService for the logic, UserService uses DatabaseService , Formhandler, ViewService and UploadService
         if ($_POST['loginbutton'] == "Log in" )
         {
             $userService = $container->getUserService();
@@ -50,7 +55,7 @@ switch ( $formname )
         }
         break;
     default:
-//        error message if no form is addressed
+        // error message if no form is addressed
         $viewService->addMessage( "Foute formname of buttonvalue", "error" );
 }
 
