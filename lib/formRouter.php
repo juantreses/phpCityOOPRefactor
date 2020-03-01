@@ -37,8 +37,8 @@ switch ( $formname )
 
     case "stad_form":
         if ( $_POST["savebutton"] == "Save" ) {
-            $formHandler = $container->getFormHandler();
-            $formHandler->SaveCity();
+            $cityService = $container->getCityService();
+            $cityService->SaveCity();
         }
         break;
 
