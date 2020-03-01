@@ -6,9 +6,12 @@ class ViewService
 
     private $databaseService;
 
-    public function __construct(DatabaseService $databaseService)
+    private $taskLoader;
+
+    public function __construct(DatabaseService $databaseService, TaskLoader $taskLoader)
     {
         $this->databaseService = $databaseService;
+        $this->taskLoader = $taskLoader;
     }
 
     public function basicHead( $css = "", $header )
@@ -145,8 +148,25 @@ class ViewService
             $d = strtotime($year . "W" . $week . $day);
             $dataReplaceContent[$day - 1]['day'] = date("l", $d);
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
-            $data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
-            $dataReplaceContent[$day -1]['tasks']= $this->replaceContent($data,$this->loadTemplate("week_tasks"));
+            $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
+
+            $dataArray = array();
+            $i = 0;
+
+            if ($tasks)
+            {
+                foreach ($tasks as $task)
+                {
+                    $dataArray[$i] = $this->getTaskModelDataInArray($task);
+
+                    $i++;
+
+                    $dataReplaceContent[$day -1]['tasks'] = $this->replaceContent($dataArray,$this->loadTemplate("week_tasks"));
+                }
+            }
+            else {
+                $dataReplaceContent[$day -1]['tasks']= '';
+            }
         }
         // get this data on the week.php page end replace the new links to previous and next week.
 
@@ -226,6 +246,14 @@ class ViewService
         return $dataRow;
     }
 
+
+    private function getTaskModelDataInArray(Task $taskModel)
+    {
+        $dataRow = array();
+        $dataRow['taa_omschr'] = $taskModel->getOmschr();
+        return $dataRow;
+    }
+
     public function renderLoginHistory(User $userObject)
     {
         $replaceContentData = array();
@@ -240,4 +268,8 @@ class ViewService
         print $this->replaceContentOneRow($replaceContentData, $templ);
     }
 
+    public function addMessage($msg, $type = "info" )
+    {
+        $_SESSION["$type"][] = $msg ;
+    }
 }

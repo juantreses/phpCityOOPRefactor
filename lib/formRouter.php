@@ -50,7 +50,7 @@ switch ( $formname )
         }
         else
         {
-            $MS->addMessage( "Foute formname of buttonvalue", "error" );
+            $viewService->addMessage( "Foute formname of buttonvalue", "error" );
         }
         break;
     default:

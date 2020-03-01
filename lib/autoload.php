@@ -21,25 +21,18 @@ require_once $_root_folder . "/Model/Menu.php";
 require_once $_root_folder . "/Model/Task.php";
 //load Services
 require_once $_root_folder . "/Service/CityLoader.php";
+require_once $_root_folder . "/Service/TaskLoader.php";
 require_once $_root_folder . "/Service/MessageService.php";
 require_once $_root_folder . "/Service/UserService.php";
-
 require_once $_root_folder . "/Service/DownloadService.php";
-
 require_once $_root_folder . "/Service/Container.php";
 require_once $_root_folder . "/Service/DatabaseService.php";
 require_once $_root_folder . "/Service/ViewService.php";
-
+require_once $_root_folder . "/Service/UploadService.php";
+require_once $_root_folder . "/Service/FormHandler.php";
 
 require_once $_root_folder . "/lib/passwd.php";
 require_once $_root_folder . "/lib/pdo.php";                          //database functies
-
-require_once $_root_folder . "/Service/UploadService.php";
-
-
-
-require_once $_root_folder . "/Service/FormHandler.php";
-
 
 session_start();
 $_SESSION["head_printed"] = false;
@@ -49,14 +42,7 @@ $_SESSION["head_printed"] = false;
 
 $container = new Container($connectionData);
 $viewService = $container->getViewService();
-$MS = new MessageService($viewService);
 $UserService = $container->getUserService();
-
-
-require_once $_root_folder . "/lib/passwd.php";
-require_once $_root_folder . "/lib/pdo.php";                          //database functies
-
-
 
 
 //redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar

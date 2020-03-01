@@ -1,13 +1,12 @@
 <?php
-//require_once "./lib/autoload.php";
 
 class DownloadService
 {
-    private $databaseService;
+    private $taskLoader;
 
-    public function __construct(DatabaseService $databaseService)
+    public function __construct(TaskLoader $taskLoader)
     {
-        $this->databaseService = $databaseService;
+        $this->taskLoader = $taskLoader;
     }
 
     public function PrintCSVHeader( $filename )
@@ -29,18 +28,15 @@ class DownloadService
         //veldnamenrij
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
-        $data = $this->databaseService->getData('SELECT * FROM taak');
+        $data = $this->taskLoader->getTasks();
 
         //rijen met data
         foreach( $data as $row )
         {
-            echo implode(";", $row) . "\r\n" ;
+            echo $row->getId() . ";";
+            echo $row->getDatum() . ";";
+            echo $row->getOmschr() . ";" . "\r\n";
         }
-    }
-
-    private function getPDO()
-    {
-        return $this->pdo;
     }
 
 }
