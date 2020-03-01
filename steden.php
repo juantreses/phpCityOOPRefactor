@@ -3,7 +3,6 @@
 require_once "lib/autoload.php";
 
 $css = array( "style.css");
-
 $viewService->basicHead($css, "Leuke plekken in Europa"); ?>
 
 <div class="container">

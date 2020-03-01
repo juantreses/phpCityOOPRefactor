@@ -10,9 +10,7 @@ if (!$user-> getPasfoto() != "" )
 $css = array( "style.css");
 $viewService->basicHead($css, "Uw profiel");
 
-//$viewService->printNavBar();
-
-// Print the ProfielForm
+// print the ProfileForm
 $userService = $container->getUserService();
 $userService->loadProfilePage();
 ?>
