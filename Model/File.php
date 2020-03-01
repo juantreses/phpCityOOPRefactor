@@ -1,13 +1,13 @@
 <?php
 
 
-class file
+class File
 {
     private $name;
     private $tmpName;
-    private $origanalName;
+    private $originalName;
     private $size;
-    private $extention;
+    private $extension;
     private $targetLocation;
     private $formField;
     private $sqlField;
@@ -15,8 +15,8 @@ class file
     public function __construct($file,$formField)
     {
         $file["name"] = strtolower($file["name"]);
-        $this->origanalName = $file["name"];
-        $this->extention = pathinfo($this->origanalName,PATHINFO_EXTENSION);
+        $this->originalName = $file["name"];
+        $this->extension = pathinfo($this->originalName,PATHINFO_EXTENSION);
         $this->size = $file["size"];
         $this->formField = $formField;
         $this->tmpName = $file['tmp_name'];
@@ -72,17 +72,17 @@ class file
     /**
      * @return string
      */
-    public function getOriganalName()
+    public function getOriginalName()
     {
-        return $this->origanalName;
+        return $this->originalName;
     }
 
     /**
-     * @param string $origanalName
+     * @param string $originalName
      */
-    public function setOriganalName(string $origanalName)
+    public function setOriginalName(string $originalName)
     {
-        $this->origanalName = $origanalName;
+        $this->originalName = $originalName;
     }
 
     /**
@@ -104,17 +104,17 @@ class file
     /**
      * @return string|string[]
      */
-    public function getExtention()
+    public function getExtension()
     {
-        return $this->extention;
+        return $this->extension;
     }
 
     /**
-     * @param string|string[] $extention
+     * @param string|string[] $extension
      */
-    public function setExtention($extention)
+    public function setExtension($extension)
     {
-        $this->extention = $extention;
+        $this->extension = $extension;
     }
 
     /**

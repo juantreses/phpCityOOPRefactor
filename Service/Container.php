@@ -7,7 +7,7 @@ class Container
 
     private $pdo;
 
-    private $cityLoader;
+    private $cityService;
 
     private $downloadService;
 
@@ -54,17 +54,15 @@ class Container
         }
 
         return $this->databaseService;
-
-
     }
 
-    public function getCityLoader()
+    public function getCityService()
     {
-        if ($this->cityLoader === null) {
-            $this->cityLoader = new CityLoader($this->getDatabaseService());
+        if ($this->cityService === null) {
+            $this->cityService = new CityService($this->getDatabaseService());
         }
 
-        return $this->cityLoader;
+        return $this->cityService;
     }
 
     public function getDownloadService()
@@ -101,15 +99,6 @@ class Container
         }
 
         return $this->uploadService;
-    }
-
-    public function getMessageService()
-    {
-        if ($this->messageService === null) {
-            $this->messageService =new MessageService();
-        }
-
-        return $this->messageService;
     }
 
      public function getViewService()

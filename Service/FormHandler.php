@@ -14,7 +14,6 @@ class FormHandler
         $this->viewService = $viewService;
     }
 
-
     /**
      * @param $userLogin
      * @return bool
@@ -22,13 +21,18 @@ class FormHandler
 
     public function checkIfUserIsInDatabase($userLogin)
     {
-        //controle of gebruiker al bestaat
+        // check if user already exists
         $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = (count($data) > 0) ? true : false;
         return $userIsInDatabase;
     }
 
-    public function ValidatePostedUserData()
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function validatePostedUserData()
+
     {
         $pass = true;
 
@@ -40,9 +44,8 @@ class FormHandler
 
         //check password
         if (strlen($_POST["usr_paswd"]) < 8) {
-            $this->viewService->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
+            $this->viewService->addMessage("Uw paswoord moet minimum 8 tekens lang zijn!", "error");
             $pass = false;
-
         }
 
         //check email format
@@ -55,8 +58,11 @@ class FormHandler
         return $pass;
     }
 
-
-    public function RegisterUser()
+    /**
+     * @param User $user
+     * @return string
+     */
+    public function registerUser()
     {
         // encrypt password
 
@@ -79,63 +85,28 @@ class FormHandler
         return $sql;
 
     }
-
+    /**
+     * @param $fileModelArray, array $ext_allowed, $max_size
+     * @return bool
+     */
 
     public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
         foreach ($fileModelArray as $fileModel)
 
-        // Check the extensions
-
-            if (!in_array($fileModel->getExtention(), $ext_allowed)) {
+            // check the extensions
+            if (!in_array($fileModel->getExtension(), $ext_allowed)) {
                 $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
-                //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
                 return false;
             }
+            // check size
             if ($fileModel->getSize() > $max_size) {
                 $this->viewService->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
-                //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
                 return false;
             }
 
-
-        // als er geen errors zijn zal True meegeven worden
+        // return true if no errors
         return true;
-    }
-
-    public function SaveCity() {
-
-        global $_application_folder;
-
-        $tablename = $_POST["tablename"];
-        $formname = $_POST["formname"];
-        $afterinsert = $_POST["afterinsert"];
-        $pkey = $_POST["pkey"];
-
-        $sql_body = array();
-
-        //key-value pairs samenstellen
-        foreach( $_POST as $field => $value )
-        {
-            if ( in_array($field, array("tablename", "formname", "afterinsert", "pkey", "savebutton", $pkey))) continue;
-
-            $sql_body[]  = " $field = '" . htmlentities($value, ENT_QUOTES) . "' " ;
-        }
-
-        if ( $_POST[$pkey] > 0 ) //update
-        {
-            $sql = "UPDATE $tablename SET " . implode( ", " , $sql_body ) . " WHERE $pkey=" . $_POST[$pkey];
-            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
-        }
-        else //insert
-        {
-            $sql = "INSERT INTO $tablename SET " . implode( ", " , $sql_body );
-            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
-        }
-
-        //print $sql;
-        header("Location: $new_url");
-
     }
 
     /**
@@ -147,6 +118,7 @@ class FormHandler
         $filesModels = [];
         foreach ($_FILES as $formFieldName =>$file)
         {
+            // create file objects from uploaded files
             if($file['name'] == "")continue;
             $x = new File($file,$formFieldName);
             $filesModels[] = $x;

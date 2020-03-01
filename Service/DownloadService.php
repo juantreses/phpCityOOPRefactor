@@ -9,7 +9,7 @@ class DownloadService
         $this->taskLoader = $taskLoader;
     }
 
-    public function PrintCSVHeader( $filename )
+    public function printCSVHeader( $filename )
     {
         // CSV header
         header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
@@ -23,14 +23,17 @@ class DownloadService
         header("Content-disposition: attachment; filename=".$filename.".csv");
     }
 
+    /**
+     * @return string
+     */
 
-    public function GenerateRows() {
-        //veldnamenrij
+    public function generateRows() {
+        // field name row
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
         $data = $this->taskLoader->getTasks();
 
-        //rijen met data
+        //rows with data
         foreach( $data as $row )
         {
             echo $row->getId() . ";";

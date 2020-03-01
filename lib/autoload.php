@@ -1,16 +1,8 @@
 <?php
-/*
-    ====root folder instructions ====
- ->create root.php in the lib map AND do not include it in the repository!
- ->copy the contend of example_root.php in root.php
- ->change the path in root.php to your path starting from the thdocs folder
- example = (/php/projects/phpCityOOPRefactor)
-*/
 //ini_set("error_reporting", E_ALL);
 //ini_set('display_errors', 1);
 //ini_set('display_startup_errors', 1);
 require_once "root.php";
-//$_application_folder = "/testremote_new";
 $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
 
 //load Models
@@ -20,9 +12,8 @@ require_once $_root_folder . "/Model/File.php";
 require_once $_root_folder . "/Model/Menu.php";
 require_once $_root_folder . "/Model/Task.php";
 //load Services
-require_once $_root_folder . "/Service/CityLoader.php";
 require_once $_root_folder . "/Service/TaskLoader.php";
-require_once $_root_folder . "/Service/MessageService.php";
+require_once $_root_folder . "/Service/CityService.php";
 require_once $_root_folder . "/Service/UserService.php";
 require_once $_root_folder . "/Service/DownloadService.php";
 require_once $_root_folder . "/Service/Container.php";
@@ -30,23 +21,19 @@ require_once $_root_folder . "/Service/DatabaseService.php";
 require_once $_root_folder . "/Service/ViewService.php";
 require_once $_root_folder . "/Service/UploadService.php";
 require_once $_root_folder . "/Service/FormHandler.php";
-
+//database functions
 require_once $_root_folder . "/lib/passwd.php";
-require_once $_root_folder . "/lib/pdo.php";                          //database functies
+
 
 session_start();
 $_SESSION["head_printed"] = false;
-/**
- *
- */
 
 $container = new Container($connectionData);
 $viewService = $container->getViewService();
-$UserService = $container->getUserService();
+$userService = $container->getUserService();
 
 
-//redirect naar NO ACCESS pagina als de gebruiker niet ingelogd is en niet naar
-//de loginpagina gaat
+//redirect to no access if user is not logged in and isn't going to login page
 if ( ! isset($_SESSION['usr_id']) AND ! $form AND ! $no_access)
 {
     header("Location: " . $_application_folder . "/no_access.php");

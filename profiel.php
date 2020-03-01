@@ -4,16 +4,14 @@ $userService = $container->getUserService();
 $user = $userService->loadUserFromId($_SESSION['usr_id']);
 if (!$user-> getPasfoto() != "" )
 {
-    $viewService->addMessage("U moet uw Pasfoto opladen!!!", "error");
+    $viewService->addMessage("U moet uw pasfoto opladen!!!", "error");
 }
 
 $css = array( "style.css");
 $viewService->basicHead($css, "Uw profiel");
 
-//$viewService->printNavBar();
-
-// Print the ProfielForm
+// print the ProfileForm
 $userService = $container->getUserService();
-$userService->loadProfielPage();
+$userService->loadProfilePage();
 ?>
 

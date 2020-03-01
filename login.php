@@ -12,7 +12,6 @@ if ( isset($_SESSION['usr']) )
 }
 
 $css = array( "style.css");
-
 $viewService->basicHead($css, "Login");
 
 print $viewService->loadTemplate("login");

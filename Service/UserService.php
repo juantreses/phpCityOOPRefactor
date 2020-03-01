@@ -22,16 +22,16 @@ class UserService
 
     /**
      * @param $userLogin
-     * @param bool $fromRegistrateForm
+     * @param bool $fromRegistrationForm
      * @return bool
      * @throws Exception
      */
 
-    public function checkLoginUser( $userLogin,$fromRegistrateForm = false)
+    public function checkLoginUser( $userLogin,$fromRegistrationForm = false)
     {
         $login_ok = false;
         //if you come from registration there are no checks
-        if(!$fromRegistrateForm)
+        if(!$fromRegistrationForm)
         {
             // Is the user in the database?
             if($this->formHandler->checkIfUserIsInDatabase($userLogin))
@@ -43,19 +43,18 @@ class UserService
             }
         }
 
-        if ( $login_ok || $fromRegistrateForm)
+        if ( $login_ok || $fromRegistrationForm)
         {
             // assign th usr_id to a session and registration of the log-in  in the database
-            $user = ($fromRegistrateForm)?$this->loadUserFromId($this->getUserIdFromLogIn($userLogin)):$user;
+            $user = ($fromRegistrationForm)?$this->loadUserFromId($this->getUserIdFromLogIn($userLogin)):$user;
             $_SESSION['usr_id'] = $user->getId();
-            $this->LogLoginUser();
+            $this->logLoginUser();
             return true;
         }else
         {
             // if there was a problem,...
             return false;
         }
-
     }
 
     /**
@@ -69,17 +68,16 @@ class UserService
         return $data[0]['usr_id'];
     }
 
-
     /**
      * @return bool
      * @throws Exception
      */
-    public function CheckRegistrationSuccess()
+    public function checkRegistrationSuccess()
     {
-        $registrationSucces = true;
+        $registrationSuccess = true;
 
         // register user in formhandler
-        $sql = $this->formHandler->RegisterUser();
+        $sql = $this->formHandler->registerUser();
 
         // set data in model, check success and give msg
 
@@ -89,27 +87,26 @@ class UserService
 
             if ( $this->checkLoginUser($_POST['usr_login'],true) )
             {
-                $registrationSucces = true;
+                $registrationSuccess = true;
             }
             else
             {
-                $this->viewService->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
-                $registrationSucces = false;
+                $this->viewService->addMessage( "Sorry! Er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $registrationSuccess = false;
             }
         }
         else
         {
             $this->viewService->addMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
-            $registrationSucces = false;
-
+            $registrationSuccess = false;
         }
-        return $registrationSucces;
+        return $registrationSuccess;
     }
 
     /**
      * @throws Exception
      */
-    public function LogLogoutUser()
+    public function logLogoutUser()
     {
         $session = session_id();
         $timenow = new DateTime( 'NOW', new DateTimeZone('Europe/Brussels') );
@@ -122,7 +119,7 @@ class UserService
      * @throws Exception
      */
 
-    public function LogLoginUser()
+    public function logLoginUser()
     {
         $session = session_id();
         $timenow = new DateTime( 'NOW', new DateTimeZone('Europe/Brussels') );
@@ -141,9 +138,7 @@ class UserService
         return $passwCheck;
     }
 
-
-
-    public function loadProfielPage()
+    public function loadProfilePage()
     {
         //gebruikersgegevens ophalen uit databank
         $sql = "select * from users where usr_id=" . $_SESSION["usr_id"];
@@ -151,11 +146,8 @@ class UserService
         $contentProfielTable[0]["img_pasfoto"] = "";
         $contentProfielTable[0]["img_vz_eid"] = "";
         $contentProfielTable[0]["img_az_eid"] = "";
-
-//            print "<table class='table table-striped table-bordered'>";
-
-
         $tableRow = "";
+
         foreach( $data[0] as $field => $value )
         {
             $notintable = false;
@@ -174,16 +166,15 @@ class UserService
                 $caption = str_replace("usr_", "", $field);
                 $caption = strtoupper(substr($caption,0,1)) . substr($caption,1);
                 $tableRow .= "<tr><td>$caption</td><td>$value</td></tr>";
-
             }
         }
         $contentProfielTable[0]["table_row"]= $tableRow;
-        // replace the the fields in the template whit the data
+        // replace the the fields in the template with the data
         print $this->viewService->replaceContentOneRow($contentProfielTable[0],$this->viewService->loadTemplate("profiel"));
 
     }
 
-    public function procesProfileForm()
+    public function processProfileForm()
     {
         global $_application_folder;
         $files = $this->formHandler->getFilesFromForm();
@@ -201,16 +192,16 @@ class UserService
                     // update the user in the database and reload the user
                     if($this->updateImagesToDatabase($files))
                     {
-                        $this->viewService->addMessage("uw profiel werd aangepast","info");
+                        $this->viewService->addMessage("Uw profiel werd aangepast","info");
                     }else{
                         $this->viewService->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
                     }
                 }
             }
-        }else
+        } else
         {
-            // if there where no images selected
-            $this->viewService->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            // if there were no images selected
+            $this->viewService->addMessage("Er werden geen bestanden geselecteerd", 'error');
 
         }
             //return to the profile page
@@ -221,23 +212,22 @@ class UserService
     {
         // if the form and user data is valid
 
-        if ($this->formHandler->ValidatePostedUserData())
+        if ($this->formHandler->validatePostedUserData())
         {
-            if ($this->CheckRegistrationSuccess())
+            if ($this->checkRegistrationSuccess())
             {
                 header("Location:../steden.php");
             }
-        }else
+        } else
         {
             header("Location:../register.php");
-
         }
-
     }
 
     public function processLoginForm()
     {
         global $_application_folder;
+        // check login, load user, msg and redirect
         if ( $this->checkLoginUser($_POST['usr_login']) )
         {
             $user = $this->loadUserFromId($_SESSION['usr_id']);
@@ -246,15 +236,22 @@ class UserService
         }
         else
         {
+            // print error
             $this->viewService->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
             header("Location: " . $_application_folder . "/login.php");
         }
     }
 
+    /**
+     * @param File $files
+     * @return bool
+     */
+
     public function updateImagesToDatabase($files)
     {
         foreach ($files as $fileModel)
         {
+            //create array
             $sqlImages[] = $fileModel->getSqlField();
         }
         $sql = "update users SET " . implode("," , $sqlImages) . " where usr_id=".$_SESSION['usr_id'];
@@ -262,12 +259,17 @@ class UserService
         if($this->databaseService->executeSQL($sql))
         {
             return true;
-        }else
+        } else
         {
             return false;
         }
 
     }
+
+    /**
+     * @param $id
+     * @return User $user
+     */
     public function loadUserFromId($id)
     {
         $user = new User();
@@ -275,8 +277,11 @@ class UserService
         $data = $this->databaseService->getData($sql);
         $user->load($data[0]);
         return $user;
-
     }
+    /**
+     * @param $id
+     * @return User $user
+     */
 
     public function loadUserWithLoginData($id)
     {
@@ -287,5 +292,4 @@ class UserService
 
         return $user;
     }
-
 }

@@ -16,9 +16,11 @@ class UploadService
         $this->viewService = $viewService;
     }
 
+    /**
+     * @return mixed
+     */
 
-
-    public function LoadUploadPage()
+    public function loadUploadPage()
     {
         $this->images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
         $this->printUploadForm();
@@ -26,7 +28,6 @@ class UploadService
         {
             $this->printImages();
         }
-
     }
 
     private function printUploadForm()
@@ -39,7 +40,6 @@ class UploadService
         $i =0;
         foreach( $this->images as $img )
         {
-
             $replaceData[$i]['img']= "'".$img."'" ;
             $i++;
         }
@@ -47,7 +47,7 @@ class UploadService
     }
 
 
-    public function procesUploadForm()
+    public function processUploadForm()
     {
         global $_application_folder;
         $files = $this->formHandler->getFilesFromForm();
@@ -63,27 +63,21 @@ class UploadService
                 // Upload the files
                 if($this->uploadFileModels($files))
                 {
-                    $this->viewService->addMessage("U Foto's zijn opgeslagen",'info');
+                    $this->viewService->addMessage("Uw foto's zijn opgeslagen",'info');
                     // update the user in the database and reload the user
-
                 }else
                 {
-                    $this->viewService->addMessage("Er Liep iets mis","error");
-
+                    $this->viewService->addMessage("Er liep iets mis","error");
                 }
             }
-        }else
+        } else
         {
-            // if there where no images selected
-            $this->viewService->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
-
+            // if there were no images selected
+            $this->viewService->AddMessage("Er werden geen bestanden geselecteerd", 'error');
         }
         //return to the profile page
         header("location:".$_application_folder."/file_upload.php");
-
     }
-
-
 
     public function uploadFileModels($fileModels)
     {
@@ -93,7 +87,7 @@ class UploadService
             $destination = $file-> getTargetLocation();
             if(!move_uploaded_file($tmpName,"../".$destination))
             {
-             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw Foto:".$destination);
+             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw foto:".$destination);
                 return false;
             }
         }
@@ -107,20 +101,21 @@ class UploadService
           $formField = $fileModel->getFormField();
             switch ( $formField )
             {
+                // set target location based on field
                 case "pasfoto":
-                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");
                     break;
                 case "eidvoor":
-                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_vz_eid ='".$newName."'");
                     break;
                 case "eidachter":
-                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_az_eid ='".$newName."'");
                     break;
                 default:
-                    $newName = $fileModel->getOriganalName();
+                    $newName = $fileModel->getOriginalName();
                     $fileModel->setTargetLocation("img/",$newName,NULL);
                     break;
             }
@@ -128,8 +123,4 @@ class UploadService
         }
         return $files;
     }
-
-
-
-
 }

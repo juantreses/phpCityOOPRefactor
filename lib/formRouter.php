@@ -6,28 +6,29 @@ $formname = $_POST["formname"];
 
 switch ( $formname )
 {
-    //Uses UserService for the logic, UserService uses databaseService , Formhandler and UploadService
+    //Uses UserService for the logic, UserService uses databaseService , Formhandler, ViewService and UploadService
     case "profiel_form":
         if ( isset($_POST["submit"]) == "Opladen" )
         {
             $userService = $container->getUserService();
-            $userService->procesProfileForm();
+            $userService->processProfileForm();
         }
         break;
 
     case "file_upload":
 
-        //uses UploadService for the logic, uploadService uses formhandler
+        //uses UploadService for the logic, uploadService uses formhandler and ViewService
         if ( isset($_POST["submit"]) AND $_POST["submit"] == "Opladen" )
         {
             $uploadService = $container->getUploadService();
-            $uploadService->procesUploadForm();
+            $uploadService->processUploadForm();
         }
         header("location:".$_application_folder."/file_upload.php");
     break;
 
     case "registration_form":
 
+        //Uses UserService for the logic, UserService uses DatabaseService , Formhandler, ViewService and UploadService
         if ( $formname == "registration_form" AND $_POST['registerbutton'] == "Register" )
         {
             $userService = $container->getUserService();
@@ -36,24 +37,25 @@ switch ( $formname )
         break;
 
     case "stad_form":
+
+        //Uses CityService for the logic, CityService uses DatabaseService
         if ( $_POST["savebutton"] == "Save" ) {
-            $formHandler = $container->getFormHandler();
-            $formHandler->SaveCity();
+            $cityService = $container->getCityService();
+            $cityService->SaveCity();
         }
         break;
 
     case "login_form":
+
+        //Uses UserService for the logic, UserService uses DatabaseService , Formhandler, ViewService and UploadService
         if ($_POST['loginbutton'] == "Log in" )
         {
             $userService = $container->getUserService();
             $userService->processLoginForm();
         }
-        else
-        {
-            $viewService->addMessage( "Foute formname of buttonvalue", "error" );
-        }
         break;
     default:
-//        error message if no form is addressed
+        // error message if no form is addressed
+        $viewService->addMessage( "Foute formname of buttonvalue", "error" );
 }
 
