@@ -48,12 +48,9 @@ switch ( $formname )
             $userService = $container->getUserService();
             $userService->processLoginForm();
         }
-        else
-        {
-            $viewService->addMessage( "Foute formname of buttonvalue", "error" );
-        }
         break;
     default:
 //        error message if no form is addressed
+        $viewService->addMessage( "Foute formname of buttonvalue", "error" );
 }
 

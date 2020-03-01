@@ -96,7 +96,7 @@ class FormHandler
 
         // Check the extensions
 
-            if (!in_array($fileModel->getExtention(), $ext_allowed)) {
+            if (!in_array($fileModel->getExtension(), $ext_allowed)) {
                 $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
                 //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
                 return false;

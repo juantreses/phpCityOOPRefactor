@@ -86,7 +86,4 @@ class City
     {
         $this->height = $height;
     }
-
-
-
 }

@@ -108,19 +108,19 @@ class UploadService
             switch ( $formField )
             {
                 case "pasfoto":
-                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");
                     break;
                 case "eidvoor":
-                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_vz_eid ='".$newName."'");
                     break;
                 case "eidachter":
-                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtention();
+                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_az_eid ='".$newName."'");
                     break;
                 default:
-                    $newName = $fileModel->getOriganalName();
+                    $newName = $fileModel->getOriginalName();
                     $fileModel->setTargetLocation("img/",$newName,NULL);
                     break;
             }
