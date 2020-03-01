@@ -6,11 +6,13 @@ class FormHandler
 
     private $databaseService;
 
-    public function __construct(DatabaseService $databaseService)
+    private $viewService;
+
+    public function __construct(DatabaseService $databaseService, ViewService $viewService)
     {
         $this->databaseService = $databaseService;
+        $this->viewService = $viewService;
     }
-
 
     /**
      * @param $userLogin
@@ -19,42 +21,36 @@ class FormHandler
 
     public function checkIfUserIsInDatabase($userLogin)
     {
-        //controle of gebruiker al bestaat
+        // check if user already exists
         $data = $this->databaseService->getData("SELECT * FROM users WHERE usr_login='" . $userLogin . "' ");
         $userIsInDatabase = (count($data) > 0) ? true : false;
         return $userIsInDatabase;
-
-//        $sql = "SELECT * FROM users WHERE usr_login='" . $userLogin . "' ";
-//        $data = GetData($sql);
-
-
     }
 
     /**
      * @param User $user
      * @return bool
      */
-    public function ValidatePostedUserData()
+    public function validatePostedUserData()
+
     {
         $pass = true;
-        global $MS;
 
         // check if user already exists
         if ($this->checkIfUserIsInDatabase($_POST['usr_login'])) {
-            $MS->addMessage("Deze login bestaat al!", "error");
+            $this->viewService->addMessage("Deze login bestaat al!", "error");
             $pass = false;
         }
 
         //check password
         if (strlen($_POST["usr_paswd"]) < 8) {
-            $MS->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
+            $this->viewService->addMessage("Uw paswoord moet minimum 8 tekens lang zijn!", "error");
             $pass = false;
-
         }
 
         //check email format
         if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) {
-            $MS->addMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
+            $this->viewService->addMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
             $pass = false;
         }
 
@@ -62,19 +58,19 @@ class FormHandler
         return $pass;
     }
 
-
-    public function RegisterUser()
+    /**
+     * @param User $user
+     * @return string
+     */
+    public function registerUser()
     {
-
-        global $tablename;
-
         // encrypt password
 
         $password_encrypted = password_hash($_POST["usr_paswd"], PASSWORD_DEFAULT);
 
         // insert into db
 
-        $sql = "INSERT INTO $tablename SET " .
+        $sql = "INSERT INTO users SET " .
             " usr_voornaam='" . htmlentities($_POST['usr_voornaam'], ENT_QUOTES) . "' , " .
             " usr_naam='" . htmlentities($_POST['usr_naam'], ENT_QUOTES) . "' , " .
             " usr_straat='" . htmlentities($_POST['usr_straat'], ENT_QUOTES) . "' , " .
@@ -89,71 +85,45 @@ class FormHandler
         return $sql;
 
     }
+    /**
+     * @param $fileModelArray, array $ext_allowed, $max_size
+     * @return bool
+     */
 
-
-    public function CheckImage($f, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
+    public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
-        // get the Mes. service
-        global $MS;
+        foreach ($fileModelArray as $fileModel)
 
-        // Check the extensions
-        $ext_allowed = array(
-            "png",
-            "jpg",
-            "jpeg"
-        );
+            // check the extensions
+            if (!in_array($fileModel->getExtension(), $ext_allowed)) {
+                $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
+                return false;
+            }
+            // check size
+            if ($fileModel->getSize() > $max_size) {
+                $this->viewService->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
+                return false;
+            }
 
-        $filename = strtolower($f["name"]);
-        $fileExplode = explode(".", $filename);
-        $fileExt = end($fileExplode);
-        if (!in_array($fileExt, $ext_allowed)) {
-            $MS->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
-            //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
-            return false;
-        }
-        if ($f["size"] > $max_size) {
-            $MS->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
-            //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
-            return false;
-        }
-
-        // als er geen errors zijn zal True meegeven worden
+        // return true if no errors
         return true;
     }
 
-    public function SaveCity() {
+    /**
+     * @return array File
+     */
 
-        global $_application_folder;
-
-        $tablename = $_POST["tablename"];
-        $formname = $_POST["formname"];
-        $afterinsert = $_POST["afterinsert"];
-        $pkey = $_POST["pkey"];
-
-        $sql_body = array();
-
-        //key-value pairs samenstellen
-        foreach( $_POST as $field => $value )
+    public function getFilesFromForm()
+    {
+        $filesModels = [];
+        foreach ($_FILES as $formFieldName =>$file)
         {
-            if ( in_array($field, array("tablename", "formname", "afterinsert", "pkey", "savebutton", $pkey))) continue;
-
-            $sql_body[]  = " $field = '" . htmlentities($value, ENT_QUOTES) . "' " ;
+            // create file objects from uploaded files
+            if($file['name'] == "")continue;
+            $x = new File($file,$formFieldName);
+            $filesModels[] = $x;
         }
-
-        if ( $_POST[$pkey] > 0 ) //update
-        {
-            $sql = "UPDATE $tablename SET " . implode( ", " , $sql_body ) . " WHERE $pkey=" . $_POST[$pkey];
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
-        }
-        else //insert
-        {
-            $sql = "INSERT INTO $tablename SET " . implode( ", " , $sql_body );
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
-        }
-
-        //print $sql;
-        header("Location: $new_url");
-
+        return $filesModels;
     }
 
 }

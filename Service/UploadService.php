@@ -9,18 +9,18 @@ class UploadService
 
     private $viewService;
 
-    private $messageService;
 
-    public function __construct(FormHandler $formHandler, ViewService $viewService, MessageService $messageService)
+    public function __construct(FormHandler $formHandler, ViewService $viewService)
     {
         $this->formHandler = $formHandler;
         $this->viewService = $viewService;
-        $this->messageService = $messageService;
     }
 
+    /**
+     * @return mixed
+     */
 
-
-    public function LoadUploadPage()
+    public function loadUploadPage()
     {
         $this->images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
         $this->printUploadForm();
@@ -28,7 +28,6 @@ class UploadService
         {
             $this->printImages();
         }
-
     }
 
     private function printUploadForm()
@@ -41,71 +40,87 @@ class UploadService
         $i =0;
         foreach( $this->images as $img )
         {
-
             $replaceData[$i]['img']= "'".$img."'" ;
             $i++;
         }
         print $this->viewService->replaceContent($replaceData,$this->viewService->loadTemplate("file_upload_img"));
     }
 
-    public function checkUploadForm()
+
+    public function processUploadForm()
     {
         global $_application_folder;
-        $target_dir = "../img/";                     //de map waar de afbeelding uiteindelijk moet komen; relatief pad tov huidig script
-        $max_size = 5000000;                         //maximum grootte in bytes
-        $allowed_extensions = [ "jpeg", "jpg", "png", "gif" ];
-        $fileUploadNr = 0;
-        foreach ( $_FILES as $f )
+        $files = $this->formHandler->getFilesFromForm();
+
+        // if there are files submitted
+        if($files)
         {
-            $upfile = array();
-            $f['name'] = strtolower($f['name']);
-            $upfile["name"] = basename($f["name"]);
-            $upfile["tmp_name"] = $f["tmp_name"];
-            $upfile["target_path_name"] = $target_dir . $upfile["name"]; //samenstellen definitieve bestandsnaam (+pad)    //basename
-            $upfile["extension"] = strtolower(pathinfo($upfile["name"], PATHINFO_EXTENSION));
-            $upfile["getimagesize"] = getimagesize($upfile["tmp_name"]);                 //getimagesize geeft false als het bestand geen afbeelding is
-            $upfile["size"] = $f["size"];
-
-            // If there is no file the loop wil be broken, otherwise the check's run and files are imported
-
-            if ($upfile["name"] == "")
+            // check the images
+            if($this->formHandler->checkImagesFromFileModels($files))
             {
-                // Go and check the next photo in the next loop.
-                $fileUploadNr++;
-                continue;
+                //Get the file destination and sql statement for inserting the db
+                $files = $this->setFileDestination($files);
+                // Upload the files
+                if($this->uploadFileModels($files))
+                {
+                    $this->viewService->addMessage("Uw foto's zijn opgeslagen",'info');
+                    // update the user in the database and reload the user
+                }else
+                {
+                    $this->viewService->addMessage("Er liep iets mis","error");
+                }
             }
+        } else
+        {
+            // if there were no images selected
+            $this->viewService->AddMessage("Er werden geen bestanden geselecteerd", 'error');
+        }
+        //return to the profile page
+        header("location:".$_application_folder."/file_upload.php");
+    }
 
-            if (!$this->formHandler->CheckImage($f,$allowed_extensions,$max_size)
-            ){
-                header("location:".$_application_folder."/file_upload.php");
-                die;
-            }
-            else
+    public function uploadFileModels($fileModels)
+    {
+        foreach ($fileModels as $file)
+        {
+            $tmpName = $file->getTmpName();
+            $destination = $file-> getTargetLocation();
+            if(!move_uploaded_file($tmpName,"../".$destination))
             {
-                //bestand verplaatsen naar definitieve locatie + naam
-                if ( move_uploaded_file( $upfile["tmp_name"], $upfile["target_path_name"] ))
-                {
-                    $this->messageService->addMessage( 'The file ' . $upfile["name"] . " has been uploaded as " . $upfile["target_path_name"]   );
-//                echo "The file " . $upfile["name"] . " has been uploaded as " . $upfile["target_path_name"] . "<br>";
-                    $upLoad = true;
+             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw foto:".$destination);
+                return false;
+            }
+        }
+        return true;
+    }
 
-                }
-                else
-                {
-                    $this->messageService->addMessage( "Sorry, there was an unexpected error uploading file ". $upfile["name"]  ,'error' );
-//                echo "Sorry, there was an unexpected error uploading file " . $upfile["name"] . "<br>";
-                    $upLoad = true;
-                }
+    public function setFileDestination($files)
+    {
+        foreach ($files as $fileModel)
+        {
+          $formField = $fileModel->getFormField();
+            switch ( $formField )
+            {
+                // set target location based on field
+                case "pasfoto":
+                    $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");
+                    break;
+                case "eidvoor":
+                    $newName = "eidvoor_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_vz_eid ='".$newName."'");
+                    break;
+                case "eidachter":
+                    $newName = "eidachter_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
+                    $fileModel->setTargetLocation("img/",$newName,"usr_az_eid ='".$newName."'");
+                    break;
+                default:
+                    $newName = $fileModel->getOriginalName();
+                    $fileModel->setTargetLocation("img/",$newName,NULL);
+                    break;
             }
 
         }
-        // if there where no images selected there wil be a error message
-        if(! $upLoad ) $this->messageService->addMessage( "sorry, there where no images"  ,'error' );
-        header("location:".$_application_folder."/file_upload.php");
-
+        return $files;
     }
-
-
-
-
 }

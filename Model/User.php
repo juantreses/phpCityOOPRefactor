@@ -15,17 +15,22 @@ class User
     private $pasfoto;
     private $vz_eid;
     private $az_eid;
-
+    private $log_in_data;
 
     /**
-     * @param User $user
+     * @return mixed
      */
-
-    public function loadUserInModelFromDatabase()
+    public function getLogInData()
     {
-        $sql = "SELECT * FROM users WHERE usr_login='" .$this->login . "' ";
-        $data = GetData($sql);
-        $this->load($data[0]);
+        return $this->log_in_data;
+    }
+
+    /**
+     * @param mixed $log_in_data
+     */
+    public function setLogInData($log_in_data): void
+    {
+        $this->log_in_data = $log_in_data;
     }
 
     /**
@@ -275,9 +280,5 @@ class User
     {
         $this->az_eid = $az_eid;
     }
-
-
-
-
 
 }

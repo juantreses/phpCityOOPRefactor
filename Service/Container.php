@@ -7,15 +7,13 @@ class Container
 
     private $pdo;
 
-    private $cityLoader;
+    private $cityService;
 
     private $downloadService;
 
     private $databaseService;
 
     private $viewService;
-  
-    private $temporaryPrintWeekTask;
 
     private $userService;
 
@@ -25,6 +23,7 @@ class Container
 
     private $messageService;
 
+    private $taskLoader;
 
     public function __construct(array $configuration)
     {
@@ -55,34 +54,30 @@ class Container
         }
 
         return $this->databaseService;
-
-
     }
 
-    public function getCityLoader()
+    public function getCityService()
     {
-        if ($this->cityLoader === null) {
-            $this->cityLoader = new CityLoader($this->getDatabaseService());
+        if ($this->cityService === null) {
+            $this->cityService = new CityService($this->getDatabaseService());
         }
 
-        return $this->cityLoader;
+        return $this->cityService;
     }
 
     public function getDownloadService()
     {
         if ($this->downloadService === null) {
-            $this->downloadService = new DownloadService($this->getDatabaseService());
+            $this->downloadService = new DownloadService($this->getTaskLoader());
         }
 
         return $this->downloadService;
     }
 
-    /* Nicole works over here */
-
     public function getUserService()
     {
         if ($this->userService === null) {
-            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler());
+            $this->userService = new UserService($this->getDatabaseService(), $this->getFormHandler(),$this->viewService,$this->getUploadService());
         }
 
         return $this->userService;
@@ -91,7 +86,7 @@ class Container
      public function getFormHandler()
     {
         if ($this->formHandler === null) {
-            $this->formHandler = new FormHandler($this->getDatabaseService());
+            $this->formHandler = new FormHandler($this->getDatabaseService(), $this->getViewService());
         }
 
         return $this->formHandler;
@@ -100,47 +95,27 @@ class Container
     public function getUploadService()
     {
         if ($this->uploadService === null) {
-            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService(), $this->getMessageService());
+            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService());
         }
 
         return $this->uploadService;
     }
 
-    public function getMessageService()
-    {
-        if ($this->messageService === null) {
-            $this->messageService =new MessageService();
-        }
-
-        return $this->messageService;
-    }
-
-
-//     Alex works over here
-    public function getTemporaryPrintWeekTask()
-    {
-        if ($this->temporaryPrintWeekTask === null) {
-            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService());
-        }
-        return $this->temporaryPrintWeekTask;
-    }
-
-
-//
-
-    // Jan works over here
-
      public function getViewService()
-        {
-            if ($this->viewService === null) {
-                $this->viewService = new ViewService($this->getDatabaseService());
-            }
+     {
+         if ($this->viewService === null) {
+             $this->viewService = new ViewService($this->getDatabaseService(), $this->getTaskLoader());
+         }
 
-            return $this->viewService;
+         return $this->viewService;
+     }
+
+    public function getTaskLoader()
+    {
+        if ($this->taskLoader === null) {
+            $this->taskLoader = new TaskLoader($this->getDatabaseService());
         }
 
-
-
-
-
+        return $this->taskLoader;
+    }
 }

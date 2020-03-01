@@ -6,10 +6,18 @@ class ViewService
 
     private $databaseService;
 
-    public function __construct(DatabaseService $databaseService)
+    private $taskLoader;
+
+    public function __construct(DatabaseService $databaseService, TaskLoader $taskLoader)
     {
         $this->databaseService = $databaseService;
+        $this->taskLoader = $taskLoader;
     }
+
+    /**
+     * @param $css, $header
+     * @return bool
+     */
 
     public function basicHead( $css = "", $header )
     {
@@ -27,8 +35,6 @@ class ViewService
             }
         }
 
-
-
         $data = array("stylesheets" => $str_stylesheets, "header" => $header, "messages" => $this->returnMessages() );
 
         unset($_SESSION["error"]);
@@ -44,45 +50,44 @@ class ViewService
         $_SESSION["head_printed"] = true;
     }
 
+
     private function printNavBar()
     {
-        //navbar items ophalen
-        $data = $this->databaseService->getData("select * from menu order by men_order");
-
-        $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
-
-        //aan de juiste datarij, de sleutels 'active' en 'sr-only' toevoegen
-        foreach( $data as $r => $row )
+        //Load the Menu Model from the database
+        $menuModelArray = $this->loadMenuModels();
+        $i = 0;
+        //Get the data from each MenuModel in a array
+        foreach ($menuModelArray as $menuModel)
         {
-            if ( $laatste_deel_url == $data[$r]['men_destination'] )
-            {
-                $data[$r]['active'] = 'active';
-                $data[$r]['sr_only'] = '<span class="sr-only">(current)</span>';
-            }
-            else
-            {
-                $data[$r]['active'] = '';
-                $data[$r]['sr_only'] = '';
-            }
+            $navbarItemsData[$i] = $this->getMenuModelDataInArray($menuModel);
+            $i++;
         }
 
-        //template voor 1 item samenvoegen met data voor items
+        // replace the data
         $template_navbar_item = $this->loadTemplate("navbar_item");
-        $navbar_items = $this->replaceContent($data, $template_navbar_item);
+        $navbar_items = $this->replaceContent($navbarItemsData, $template_navbar_item);
 
-        //navbar template samenvoegen met resultaat ($navbar_items)
+        //compile navbar template with result ($navbar_items)
         $data = array( "navbar_items" => $navbar_items ) ;
         $template_navbar = $this->loadTemplate("navbar");
         print $this->replaceContentOneRow($data, $template_navbar);
     }
+    /**
+     * @param $name
+     * @return mixed
+     */
 
-    public function loadTemplate( $name )
+    public function loadTemplate($name)
     {
         if ( file_exists("$name.html") ) return file_get_contents("$name.html");
         if ( file_exists("templates/$name.html") ) return file_get_contents("templates/$name.html");
         if ( file_exists("../templates/$name.html") ) return file_get_contents("../templates/$name.html");
     }
 
+    /**
+     * @param $data, $template_html
+     * @return string
+     */
     public function replaceContent( $data, $template_html )
     {
         $returnval = "";
@@ -102,6 +107,10 @@ class ViewService
         return $returnval;
     }
 
+    /**
+     * @param $cities, $template_html
+     * @return string
+     */
 
     public function replaceCities( $cities, $template_html )
     {
@@ -121,6 +130,7 @@ class ViewService
         return $returnval;
     }
 
+
     /* Deze functie voegt data en template samen en print het resultaat */
     public function replaceContentOneRow($row, $template_html )
     {
@@ -133,8 +143,12 @@ class ViewService
 
         return $content;
     }
+    /**
+     * @param $week, $year
+     * @return array $newDate
+     */
 
-    public function printWeekAndReturnNewDateForLink($week, $year)
+    private function printWeekAndReturnNewDateForLink($week, $year)
     {
         // correction of the week //
         if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
@@ -155,9 +169,25 @@ class ViewService
             $d = strtotime($year . "W" . $week . $day);
             $dataReplaceContent[$day - 1]['day'] = date("l", $d);
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
-            $data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
-            $dataReplaceContent[$day -1]['tasks']= $this->replaceContent($data,$this->loadTemplate("week_tasks"));
+            $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
 
+            $dataArray = array();
+            $i = 0;
+
+            if ($tasks)
+            {
+                foreach ($tasks as $task)
+                {
+                    $dataArray[$i] = $this->getTaskModelDataInArray($task);
+
+                    $i++;
+
+                    $dataReplaceContent[$day -1]['tasks'] = $this->replaceContent($dataArray,$this->loadTemplate("week_tasks"));
+                }
+            }
+            else {
+                $dataReplaceContent[$day -1]['tasks']= '';
+            }
         }
         // get this data on the week.php page end replace the new links to previous and next week.
 
@@ -167,6 +197,16 @@ class ViewService
         print $this->replaceContentOneRow($dataReplaceOneRow,$this->loadTemplate("week_table"));
         return $newDate= array($week,$year);
     }
+
+    public function renderWeek() {
+        // Get the year and week
+        $year = (isset($_GET['year'])) ? $_GET['year'] : date("Y");
+        $week = (isset($_GET['week'])) ? $_GET['week'] : date("W");
+
+        // print the week and return the new date(link updated in class)
+        $this->printWeekAndReturnNewDateForLink($week,$year);
+    }
+
 
     private function returnMessages()
     {
@@ -183,5 +223,81 @@ class ViewService
                 }
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function loadMenuModels()
+    {
+        //check the page your one to know the active menu item
+        $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
+        //collect the data from the database
+        $data = $this->databaseService->getData("select * from menu order by men_order");
+        // each menu item is loaded in a menuModel
+        foreach ($data as $row)
+        {
+            $menu = new Menu($row);
+            if ( $laatste_deel_url == $menu-> getDestination() )
+            {
+                $menu->setActive('active');
+                $menu->setSrOnly('<span class="sr-only">(current)</span>');
+            }
+            $menuModelArray[] = $menu;
+        }
+        // return a array of menuModels
+        return $menuModelArray;
+    }
+
+    /**
+     * @param Menu $menuModel
+     * @return array
+     */
+    private function getMenuModelDataInArray(Menu $menuModel)
+    {
+        // put the data of the menuModel in a array
+        $dataRow = array();
+        $dataRow['men_caption'] = $menuModel->getCaption();
+        $dataRow['men_destination'] = $menuModel->getDestination();
+        $dataRow['men_order'] = $menuModel->getOrder();
+        $dataRow['men_id'] = $menuModel->getId();
+        $dataRow['active'] = $menuModel->getActive();
+        $dataRow['sr_only'] = $menuModel->getSrOnly();
+        return $dataRow;
+    }
+
+
+    private function getTaskModelDataInArray(Task $taskModel)
+    {
+        $dataRow = array();
+        $dataRow['taa_omschr'] = $taskModel->getOmschr();
+        return $dataRow;
+    }
+
+    /**
+     * @param User $userObject
+     * @return mixed
+     */
+
+    public function renderLoginHistory(User $userObject)
+    {
+        $replaceContentData = array();
+        $replaceContentData['usr_naam'] = $userObject->getNaam();
+        $replaceContentData['usr_voornaam'] = $userObject->getVoornaam();
+
+        $loginData = $userObject->getLogInData();
+
+        $replaceContentData['login_data'] = $this->replaceContent($loginData, $this->loadTemplate('historiek_data'));
+
+        $templ = $this->loadTemplate('historiek');
+        print $this->replaceContentOneRow($replaceContentData, $templ);
+    }
+    /**
+     * @param $msg, $type
+     */
+
+    public function addMessage($msg, $type = "info" )
+    {
+        $_SESSION["$type"][] = $msg ;
     }
 }

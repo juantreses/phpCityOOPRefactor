@@ -1,16 +1,15 @@
 <?php
-//require_once "./lib/autoload.php";
 
 class DownloadService
 {
-    private $databaseService;
+    private $taskLoader;
 
-    public function __construct(DatabaseService $databaseService)
+    public function __construct(TaskLoader $taskLoader)
     {
-        $this->databaseService = $databaseService;
+        $this->taskLoader = $taskLoader;
     }
 
-    public function PrintCSVHeader( $filename )
+    public function printCSVHeader( $filename )
     {
         // CSV header
         header("Expires: Sat, 01 Jan 2000 00:00:00 GMT");
@@ -24,23 +23,23 @@ class DownloadService
         header("Content-disposition: attachment; filename=".$filename.".csv");
     }
 
+    /**
+     * @return string
+     */
 
-    public function GenerateRows() {
-        //veldnamenrij
+    public function generateRows() {
+        // field name row
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
-        $data = $this->databaseService->getData('SELECT * FROM taak');
+        $data = $this->taskLoader->getTasks();
 
-        //rijen met data
+        //rows with data
         foreach( $data as $row )
         {
-            echo implode(";", $row) . "\r\n" ;
+            echo $row->getId() . ";";
+            echo $row->getDatum() . ";";
+            echo $row->getOmschr() . ";" . "\r\n";
         }
-    }
-
-    private function getPDO()
-    {
-        return $this->pdo;
     }
 
 }
