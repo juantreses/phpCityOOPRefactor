@@ -32,6 +32,7 @@ class FormHandler
      * @return bool
      */
     public function validatePostedUserData()
+
     {
         $pass = true;
 
