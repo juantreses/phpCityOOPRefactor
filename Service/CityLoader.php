@@ -62,7 +62,6 @@ class CityLoader
      */
     private function queryForCities()
     {
-
         $cityArray = $this->databaseService->getData('SELECT * FROM images');
         return $cityArray;
     }
