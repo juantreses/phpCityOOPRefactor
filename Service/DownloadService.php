@@ -38,9 +38,4 @@ class DownloadService
         }
     }
 
-    private function getPDO()
-    {
-        return $this->pdo;
-    }
-
 }

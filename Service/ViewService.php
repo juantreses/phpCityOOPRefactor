@@ -240,4 +240,9 @@ class ViewService
         print $this->replaceContentOneRow($replaceContentData, $templ);
     }
 
+    public function addMessage($msg, $type = "info" )
+    {
+        $_SESSION["$type"][] = $msg ;
+    }
+
 }

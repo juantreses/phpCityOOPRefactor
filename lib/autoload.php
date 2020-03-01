@@ -21,7 +21,6 @@ require_once $_root_folder . "/Model/Menu.php";
 require_once $_root_folder . "/Model/Task.php";
 //load Services
 require_once $_root_folder . "/Service/CityLoader.php";
-require_once $_root_folder . "/Service/MessageService.php";
 require_once $_root_folder . "/Service/UserService.php";
 
 require_once $_root_folder . "/Service/DownloadService.php";
@@ -49,7 +48,6 @@ $_SESSION["head_printed"] = false;
 
 $container = new Container($connectionData);
 $viewService = $container->getViewService();
-$MS = new MessageService($viewService);
 $UserService = $container->getUserService();
 
 

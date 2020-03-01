@@ -11,6 +11,6 @@ unset($_SESSION);
 
 session_start();
 session_regenerate_id();
-$MS->addMessage( "U bent afgemeld!" );
+$viewService->addMessage( "U bent afgemeld!" );
 header("Location: " . $_application_folder . "/login.php");
 ?>

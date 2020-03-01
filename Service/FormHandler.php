@@ -6,9 +6,12 @@ class FormHandler
 
     private $databaseService;
 
-    public function __construct(DatabaseService $databaseService)
+    private $viewService;
+
+    public function __construct(DatabaseService $databaseService, ViewService $viewService)
     {
         $this->databaseService = $databaseService;
+        $this->viewService = $viewService;
     }
 
 
@@ -37,24 +40,23 @@ class FormHandler
     public function ValidatePostedUserData()
     {
         $pass = true;
-        global $MS;
 
         // check if user already exists
         if ($this->checkIfUserIsInDatabase($_POST['usr_login'])) {
-            $MS->addMessage("Deze login bestaat al!", "error");
+            $this->viewService->addMessage("Deze login bestaat al!", "error");
             $pass = false;
         }
 
         //check password
         if (strlen($_POST["usr_paswd"]) < 8) {
-            $MS->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
+            $this->viewService->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
             $pass = false;
 
         }
 
         //check email format
         if (!filter_var($_POST["usr_login"], FILTER_VALIDATE_EMAIL)) {
-            $MS->addMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
+            $this->viewService->addMessage("Uw e-mail adres heeft een ongeldig formaat!", "error");
             $pass = false;
         }
 
@@ -65,8 +67,6 @@ class FormHandler
 
     public function RegisterUser()
     {
-
-
         // encrypt password
 
         $password_encrypted = password_hash($_POST["usr_paswd"], PASSWORD_DEFAULT);
@@ -92,19 +92,17 @@ class FormHandler
 
     public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
-        // get the Mes. service
-        global $MS;
         foreach ($fileModelArray as $fileModel)
 
         // Check the extensions
 
             if (!in_array($fileModel->getExtention(), $ext_allowed)) {
-                $MS->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
+                $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
                 //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
                 return false;
             }
             if ($fileModel->getSize() > $max_size) {
-                $MS->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
+                $this->viewService->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
                 //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
                 return false;
             }
