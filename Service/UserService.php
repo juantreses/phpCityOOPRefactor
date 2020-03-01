@@ -91,7 +91,7 @@ class UserService
             }
             else
             {
-                $this->viewService->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $this->viewService->addMessage( "Sorry! Er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
                 $registrationSuccess = false;
             }
         }
@@ -192,7 +192,7 @@ class UserService
                     // update the user in the database and reload the user
                     if($this->updateImagesToDatabase($files))
                     {
-                        $this->viewService->addMessage("uw profiel werd aangepast","info");
+                        $this->viewService->addMessage("Uw profiel werd aangepast","info");
                     }else{
                         $this->viewService->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
                     }
@@ -201,7 +201,7 @@ class UserService
         } else
         {
             // if there were no images selected
-            $this->viewService->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            $this->viewService->addMessage("Er werden geen bestanden geselecteerd", 'error');
 
         }
             //return to the profile page

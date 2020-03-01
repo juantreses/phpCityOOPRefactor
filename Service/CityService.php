@@ -89,12 +89,12 @@ class CityService
         if ( $_POST[$pkey] > 0 ) //update
         {
             $sql = "UPDATE $tablename SET " . implode( ", " , $sql_body ) . " WHERE $pkey=" . $_POST[$pkey];
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
+            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder  . "/$formname.php?id=" . $_POST[$pkey] . "&updateOK=true" ;
         }
         else //insert
         {
             $sql = "INSERT INTO $tablename SET " . implode( ", " , $sql_body );
-            if ( ExecuteSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
+            if ( $this->databaseService->executeSQL($sql) ) $new_url = $_application_folder . "/$afterinsert?insertOK=true" ;
         }
 
         //print $sql;

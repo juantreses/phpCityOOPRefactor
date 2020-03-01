@@ -22,14 +22,14 @@ require_once $_root_folder . "/Service/UploadService.php";
 require_once $_root_folder . "/Service/FormHandler.php";
 //database functions
 require_once $_root_folder . "/lib/passwd.php";
-require_once $_root_folder . "/lib/pdo.php";
+
 
 session_start();
 $_SESSION["head_printed"] = false;
 
 $container = new Container($connectionData);
 $viewService = $container->getViewService();
-$UserService = $container->getUserService();
+$userService = $container->getUserService();
 
 
 //redirect to no access if user is not logged in and isn't going to login page

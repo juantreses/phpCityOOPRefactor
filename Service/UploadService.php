@@ -63,17 +63,17 @@ class UploadService
                 // Upload the files
                 if($this->uploadFileModels($files))
                 {
-                    $this->viewService->addMessage("U Foto's zijn opgeslagen",'info');
+                    $this->viewService->addMessage("Uw foto's zijn opgeslagen",'info');
                     // update the user in the database and reload the user
                 }else
                 {
-                    $this->viewService->addMessage("Er Liep iets mis","error");
+                    $this->viewService->addMessage("Er liep iets mis","error");
                 }
             }
         } else
         {
             // if there were no images selected
-            $this->viewService->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            $this->viewService->AddMessage("Er werden geen bestanden geselecteerd", 'error');
         }
         //return to the profile page
         header("location:".$_application_folder."/file_upload.php");
@@ -87,7 +87,7 @@ class UploadService
             $destination = $file-> getTargetLocation();
             if(!move_uploaded_file($tmpName,"../".$destination))
             {
-             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw Foto:".$destination);
+             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw foto:".$destination);
                 return false;
             }
         }

@@ -43,7 +43,7 @@ class FormHandler
 
         //check password
         if (strlen($_POST["usr_paswd"]) < 8) {
-            $this->viewService->addMessage("Uw paswoord moet minimum 8 cijfers zijn!", "error");
+            $this->viewService->addMessage("Uw paswoord moet minimum 8 tekens lang zijn!", "error");
             $pass = false;
         }
 
