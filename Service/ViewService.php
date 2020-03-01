@@ -11,6 +11,11 @@ class ViewService
         $this->databaseService = $databaseService;
     }
 
+    /**
+     * @param $css, $header
+     * @return bool
+     */
+
     public function basicHead( $css = "", $header )
     {
         global $_application_folder;
@@ -42,6 +47,7 @@ class ViewService
         $_SESSION["head_printed"] = true;
     }
 
+
     private function printNavBar()
     {
         //Load the Menu Model from the database
@@ -58,19 +64,27 @@ class ViewService
         $template_navbar_item = $this->loadTemplate("navbar_item");
         $navbar_items = $this->replaceContent($navbarItemsData, $template_navbar_item);
 
-        //navbar template samenvoegen met resultaat ($navbar_items)
+        //compile navbar template with result ($navbar_items)
         $data = array( "navbar_items" => $navbar_items ) ;
         $template_navbar = $this->loadTemplate("navbar");
         print $this->replaceContentOneRow($data, $template_navbar);
     }
+    /**
+     * @param $name
+     * @return mixed
+     */
 
-    public function loadTemplate( $name )
+    public function loadTemplate($name)
     {
         if ( file_exists("$name.html") ) return file_get_contents("$name.html");
         if ( file_exists("templates/$name.html") ) return file_get_contents("templates/$name.html");
         if ( file_exists("../templates/$name.html") ) return file_get_contents("../templates/$name.html");
     }
 
+    /**
+     * @param $data, $template_html
+     * @return string
+     */
     public function replaceContent( $data, $template_html )
     {
         $returnval = "";
@@ -90,6 +104,10 @@ class ViewService
         return $returnval;
     }
 
+    /**
+     * @param $cities, $template_html
+     * @return string
+     */
 
     public function replaceCities( $cities, $template_html )
     {
@@ -109,6 +127,7 @@ class ViewService
         return $returnval;
     }
 
+
     /* Deze functie voegt data en template samen en print het resultaat */
     public function replaceContentOneRow($row, $template_html )
     {
@@ -121,6 +140,10 @@ class ViewService
 
         return $content;
     }
+    /**
+     * @param $week, $year
+     * @return array $newDate
+     */
 
     private function printWeekAndReturnNewDateForLink($week, $year)
     {
@@ -223,6 +246,10 @@ class ViewService
         return $dataRow;
     }
 
+    /**
+     * @param User $userObject
+     * @return mixed
+     */
     public function renderLoginHistory(User $userObject)
     {
         $replaceContentData = array();
@@ -236,6 +263,9 @@ class ViewService
         $templ = $this->loadTemplate('historiek');
         print $this->replaceContentOneRow($replaceContentData, $templ);
     }
+    /**
+     * @param $msg, $type
+     */
 
     public function addMessage($msg, $type = "info" )
     {

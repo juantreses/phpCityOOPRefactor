@@ -16,6 +16,10 @@ class UploadService
         $this->viewService = $viewService;
     }
 
+    /**
+     * @return mixed
+     */
+
     public function loadUploadPage()
     {
         $this->images = glob( "img/*.{jpg,png,gif}", GLOB_BRACE );
@@ -97,6 +101,7 @@ class UploadService
           $formField = $fileModel->getFormField();
             switch ( $formField )
             {
+                // set target location based on field
                 case "pasfoto":
                     $newName = "pasfoto_" . $_SESSION['usr_id'] . "." . $fileModel-> getExtension();
                     $fileModel->setTargetLocation("img/",$newName,"usr_pasfoto ='".$newName."'");

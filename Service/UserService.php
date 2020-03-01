@@ -166,11 +166,10 @@ class UserService
                 $caption = str_replace("usr_", "", $field);
                 $caption = strtoupper(substr($caption,0,1)) . substr($caption,1);
                 $tableRow .= "<tr><td>$caption</td><td>$value</td></tr>";
-
             }
         }
         $contentProfielTable[0]["table_row"]= $tableRow;
-        // replace the the fields in the template whit the data
+        // replace the the fields in the template with the data
         print $this->viewService->replaceContentOneRow($contentProfielTable[0],$this->viewService->loadTemplate("profiel"));
 
     }
@@ -201,7 +200,7 @@ class UserService
             }
         } else
         {
-            // if there where no images selected
+            // if there were no images selected
             $this->viewService->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
 
         }
@@ -228,6 +227,7 @@ class UserService
     public function processLoginForm()
     {
         global $_application_folder;
+        // check login, load user, msg and redirect
         if ( $this->checkLoginUser($_POST['usr_login']) )
         {
             $user = $this->loadUserFromId($_SESSION['usr_id']);
@@ -236,15 +236,22 @@ class UserService
         }
         else
         {
+            // print error
             $this->viewService->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
             header("Location: " . $_application_folder . "/login.php");
         }
     }
 
+    /**
+     * @param File $files
+     * @return bool
+     */
+
     public function updateImagesToDatabase($files)
     {
         foreach ($files as $fileModel)
         {
+            //create array
             $sqlImages[] = $fileModel->getSqlField();
         }
         $sql = "update users SET " . implode("," , $sqlImages) . " where usr_id=".$_SESSION['usr_id'];
@@ -258,6 +265,11 @@ class UserService
         }
 
     }
+
+    /**
+     * @param $id
+     * @return User $user
+     */
     public function loadUserFromId($id)
     {
         $user = new User();
@@ -266,6 +278,10 @@ class UserService
         $user->load($data[0]);
         return $user;
     }
+    /**
+     * @param $id
+     * @return User $user
+     */
 
     public function loadUserWithLoginData($id)
     {

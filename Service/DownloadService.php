@@ -1,5 +1,4 @@
 <?php
-//require_once "./lib/autoload.php";
 
 class DownloadService
 {
@@ -24,6 +23,9 @@ class DownloadService
         header("Content-disposition: attachment; filename=".$filename.".csv");
     }
 
+    /**
+     * @return string
+     */
 
     public function generateRows() {
         // field name row

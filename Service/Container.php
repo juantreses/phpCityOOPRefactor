@@ -14,8 +14,6 @@ class Container
     private $databaseService;
 
     private $viewService;
-  
-    private $temporaryPrintWeekTask;
 
     private $userService;
 
@@ -98,15 +96,6 @@ class Container
         }
 
         return $this->uploadService;
-    }
-
-    public function getTemporaryPrintWeekTask()
-    {
-        if ($this->temporaryPrintWeekTask === null) {
-            $this->temporaryPrintWeekTask = new TemporaryPrintWeekTask($this->getDatabaseService(),$this->getViewService());
-        }
-
-        return $this->temporaryPrintWeekTask;
     }
 
      public function getViewService()

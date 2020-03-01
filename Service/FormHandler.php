@@ -57,7 +57,10 @@ class FormHandler
         return $pass;
     }
 
-
+    /**
+     * @param User $user
+     * @return string
+     */
     public function registerUser()
     {
         // encrypt password
@@ -81,7 +84,10 @@ class FormHandler
         return $sql;
 
     }
-
+    /**
+     * @param $fileModelArray, array $ext_allowed, $max_size
+     * @return bool
+     */
 
     public function checkImagesFromFileModels($fileModelArray, $ext_allowed = array("png", "jpg", "jpeg"), $max_size = 8000000)
     {
@@ -90,13 +96,11 @@ class FormHandler
             // check the extensions
             if (!in_array($fileModel->getExtension(), $ext_allowed)) {
                 $this->viewService->addMessage("U mag enkel jpg, jpeg of png bestanden toevoegen. ", 'error');
-                //            $_SESSION['error'] = " u mag enkel jpg, jpeg of png bestanden toevoegen, ";
                 return false;
             }
             // check size
             if ($fileModel->getSize() > $max_size) {
                 $this->viewService->addMessage("Een afbeelding mag maximum 8MB zijn ", 'error');
-                //            $_SESSION['error'] .= "een afbeelding mag maximum 8MB zijn.";
                 return false;
             }
 
