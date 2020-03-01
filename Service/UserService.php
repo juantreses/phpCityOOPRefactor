@@ -77,7 +77,6 @@ class UserService
     public function CheckRegistrationSuccess()
     {
         $registrationSucces = true;
-        global $MS;
 
         // register user in formhandler
         $sql = $this->formHandler->RegisterUser();
@@ -86,7 +85,7 @@ class UserService
 
         if ($this->databaseService->executeSQL($sql) )
         {
-            $MS->addMessage( "Bedankt voor uw registratie!","info" );
+            $this->viewService->addMessage( "Bedankt voor uw registratie!","info" );
 
             if ( $this->checkLoginUser($_POST['usr_login'],true) )
             {
@@ -94,13 +93,13 @@ class UserService
             }
             else
             {
-                $MS->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
+                $this->viewService->addMessage( "Sorry! Verkeerde er was een probleem bij het inloggen, probeer opnieuw!" ,"error");
                 $registrationSucces = false;
             }
         }
         else
         {
-            $MS->addMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
+            $this->viewService->addMessage( "Sorry, er liep iets fout. Uw gegevens werden niet goed opgeslagen" ,"error") ;
             $registrationSucces = false;
 
         }
@@ -186,7 +185,6 @@ class UserService
 
     public function procesProfileForm()
     {
-        global $MS;
         global $_application_folder;
         $files = $this->formHandler->getFilesFromForm();
         // if there are files submitted
@@ -203,16 +201,16 @@ class UserService
                     // update the user in the database and reload the user
                     if($this->updateImagesToDatabase($files))
                     {
-                        $MS->addMessage("uw profiel werd aangepast","info");
+                        $this->viewService->addMessage("uw profiel werd aangepast","info");
                     }else{
-                        $MS->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
+                        $this->viewService->addMessage("Er is een probleem met het updaten van uw userprofiel","error");
                     }
                 }
             }
         }else
         {
             // if there where no images selected
-            $MS->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            $this->viewService->addMessage("Er Werden Geen Bestanden geselecteerd", 'error');
 
         }
             //return to the profile page
@@ -239,17 +237,16 @@ class UserService
 
     public function processLoginForm()
     {
-        global $MS;
         global $_application_folder;
         if ( $this->checkLoginUser($_POST['usr_login']) )
         {
             $user = $this->loadUserFromId($_SESSION['usr_id']);
-            $MS->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
+            $this->viewService->addMessage( "Welkom, " . $user->getVoornaam() . "!" );
             header("Location: " . $_application_folder . "/steden.php");
         }
         else
         {
-            $MS->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
+            $this->viewService->addMessage( "Sorry! Verkeerde login of wachtwoord!", "error" );
             header("Location: " . $_application_folder . "/login.php");
         }
     }
@@ -279,6 +276,16 @@ class UserService
         $user->load($data[0]);
         return $user;
 
+    }
+
+    public function loadUserWithLoginData($id)
+    {
+        $user = $this->loadUserFromId($id);
+        $sql = "SELECT * FROM log_user WHERE log_usr_id=" . $_SESSION['usr_id']. " ORDER BY log_in" ;
+        $data = $this->databaseService->getData($sql);
+        $user->setLogInData($data);
+
+        return $user;
     }
 
 }

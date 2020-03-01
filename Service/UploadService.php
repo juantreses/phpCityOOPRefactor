@@ -9,13 +9,11 @@ class UploadService
 
     private $viewService;
 
-    private $messageService;
 
-    public function __construct(FormHandler $formHandler, ViewService $viewService, MessageService $messageService)
+    public function __construct(FormHandler $formHandler, ViewService $viewService)
     {
         $this->formHandler = $formHandler;
         $this->viewService = $viewService;
-        $this->messageService = $messageService;
     }
 
 
@@ -51,7 +49,6 @@ class UploadService
 
     public function procesUploadForm()
     {
-        global $MS;
         global $_application_folder;
         $files = $this->formHandler->getFilesFromForm();
 
@@ -66,19 +63,19 @@ class UploadService
                 // Upload the files
                 if($this->uploadFileModels($files))
                 {
-                    $MS->addMessage("U Foto's zijn opgeslagen",'info');
+                    $this->viewService->addMessage("U Foto's zijn opgeslagen",'info');
                     // update the user in the database and reload the user
 
                 }else
                 {
-                    $MS->addMessage("Er Liep iets mis","error");
+                    $this->viewService->addMessage("Er Liep iets mis","error");
 
                 }
             }
         }else
         {
             // if there where no images selected
-            $MS->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
+            $this->viewService->AddMessage("Er Werden Geen Bestanden geselecteerd", 'error');
 
         }
         //return to the profile page
@@ -90,14 +87,13 @@ class UploadService
 
     public function uploadFileModels($fileModels)
     {
-        global $MS;
         foreach ($fileModels as $file)
         {
             $tmpName = $file->getTmpName();
             $destination = $file-> getTargetLocation();
             if(!move_uploaded_file($tmpName,"../".$destination))
             {
-             $MS->AddMessage("Er liep iets mis met het uploaden van uw Foto:".$destination);
+             $this->viewService->AddMessage("Er liep iets mis met het uploaden van uw Foto:".$destination);
                 return false;
             }
         }

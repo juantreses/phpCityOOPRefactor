@@ -25,7 +25,6 @@ class Container
 
     private $taskLoader;
 
-
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -89,7 +88,7 @@ class Container
      public function getFormHandler()
     {
         if ($this->formHandler === null) {
-            $this->formHandler = new FormHandler($this->getDatabaseService());
+            $this->formHandler = new FormHandler($this->getDatabaseService(), $this->getViewService());
         }
 
         return $this->formHandler;
@@ -98,7 +97,7 @@ class Container
     public function getUploadService()
     {
         if ($this->uploadService === null) {
-            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService(), $this->getMessageService());
+            $this->uploadService = new UploadService($this->getFormHandler(), $this->getViewService());
         }
 
         return $this->uploadService;
@@ -130,7 +129,4 @@ class Container
 
         return $this->taskLoader;
     }
-
-
-
 }

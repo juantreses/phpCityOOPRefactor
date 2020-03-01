@@ -127,7 +127,7 @@ class ViewService
         return $content;
     }
 
-    public function printWeekAndReturnNewDateForLink($week, $year)
+    private function printWeekAndReturnNewDateForLink($week, $year)
     {
         // correction of the week //
         if( isset($_GET['week']) AND $week < 10 ) { $week = '0' . $week; }
@@ -148,7 +148,6 @@ class ViewService
             $d = strtotime($year . "W" . $week . $day);
             $dataReplaceContent[$day - 1]['day'] = date("l", $d);
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
-            //$data = $this->databaseService->getData( "SELECT taa_omschr FROM taak WHERE taa_datum = '".date("Y-m-d", $d)."'" );
             $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
 
             $dataArray = array();
@@ -184,9 +183,7 @@ class ViewService
         $week = (isset($_GET['week'])) ? $_GET['week'] : date("W");
 
         // print the week and return the new date(link updated in class)
-        $newdate = $this->printWeekAndReturnNewDateForLink($week,$year);
-        $week = $newdate[0];
-        $year = $newdate[1];
+        $this->printWeekAndReturnNewDateForLink($week,$year);
     }
 
 
@@ -210,7 +207,7 @@ class ViewService
     /**
      * @return array
      */
-    public function loadMenuModels()
+    private function loadMenuModels()
     {
         //check the page your one to know the active menu item
         $laatste_deel_url = basename($_SERVER['SCRIPT_NAME']);
@@ -236,7 +233,7 @@ class ViewService
      * @param Menu $menuModel
      * @return array
      */
-    public function getMenuModelDataInArray(Menu $menuModel)
+    private function getMenuModelDataInArray(Menu $menuModel)
     {
         // put the data of the menuModel in a array
         $dataRow = array();
@@ -249,6 +246,7 @@ class ViewService
         return $dataRow;
     }
 
+
     private function getTaskModelDataInArray(Task $taskModel)
     {
         $dataRow = array();
@@ -256,5 +254,22 @@ class ViewService
         return $dataRow;
     }
 
+    public function renderLoginHistory(User $userObject)
+    {
+        $replaceContentData = array();
+        $replaceContentData['usr_naam'] = $userObject->getNaam();
+        $replaceContentData['usr_voornaam'] = $userObject->getVoornaam();
 
+        $loginData = $userObject->getLogInData();
+
+        $replaceContentData['login_data'] = $this->replaceContent($loginData, $this->loadTemplate('historiek_data'));
+
+        $templ = $this->loadTemplate('historiek');
+        print $this->replaceContentOneRow($replaceContentData, $templ);
+    }
+
+    public function addMessage($msg, $type = "info" )
+    {
+        $_SESSION["$type"][] = $msg ;
+    }
 }
