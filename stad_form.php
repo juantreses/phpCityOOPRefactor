@@ -7,8 +7,8 @@ $viewService->basicHead($css, "Formulier Stad");  ?>
     <div class="row">
 
         <?php
-        $cityLoader = $container->getCityLoader();
-        $city = $cityLoader->getCityByID($id = $_GET['id']);
+        $cityService = $container->getCityService();
+        $city = $cityService->getCityByID($id = $_GET['id']);
 
         $template = $viewService->loadTemplate("stad_form");
         print $viewService->replaceCities($city, $template);

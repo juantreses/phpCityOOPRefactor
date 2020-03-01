@@ -1,5 +1,5 @@
 <?php
-class CityLoader
+class CityService
 {
     private $databaseService;
 
