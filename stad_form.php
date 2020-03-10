@@ -9,7 +9,7 @@ $viewService->basicHead($css, "Formulier Stad");
 
         <?php
         $cityService = $container->getCityService();
-        $city = $cityService->getCityByID($id = $_GET['id']);
+        $city = $cityService->fetchCityDataByID($id = $_GET['id']);
 
         $userService = $container->getUserService();
         $user = $userService->loadUserFromId($_SESSION['usr_id']);

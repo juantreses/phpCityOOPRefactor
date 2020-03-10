@@ -1,0 +1,23 @@
+[
+  {
+    "img_id": 1,
+    "img_filename": "london_2423609b",
+    "img_title": "Big Ben",
+    "img_width": 2330,
+    "img_height": 4400
+  },
+  {
+    "img_id": 2,
+    "img_filename": "paris",
+    "img_title": "Eiffeltoren",
+    "img_width": 3000,
+    "img_height": 4000
+  },
+  {
+    "img_id": 3,
+    "img_filename": "berlin",
+    "img_title": "De Muur",
+    "img_width": 5600,
+    "img_height": 1400
+  }
+]

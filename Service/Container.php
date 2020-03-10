@@ -25,6 +25,8 @@ class Container
 
     private $taskLoader;
 
+    private $cityStorage;
+
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
@@ -59,7 +61,7 @@ class Container
     public function getCityService()
     {
         if ($this->cityService === null) {
-            $this->cityService = new CityService($this->getDatabaseService());
+            $this->cityService = new CityService($this->getDatabaseService(), $this->getCityStorage());
         }
 
         return $this->cityService;
@@ -117,5 +119,15 @@ class Container
         }
 
         return $this->taskLoader;
+    }
+
+    public function getCityStorage()
+    {
+        if ($this->cityStorage === null) {
+           // $this->cityStorage = new CityPDOStorage($this->getDatabaseService());
+            $this->cityStorage = new CityJSONStorage(__DIR__ . '/../resources/steden_images.json');
+        }
+
+        return $this->cityStorage;
     }
 }

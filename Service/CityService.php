@@ -2,10 +2,12 @@
 class CityService
 {
     private $databaseService;
+    private $cityStorage;
 
-    public function __construct(DatabaseService $databaseService)
+    public function __construct(DatabaseService $databaseService, CityStorageInterface $cityStorage)
     {
         $this->databaseService = $databaseService;
+        $this->cityStorage = $cityStorage;
     }
 
     /**
@@ -13,7 +15,8 @@ class CityService
      */
     public function getCities()
     {
-        $citiesData = $this->queryForCities();
+        $cityStorage = $this->cityStorage;
+        $citiesData = $cityStorage->queryForCities();
 
         $cities = array();
         foreach ($citiesData as $cityData) {
@@ -27,14 +30,10 @@ class CityService
      * @param $id
      * @return array|null
      */
-    public function getCityByID($id)
+    public function fetchCityDataByID($id)
     {
-        $cityArray = $this->databaseService->getData("SELECT * FROM images WHERE img_id = ". $id);
-
-
-        if (!$cityArray) {
-            return null;
-        }
+        $cityStorage = $this->cityStorage;
+        $cityArray = $cityStorage->getCityByID($id);
 
         $cities[] = $this->createCityFromData($cityArray[0]);
 
@@ -55,15 +54,6 @@ class CityService
         $city->setHeight($cityData['img_height']);
 
         return $city;
-    }
-
-    /**
-     * @return array
-     */
-    private function queryForCities()
-    {
-        $cityArray = $this->databaseService->getData('SELECT * FROM images');
-        return $cityArray;
     }
 
     public function SaveCity() {

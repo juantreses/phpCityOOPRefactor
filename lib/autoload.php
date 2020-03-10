@@ -15,6 +15,9 @@ require_once $_root_folder . "/Model/Menu.php";
 require_once $_root_folder . "/Model/Task.php";
 //load Services
 require_once $_root_folder . "/Service/TaskLoader.php";
+require_once $_root_folder . "/Service/CityStorageInterface.php";
+require_once $_root_folder . "/Service/CityPDOStorage.php";
+require_once $_root_folder . "/Service/CityJSONStorage.php";
 require_once $_root_folder . "/Service/CityService.php";
 require_once $_root_folder . "/Service/UserService.php";
 require_once $_root_folder . "/Service/DownloadService.php";

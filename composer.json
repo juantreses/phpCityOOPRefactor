@@ -6,5 +6,8 @@
         "psr-4": {
             "": ["Model/","Service/","lib/pdo.php","lib/passwd.php"]
         }
-    }
+    },
+  "require": {
+    "ext-json": "*"
+  }
 }
