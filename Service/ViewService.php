@@ -208,7 +208,7 @@ class ViewService
     }
 
 
-    private function returnMessages()
+    public function returnMessages()
     {
         //weergeven 2 soorten messages: errors en infos
         foreach( array("error", "info") as $type )

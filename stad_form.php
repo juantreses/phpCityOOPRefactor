@@ -14,7 +14,18 @@ $viewService->basicHead($css, "Formulier Stad");
         $userService = $container->getUserService();
         $user = $userService->loadUserFromId($_SESSION['usr_id']);
 
-        $templateName = $user->doesThisUserHaveAdminRigths() ?  'stad_form_admin' : 'stad_form';
+        if ($user->doesThisUserHaveAdminRigths()) {
+            if ($user->getAdminPower() > 50) {
+                $templateName = 'stad_form_admin';
+            }
+            else {
+                $viewService->addMessage('You don\'t have enough power today, mister Admin', "error");
+                $templateName = 'stad_form';
+            }
+            print $viewService->returnMessages();
+            unset($_SESSION["error"]);
+            unset($_SESSION["info"]);
+        }
 
         $template = $viewService->loadTemplate($templateName);
         print $viewService->replaceCities($city, $template);
