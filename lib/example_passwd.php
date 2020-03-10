@@ -6,6 +6,6 @@
 4.	Make sure you don't put passwd.php on the repo
 */
 
-$connectionData = array('db_dsn' => 'mysql:host=localhost;dbname=phpsteden',
-    "db_user" => "root? or other",
+$connectionData = array('db_dsn' => 'mysql:host=localhost;dbname=YourDBNameHere',
+    "db_user" => "YourDBUser",
     "db_pass" => "YourPasswordGoesHere" );
