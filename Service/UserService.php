@@ -272,10 +272,17 @@ class UserService
      */
     public function loadUserFromId($id)
     {
-        $user = new User();
         $sql = "SELECT * FROM users WHERE usr_id='".$id. "' ";
         $data = $this->databaseService->getData($sql);
-        $user->load($data[0]);
+        if ($data[0]['usr_admin'] == 0) {
+            $user = new User();
+            $user->load($data[0]);
+        }
+        else {
+            $user = new AdminUser();
+            $user->load($data[0]);
+        }
+
         return $user;
     }
     /**

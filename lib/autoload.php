@@ -7,6 +7,8 @@ $_root_folder = $_SERVER['DOCUMENT_ROOT'] . "$_application_folder";
 
 //load Models
 require_once $_root_folder . "/Model/City.php";
+require_once $_root_folder . "/Model/AbstractUser.php";
+require_once $_root_folder . "/Model/AdminUser.php";
 require_once $_root_folder . "/Model/User.php";
 require_once $_root_folder . "/Model/File.php";
 require_once $_root_folder . "/Model/Menu.php";
