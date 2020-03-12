@@ -25,6 +25,9 @@ $viewService->basicHead($css, "Formulier Stad");
             print $viewService->returnMessages();
             unset($_SESSION["error"]);
             unset($_SESSION["info"]);
+        }else
+        {
+            $templateName = 'stad_form';
         }
 
         $template = $viewService->loadTemplate($templateName);

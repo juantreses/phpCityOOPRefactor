@@ -39,8 +39,8 @@ $userService = $container->getUserService();
 
 
 //redirect to no access if user is not logged in and isn't going to login page
-if ( ! isset($_SESSION['usr_id']) AND ! $form AND ! $no_access)
-{
-    header("Location: " . $_application_folder . "/no_access.php");
-}
+//if ( ! isset($_SESSION['usr_id']) AND ! $form AND ! $no_access)
+//{
+//    header("Location: " . $_application_folder . "/no_access.php");
+//}
 

@@ -14,6 +14,7 @@ $viewService->basicHead($css, "Leuke plekken in Europa"); ?>
 
         $template = $viewService->loadTemplate("steden");
         print $viewService->replaceCities($cities, $template);
+
         ?>
 
     </div>
