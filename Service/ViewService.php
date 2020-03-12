@@ -279,7 +279,7 @@ class ViewService
      * @return mixed
      */
 
-    public function renderLoginHistory(User $userObject)
+    public function renderLoginHistory(AbstractUser $userObject)
     {
         $replaceContentData = array();
         $replaceContentData['usr_naam'] = $userObject->getNaam();
