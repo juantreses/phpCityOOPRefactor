@@ -1,7 +1,6 @@
 <?php
 
-
-class AbstractUser
+abstract class AbstractUser
 {
     private $id;
     private $voornaam;

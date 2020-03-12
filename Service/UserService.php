@@ -36,10 +36,12 @@ class UserService
             // Is the user in the database?
             if($this->formHandler->checkIfUserIsInDatabase($userLogin))
             {
+
                 // Get the pw hash in the model
                 $user = $this->loadUserFromId($this->getUserIdFromLogIn($userLogin));
                 //check the pw from the form with the hash
                 $login_ok = ($this->checkUserPassword($user))?true:false;
+
             }
         }
 
@@ -132,7 +134,7 @@ class UserService
      * @param User $user
      * @return bool
      */
-    public function checkUserPassword(User $user)
+    public function checkUserPassword(AbstractUser $user)
     {
         $passwCheck = (password_verify($_POST["usr_paswd"],$user->getPaswd()))?true:false;
         return $passwCheck;

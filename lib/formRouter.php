@@ -50,6 +50,7 @@ switch ( $formname )
         //Uses UserService for the logic, UserService uses DatabaseService , Formhandler, ViewService and UploadService
         if ($_POST['loginbutton'] == "Log in" )
         {
+            var_dump($_POST);
             $userService = $container->getUserService();
             $userService->processLoginForm();
         }

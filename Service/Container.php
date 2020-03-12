@@ -124,8 +124,8 @@ class Container
     public function getCityStorage()
     {
         if ($this->cityStorage === null) {
-           // $this->cityStorage = new CityPDOStorage($this->getDatabaseService());
-            $this->cityStorage = new CityJSONStorage(__DIR__ . '/../resources/steden_images.json');
+            $this->cityStorage = new CityPDOStorage($this->getDatabaseService());
+//            $this->cityStorage = new CityJSONStorage(__DIR__ . '/../resources/steden_images.json');
         }
 
         return $this->cityStorage;

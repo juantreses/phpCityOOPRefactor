@@ -22,9 +22,7 @@ $viewService->basicHead($css, "Formulier Stad");
                 $viewService->addMessage('You don\'t have enough power today, mister Admin', "error");
                 $templateName = 'stad_form';
             }
-            print $viewService->returnMessages();
-            unset($_SESSION["error"]);
-            unset($_SESSION["info"]);
+
         }else
         {
             $templateName = 'stad_form';
@@ -32,6 +30,9 @@ $viewService->basicHead($css, "Formulier Stad");
 
         $template = $viewService->loadTemplate($templateName);
         print $viewService->replaceCities($city, $template);
+        print $viewService->returnMessages();
+        unset($_SESSION["error"]);
+        unset($_SESSION["info"]);
         ?>
 
     </div>
