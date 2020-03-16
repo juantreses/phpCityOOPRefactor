@@ -124,6 +124,9 @@ class ViewService
             $content = str_replace("@@img_filename@@", $city->getFileName(), $content);
             $content = str_replace("@@img_width@@", $city->getWidth(), $content);
             $content = str_replace("@@img_height@@", $city->getHeight(), $content);
+            $content = str_replace("@@temperature@@", $city->getTemperature(), $content);
+            $content = str_replace("@@weatherDescription@@", $city->getWeatherDescription(), $content);
+
 
             $returnval .= $content;
         }

@@ -6,6 +6,8 @@ class City
     private $title;
     private $width;
     private $height;
+    private $temperature;
+    private $weatherDescription;
 
     /**
      * @return mixed
@@ -86,4 +88,38 @@ class City
     {
         $this->height = $height;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTemperature()
+    {
+        return $this->temperature;
+    }
+
+    /**
+     * @param mixed $temperature
+     */
+    public function setTemperature($temperature)
+    {
+        $this->temperature = $temperature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeatherDescription()
+    {
+        return $this->weatherDescription;
+    }
+
+    /**
+     * @param mixed $weatherDescription
+     */
+    public function setWeatherDescription($weatherDescription)
+    {
+        $this->weatherDescription = $weatherDescription;
+    }
+
+
 }

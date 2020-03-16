@@ -53,6 +53,11 @@ class CityService
         $city->setWidth($cityData['img_width']);
         $city->setHeight($cityData['img_height']);
 
+        $weatherInformation = $this->getWeatherInformation($cityData['img_cityname'], $cityData['img_country']);
+
+        $city->setTemperature($weatherInformation['main']['temp']);
+        $city->setWeatherDescription($weatherInformation['weather'][0]['description']);
+
         return $city;
     }
 
@@ -89,6 +94,22 @@ class CityService
         //print $sql;
         header("Location: $new_url");
 
+    }
+
+    private function getWeatherInformation($city, $country)
+    {
+        $url = "api.openweathermap.org/data/2.5/weather?q=$city,$country&APPID=fb0373e0ef1d06a6330b7048c2007f6e&lang=nl&units=metric";
+
+        $curl = curl_init();
+        $headers = array();
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        $json = curl_exec($curl);
+
+        return json_decode($json, true);
     }
 
 
