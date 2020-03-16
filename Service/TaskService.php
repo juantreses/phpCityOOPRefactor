@@ -1,6 +1,6 @@
 <?php
 
-class TaskLoader
+class TaskService
 {
     private $databaseService;
 
@@ -42,7 +42,7 @@ class TaskLoader
     /**
      * @return array
      */
-    private function queryForTasks()
+    public function queryForTasks()
     {
         $taskArray = $this->databaseService->getData('SELECT * FROM taak');
         return $taskArray;
@@ -66,7 +66,14 @@ class TaskLoader
         return $tasks;
     }
 
+    public function writeTaskToDatabase(Task $task)
+    {
+        // sanitize
+        $task->setOmschr(htmlspecialchars(strip_tags($task->getOmschr())));
+        $task->setDatum(htmlspecialchars(strip_tags($task->getDatum())));
 
+        $sql = "INSERT INTO taak SET taa_datum = '" . $task->getDatum() . "', taa_omschr = '" . $task->getOmschr() . "'";
 
-
+        return $this->databaseService->executeSQL($sql);
+    }
 }

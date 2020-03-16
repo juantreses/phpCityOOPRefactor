@@ -2,11 +2,11 @@
 
 class DownloadService
 {
-    private $taskLoader;
+    private $taskService;
 
-    public function __construct(TaskLoader $taskLoader)
+    public function __construct(TaskService $taskService)
     {
-        $this->taskLoader = $taskLoader;
+        $this->taskService = $taskService;
     }
 
     public function printCSVHeader( $filename )
@@ -31,7 +31,7 @@ class DownloadService
         // field name row
         echo implode(";", array("ID", "Datum", "Taak")) . "\r\n";
 
-        $data = $this->taskLoader->getTasks();
+        $data = $this->taskService->getTasks();
 
         //rows with data
         foreach( $data as $row )
