@@ -23,9 +23,11 @@ class Container
 
     private $messageService;
 
-    private $taskLoader;
+    private $taskService;
 
     private $cityStorage;
+
+    private $apiService;
 
     public function __construct(array $configuration)
     {
@@ -70,7 +72,7 @@ class Container
     public function getDownloadService()
     {
         if ($this->downloadService === null) {
-            $this->downloadService = new DownloadService($this->getTaskLoader());
+            $this->downloadService = new DownloadService($this->getTaskService());
         }
 
         return $this->downloadService;
@@ -106,19 +108,19 @@ class Container
      public function getViewService()
      {
          if ($this->viewService === null) {
-             $this->viewService = new ViewService($this->getDatabaseService(), $this->getTaskLoader());
+             $this->viewService = new ViewService($this->getDatabaseService(), $this->getTaskService());
          }
 
          return $this->viewService;
      }
 
-    public function getTaskLoader()
+    public function getTaskService()
     {
-        if ($this->taskLoader === null) {
-            $this->taskLoader = new TaskLoader($this->getDatabaseService());
+        if ($this->taskService === null) {
+            $this->taskService = new TaskService($this->getDatabaseService());
         }
 
-        return $this->taskLoader;
+        return $this->taskService;
     }
 
     public function getCityStorage()
@@ -129,5 +131,14 @@ class Container
         }
 
         return $this->cityStorage;
+    }
+
+    public function getAPIService()
+    {
+        if ($this->apiService === null) {
+            $this->apiService = new APIService($this->getTaskService(), $this->getDatabaseService());
+        }
+
+        return $this->apiService;
     }
 }

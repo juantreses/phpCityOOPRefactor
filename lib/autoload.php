@@ -14,7 +14,7 @@ require_once $_root_folder . "/Model/File.php";
 require_once $_root_folder . "/Model/Menu.php";
 require_once $_root_folder . "/Model/Task.php";
 //load Services
-require_once $_root_folder . "/Service/TaskLoader.php";
+require_once $_root_folder . "/Service/TaskService.php";
 require_once $_root_folder . "/Service/CityStorageInterface.php";
 require_once $_root_folder . "/Service/CityPDOStorage.php";
 require_once $_root_folder . "/Service/CityJSONStorage.php";
@@ -26,6 +26,7 @@ require_once $_root_folder . "/Service/DatabaseService.php";
 require_once $_root_folder . "/Service/ViewService.php";
 require_once $_root_folder . "/Service/UploadService.php";
 require_once $_root_folder . "/Service/FormHandler.php";
+require_once $_root_folder . "/Service/APIService.php";
 //database functions
 require_once $_root_folder . "/lib/passwd.php";
 

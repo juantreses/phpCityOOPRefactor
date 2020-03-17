@@ -6,12 +6,12 @@ class ViewService
 
     private $databaseService;
 
-    private $taskLoader;
+    private $taskService;
 
-    public function __construct(DatabaseService $databaseService, TaskLoader $taskLoader)
+    public function __construct(DatabaseService $databaseService, TaskService $taskService)
     {
         $this->databaseService = $databaseService;
-        $this->taskLoader = $taskLoader;
+        $this->taskService = $taskService;
     }
 
     /**
@@ -172,7 +172,7 @@ class ViewService
             $d = strtotime($year . "W" . $week . $day);
             $dataReplaceContent[$day - 1]['day'] = date("l", $d);
             $dataReplaceContent[$day - 1]['date'] = date("d/m/Y", $d);
-            $tasks = $this->taskLoader->getTaskDescriptionByDate(date("Y-m-d", $d));
+            $tasks = $this->taskService->getTaskDescriptionByDate(date("Y-m-d", $d));
 
             $dataArray = array();
             $i = 0;

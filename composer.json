@@ -9,6 +9,7 @@
     },
   "require": {
     "ext-json": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-pdo": "*"
   }
 }

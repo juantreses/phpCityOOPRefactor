@@ -1,6 +1,6 @@
 <?php
 
-class TaskLoader
+class TaskService
 {
     private $databaseService;
 
@@ -42,9 +42,15 @@ class TaskLoader
     /**
      * @return array
      */
-    private function queryForTasks()
+    public function queryForTasks()
     {
         $taskArray = $this->databaseService->getData('SELECT * FROM taak');
+        return $taskArray;
+    }
+
+    public function queryForTaskByID($id)
+    {
+        $taskArray = $this->databaseService->getData("SELECT * FROM taak WHERE taa_id = '" . $id . "'");
         return $taskArray;
     }
 
@@ -66,7 +72,32 @@ class TaskLoader
         return $tasks;
     }
 
+    public function writeTaskToDatabase(Task $task)
+    {
+        // sanitize
+        $task->setOmschr(htmlspecialchars(strip_tags($task->getOmschr())));
+        $task->setDatum(htmlspecialchars(strip_tags($task->getDatum())));
 
+        $sql = "INSERT INTO taak SET taa_datum = '" . $task->getDatum() . "', taa_omschr = '" . $task->getOmschr() . "'";
 
+        return $this->databaseService->executeSQL($sql);
+    }
 
+    public function updateTaskInDatabase(Task $task)
+    {
+        // sanitize
+        $task->setOmschr(htmlspecialchars(strip_tags($task->getOmschr())));
+        $task->setDatum(htmlspecialchars(strip_tags($task->getDatum())));
+
+        $sql = "UPDATE taak SET taa_datum = '" . $task->getDatum() . "', taa_omschr = '" . $task->getOmschr() . "' WHERE taa_id = '" . $task->getId() . "'";
+
+        return $this->databaseService->executeSQL($sql);
+    }
+
+    public function deleteTask(Task $task)
+    {
+        $sql = "DELETE FROM taak WHERE taa_id = '" . $task->getId() . "'";
+
+        return $this->databaseService->executeSQL($sql);
+    }
 }

@@ -14,7 +14,7 @@ class DatabaseService
      * @param string $sql
      * @return mixed
      */
-    public function getData(string $sql)
+    public function getData($sql)
     {
         $stm = $this->pdo->prepare($sql);
         $stm->execute();
