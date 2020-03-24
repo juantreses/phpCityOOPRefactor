@@ -78,6 +78,7 @@ class TaskService
         $task->setOmschr(htmlspecialchars(strip_tags($task->getOmschr())));
         $task->setDatum(htmlspecialchars(strip_tags($task->getDatum())));
 
+
         $sql = "INSERT INTO taak SET taa_datum = '" . $task->getDatum() . "', taa_omschr = '" . $task->getOmschr() . "'";
 
         return $this->databaseService->executeSQL($sql);
@@ -88,8 +89,9 @@ class TaskService
         // sanitize
         $task->setOmschr(htmlspecialchars(strip_tags($task->getOmschr())));
         $task->setDatum(htmlspecialchars(strip_tags($task->getDatum())));
+        $task->setStatus(htmlspecialchars(strip_tags($task->getStatus())));
 
-        $sql = "UPDATE taak SET taa_datum = '" . $task->getDatum() . "', taa_omschr = '" . $task->getOmschr() . "' WHERE taa_id = '" . $task->getId() . "'";
+        $sql = "UPDATE taak SET taa_datum = '" . $task->getDatum() . "',taa_status = '1', taa_omschr = '" . $task->getOmschr() . "' WHERE taa_id = '" . $task->getId() . "'";
 
         return $this->databaseService->executeSQL($sql);
     }
@@ -99,5 +101,12 @@ class TaskService
         $sql = "DELETE FROM taak WHERE taa_id = '" . $task->getId() . "'";
 
         return $this->databaseService->executeSQL($sql);
+    }
+    public function updateStatus(Task $task){
+        $id=$task->getID();
+
+        $sql = "Update taak SET taa_status = 1 WHERE taa_id = 2";
+        return $this->databaseService->executeSQL($sql);
+
     }
 }

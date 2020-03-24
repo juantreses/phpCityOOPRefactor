@@ -1,5 +1,11 @@
 <?php
 require_once '../lib/autoload.php';
+// required headers
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST,GET,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 $apiService = $container->getAPIService();
 
@@ -10,18 +16,18 @@ $count = count($uriParts);
 $lastUriPart = $uriParts[$count-1];
 $secondToLastUriPart = $uriParts[$count-2];
 
-if ($count === 4 && $lastUriPart === 'taken') {
+if ( $lastUriPart === 'taak') {
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $apiService->read();
     } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo $apiService->create();
     } else {
-        http_response_code(404);
-        return json_encode(array("message" => "Unvalid request method"));
+        http_response_code(418);
+        print json_encode(array("message" => "Invalid request method"));
     }
 }
 
-elseif ($count === 5 && $secondToLastUriPart === 'taken') {
+elseif ( $secondToLastUriPart === 'taak') {
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $apiService->readOne($lastUriPart);
     } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
@@ -30,6 +36,6 @@ elseif ($count === 5 && $secondToLastUriPart === 'taken') {
         echo $apiService->delete($lastUriPart);
     } else {
         http_response_code(404);
-        return json_encode(array("message" => "Unvalid request method"));
+        print json_encode(array("message" => "Invalid request method"));
     }
 }

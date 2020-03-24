@@ -5,7 +5,8 @@ class Task
 {
     private $id;
     private $datum;
-    private $omschr;    
+    private $omschr;
+    private $status;
     
     /**
      * @return mixed
@@ -43,5 +44,20 @@ class Task
     public function setOmschr($omschr)
     {
         $this->omschr = $omschr;
+    }
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }
