@@ -121,6 +121,8 @@ class APIService
         //Check if there is a task with given id in Database
         $task = $this->taskService->queryForTaskByID($id);
 
+        $taskModel = new Task();
+
         if (count($task) == 0) {
             http_response_code(400);
             return json_encode(array("message" => "No task found at this ID"));
@@ -131,12 +133,12 @@ class APIService
         if(!empty($data->taa_datum) && !empty($data->taa_omschr)){
 
             // set task property values
-            $task->setDatum($data->taa_datum);
-            $task->setOmschr($data->taa_omschr);
-            $task->setId($id);
+            $taskModel->setDatum($data->taa_datum);
+            $taskModel->setOmschr($data->taa_omschr);
+            $taskModel->setId($id);
 
             //create task
-            if ($this->taskService->updateTaskInDatabase($task)){
+            if ($this->taskService->updateTaskInDatabase($taskModel)){
                 // set response code - 201 created
                 http_response_code(201);
                 return json_encode(array("message" => "Task was updated."));
